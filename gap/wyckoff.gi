@@ -364,6 +364,55 @@ end;
     
 #############################################################################
 ##
+#F  IntersectionsAffineSubspaceLattice( <U>, <V> )
+##
+IntersectionsAffineSubspaceLattice := function( U, V )
+
+    local T, m, t, s, b, lst, x, len, tt;
+
+    T  := TranslationBasis( U.spaceGroup );
+    m  := Concatenation( U.basis, -V.basis );
+    t  := V.translation - U.translation;
+
+    s  := SolveInhomEquationsModZ( m*T, t*T );
+
+    if s[1] = [] then
+        return fail;
+    fi;
+
+    b := IntersectionModule( U.basis, -V.basis );
+
+    lst := [];
+    for x in s[1] do
+        tt := x{[1..Length(U.basis)]} * U.basis + U.translation;
+        Add( lst, rec( translation := tt, basis := b, 
+                       spaceGroup  := U.spaceGroup ) );
+    od;
+
+    for x in lst do
+        ReduceAffineSubspaceLattice( x );
+    od;
+
+    return lst;
+
+end;
+
+#############################################################################
+##
+#F  IsSubspaceAffineSubspaceLattice( <U>, <V> )  repres. of V contained in U?
+##
+IsSubspaceAffineSubspaceLattice := function( U, V ) 
+    local s;
+    s := IntersectionsAffineSubspaceLattice( U, V );
+    if s = fail then
+        return false;
+    else
+        return r in s;
+    fi;
+end;
+
+#############################################################################
+##
 #F  WyPos( S, stabs, lift ) . . . . . . . . . . . . . . . . Wyckoff positions
 ##
 WyPos := function( S, stabs, lift )
