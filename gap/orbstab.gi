@@ -330,7 +330,9 @@ function( G, H )
     P  := Normalizer( PointGroup( G ), PointGroup( H ) );
     TH := TranslationBasis( H );
     if TH <> [] then
-        P := Stabilizer( P, TH, OnRight );
+        P := Stabilizer( P, TH, function( x, g ) 
+                                  return ReducedLatticeBasis( x * g );
+                                end );
     fi;
 
     # lift P to G
