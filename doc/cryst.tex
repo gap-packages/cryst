@@ -333,8 +333,9 @@ is bound and `true'.
 
 \index{space groups!for given point group}
 
-\>SpaceGroupsByPointGroupOnRight( <P> ) F
-\>SpaceGroupsByPointGroupOnRight( <P>, <normelems> ) F
+\>SpaceGroupsByPointGroupOnRight( <P> ) O
+\>SpaceGroupsByPointGroupOnRight( <P>, <norm> ) O
+\>SpaceGroupsByPointGroupOnRight( <P>, <norm>, <orbsflag> ) O
 
 where <P> is any finite subgroup of $GL(d,\Z)$, returns a list of 
 all space groups (acting on the right) with point group <P>, up to 
@@ -345,35 +346,76 @@ be a list of elements of the normalizer of <P> in $GL(d,\Z)$, only
 space groups inequivalent under conjugation with these elements are 
 returned.  If these normalizer elements, together with <P>, generate 
 the full normalizer of <P> in $GL(d,\Z)$, then exactly one 
-representative of each space group type isobtained. This can also
-be achieved with the function
+representative of each space group type is obtained. 
+If the third argument <orbsflag>, which must be `false' or `true',
+is also present and `true', all space groups up to conjugacy in
+the full translation group are returned, but these space groups are 
+collected into orbits under the conjugation action with elements from
+<norm>.
 
-\>SpaceGroupTypesByPointGroupOnRight( <P> ) F
+\beginexample
+gap> P := Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ]);
+Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
+gap> norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );
+[ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
+  [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
+gap> SpaceGroupsByPointGroupOnRight( P );
+[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
+  <matrix group with 4 generators>, <matrix group with 4 generators> ]
+gap> SpaceGroupsByPointGroupOnRight( P, norm );
+[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
+  <matrix group with 4 generators> ]
+gap> SpaceGroupsByPointGroupOnRight( P, norm, true );
+[ [ <matrix group with 4 generators> ], 
+  [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
+  [ <matrix group with 4 generators> ] ]
+\endexample
 
-which returns a list of space group type representatives (acting on the
-right) of the point group <P>.
+\>SpaceGroupTypesByPointGroupOnRight( <P> ) O
+\>SpaceGroupTypesByPointGroupOnRight( <P>, <orbsflag> ) O
 
-\>SpaceGroupsByPointGroupOnLeft( <P> ) F
-\>SpaceGroupsByPointGroupOnLeft( <P>, <normelems> ) F
+returns a list of space group type representatives (acting on the right) 
+of the point group <P>. As in the case of `SpaceGroupsByPointGroupOnRight',
+if the boolean argument <orbsflag> is present and `true', not only space
+group type representatives, but all space groups up to conjugacy in
+the full translation group are returned. These are then collected 
+into lists of space groups of the same space group type.
+
+\endexample
+gap> SpaceGroupTypesByPointGroupOnRight( P );
+[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
+  <matrix group with 4 generators> ]
+gap> SpaceGroupTypesByPointGroupOnRight( P, true );
+[ [ <matrix group with 4 generators> ], 
+  [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
+  [ <matrix group with 4 generators> ] ]
+\endexample
+
+\>SpaceGroupsByPointGroupOnLeft( <P> ) O
+\>SpaceGroupsByPointGroupOnLeft( <P>, <norm> ) O
+\>SpaceGroupsByPointGroupOnLeft( <P>, <norm>, <orbsflag> ) O
 
 works the same way as `SpaceGroupsByPointGroupOnRight', except that
-the space groups are returned as `AffineCrystGroupOnLeft'.
+the space groups acting from the left are returned.
 
-\>SpaceGroupTypesByPointGroupOnLeft( <P> ) F
+\>SpaceGroupTypesByPointGroupOnLeft( <P> ) O
+\>SpaceGroupTypesByPointGroupOnLeft( <P>, <orbsflag> ) O
 
-returns a list of space group type representatives (acting on the
-left) of the point group <P>.
+works the same way as `SpaceGroupTypesByPointGroupOnRight', except that
+the space groups acting from the left are returned.
 
-\>SpaceGroupsByPointGroup( <P> ) F
-\>SpaceGroupsByPointGroup( <P>, <normelems> ) F
+\>SpaceGroupsByPointGroup( <P> ) O
+\>SpaceGroupsByPointGroup( <P>, <norm> ) O
+\>SpaceGroupsByPointGroup( <P>, <norm>, <orbsflag> ) O
 
 calls `SpaceGroupByPointGroupOnRight' or `SpaceGroupByPointGroupOnLeft' 
 with the same arguments, depending on the value of `CrystGroupDefaultAction'.
 
-\>SpaceGroupTypesByPointGroupOnLeft( <P> ) F
+\>SpaceGroupTypesByPointGroupOnLeft( <P> ) O
+\>SpaceGroupTypesByPointGroupOnLeft( <P>, <orbsflag> ) O
 
 calls either `SpaceGroupTypesByPointGroupOnRight' or
-`SpaceGroupTypesByPointGroupOnLeft' with the same argument, depending
+`SpaceGroupTypesByPointGroupOnLeft' with the same arguments, depending
 on the variable `CrystGroupDefaultAction'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -387,50 +429,139 @@ consists of an <S>-orbit of some affine subspace <A>. In CrystGap,
 a Wyckoff position <W> is specified by such a representative affine
 subspace.
 
-\>IsWyckoffPosition( <obj> ) R
-
-checks whether <obj> is a Wyckoff position.
-
 \>WyckoffPositions( <S> ) A
 
 returns the list of Wyckoff positions of the space group <S>.
+
+\beginexample
+gap> S := SpaceGroupIT(2,14);
+SpaceGroupOnRightIT(2,14,'1')
+gap> W := WyckoffPositions(S);  
+[ < Wyckoff position, point group 1, translation := [ 0, 0 ], 
+    basis := [  ] >
+    , < Wyckoff position, point group 1, translation := [ 2/3, 1/3 ], 
+    basis := [  ] >
+    , < Wyckoff position, point group 1, translation := [ 1/3, 2/3 ], 
+    basis := [  ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+    basis := [ [ 1, -1 ] ] >
+    , < Wyckoff position, point group 4, translation := [ 0, 0 ], 
+    basis := [ [ 1, 0 ], [ 0, 1 ] ] >
+     ]
+\endexample
+
+In the previous example, <S> has three kinds of special points
+(the basis is empty), whose representatives all have a stabilizer 
+with the same point group (with label 1), one kind of special line
+(the basis has length 1), and the general position.
 
 \>WyckoffPositionsByStabilizer( <S>, <sub> ) O
 
 where <S> is a space group and <sub> a subgroup of the point group or
 a list of such subgroups, determines only the Wyckoff positions whose
-points have a stabilizer with a point group equal to the subgroup <sub> 
-or contained in the list <sub>, respectively.
+representatives have a stabilizer with a point group equal to the 
+subgroup <sub> or contained in the list <sub>, respectively.
+
+\beginexample
+gap> sub := Group([ [ [ 0, -1 ], [ -1, 0 ] ] ]);
+Group([ [ [ 0, -1 ], [ -1, 0 ] ] ])
+gap> IsSubgroup( PointGroup( S ), sub );
+true
+gap> WyckoffPositionsByStabilizer( S, sub );
+[ < Wyckoff position, point group 1, translation := [ 0, 0 ], 
+    basis := [ [ 1, -1 ] ] >
+     ]
+\endexample
+
+\>IsWyckoffPosition( <obj> ) R
+
+checks whether <obj> is a Wyckoff position.
+
+\beginexample
+gap> ForAll( W, IsWyckoffPosition );
+true
+\endexample
 
 \>WyckoffBasis( <W> ) O
 
 returns a basis of the representative affine subspace of the Wyckoff 
 position <W>.
 
+\beginexample
+gap> WyckoffBasis( W[4] );
+[ [ 1, -1 ] ]
+\endexample
+
 \>WyckoffTranslation( <W> ) O
 
 returns a point of the representative affine subspace of the Wyckoff 
 position <W>.
 
+\beginexample
+gap> WyckoffTranslation( W[3] );
+[ 1/3, 2/3 ]
+\endexample
+
 \>WyckoffSpaceGroup( <W> ) O
 
 returns the space group of which <W> is a Wyckoff position.
 
+\beginexample
+gap> WyckoffSpaceGroup( W[1] );
+SpaceGroupOnRightIT(2,14,'1')
+\endexample
+
 \>WyckoffStabilizer( <W> ) O
 
 returns the stabilizer of the (generic) points in the representative
-affine subspace of the Wyckoff position <W>.
+affine subspace of the Wyckoff position <W>. This stabilizer is a
+subgroup of the space group of <W>, and thus an `AffineCrystGroup'.
+
+\beginexample
+gap> stab := WyckoffStabilizer( W[4] );
+Group([ [ [ 0, -1, 0 ], [ -1, 0, 0 ], [ 0, 0, 1 ] ] ])
+gap> IsAffineCrystGroupOnRight( stab );
+true
+\endexample
 
 \>WyckoffOrbit( <W> ) O
 
 determines the orbit of the representative affine subspace <A> of the 
 Wyckoff position <W> under the space group <S> of <W> (modulo lattice 
 translations). The affine subspaces in this orbit are then converted 
-into a list of Wyckoff positions (which just different representations 
-of <W>), which is then returned. The `WckoffBasis' and `WyckoffTranslation'
-of these Wyckoff positions are chosen such that the induced 
-parametrizations of their representative subspaces are mapped onto
-each other under the space group operation.
+into a list of Wyckoff positions, which is returned. The Wyckoff 
+positions in this list are just different representations of <W>. 
+Their `WyckoffBasis' and `WyckoffTranslation' are chosen such that 
+the induced parametrizations of their representative subspaces are 
+mapped onto each other under the space group operation.
+
+\beginexample
+gap> orb := WyckoffOrbit( W[4] );
+[ < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+    basis := [ [ -2, -1 ] ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+    basis := [ [ 1, -1 ] ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+    basis := [ [ 1, 2 ] ] >
+     ]
+gap> Set(orb);
+[ < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+    basis := [ [ -2, -1 ] ] >
+     ]
+\endexample
+
+\>WyckoffGraph( <W> [, def ] ) O
+\>WyckoffGraph( <S> [, def ] ) O
+
+displays the incidence relations of a set of Wyckoff positions graphically.
+This function is available only under XGAP. In the first form, <W> is
+a list of Wyckoff positions, which must belong to the same space group.
+In the second form, <S> is a space group; in this case, the function is
+applied to the complete list of Wyckoff positions of <S>. In both forms,
+a second argument, <def>, is possible, which is a record with optional
+components `title', `width' and `height', specifying the title, width
+and height of the graphic sheet on which the graph will be displayed.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -491,10 +622,12 @@ of the group that is returned.  However, a basis of the space of
 continuous translations is bound in the component 
 `AF!.continuousTranslations'.
 
-\>AffineInequivalentSubgroups( <sub> ) F
+\>AffineInequivalentSubgroups( <S>, <sub> ) F
 
-takes as input a list of subgroups with common parent space group <S>,
-and returns a sublist of those which are affine inequivalent. 
+takes as input a space group <S> and list of subgroups of <S>,
+and returns a sublist of affine inequivalent subgroups.
+Note that the affine normalizer of <S> must be discrete in the
+current implementation. If it is not, `fail' is returned. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
