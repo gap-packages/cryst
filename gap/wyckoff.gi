@@ -405,7 +405,7 @@ WyPos := function( S, stabs, lift )
             s := lst[1];
             c := s.class;
             Unbind( s.class );
-            orb := Orbit( U, s, ImageAffineSubspaceLattice );
+            orb := Orbit( U, Immutable(s), ImageAffineSubspaceLattice );
             lst := Filtered( lst, 
                    x -> not rec( translation := x.translation,
                                  basis       := x.basis,
