@@ -29,7 +29,7 @@ ReadPkg( "cryst/grp/spacegrp.gd" );  # the IT space group catalogue
 
 #############################################################################
 ##
-#R  try to read the CARAT and polycyclic packages; 
+#R  try to read the Carat and polycyclic packages; 
 #R  don't complain if they are not available
 if TestPackageAvailability("carat", "1.0") <> fail then
   RequirePackage( "carat" );
