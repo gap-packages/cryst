@@ -368,6 +368,7 @@ function( G, H )
         trn := ConjugatingTranslation( H, img, TG );
         gen[d+1]{[1..d]} := gen[d+1]{[1..d]} + trn;
     od;
+    gens := Set( gens );
 
     # construct the pure translations
     T := TG;

@@ -34,6 +34,7 @@ ReadPkg( "cryst/grp/spacegrp.gd" );  # the IT space group catalogue
 OldWarningLevel := InfoLevel( InfoWarning );
 SetInfoLevel( InfoWarning, 0 );
 RequirePackage( "carat" );
+RequirePackage( "polycyclic" );
 SetInfoLevel( InfoWarning, OldWarningLevel );
 Unbind( OldWarningLevel );
 

@@ -37,6 +37,10 @@ else
    ReadPkg("cryst/gap/noxgap.gi");   # dummy for WyckoffGraph
 fi;
 
+if IsBound( LOADED_PACKAGES.polycyclic ) then
+   ReadPkg("cryst/gap/pcpgrp.gi");   # PcpGroup for CrystGroups and PointGroups
+fi;
+
 #############################################################################
 ##
 #R  read the orbit stabilizer methods
