@@ -279,7 +279,7 @@ InstallMethod( NormalizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj,
 function( G, H )
 
     local P, TH, TG, d, I, gens1, gens2, gens, T, t, orb, rep, stb, 
-          H2, grp, gen, img, i, sch, g, b, M, M2, m, sol, Q, N;
+          H2, grp, gen, img, i, sch, g, b, M, M2, m, sol, Q, N, new;
 
     # the point group of the normalizer
     P  := Normalizer( PointGroup( G ), PointGroup( H ) );
@@ -326,7 +326,7 @@ function( G, H )
             fi;
         od;
     od;
-    gens1 := ShallowCopy( GeneratorsOfGroup( stb ) );
+    gens1 := List( GeneratorsOfGroup( stb ), MutableMatrix );
 
     # fix the translations if H2 <> H
     if not IsIdenticalObj( H, H2 ) then
@@ -337,6 +337,7 @@ function( G, H )
                 M2{[1..Length(TH)]+(i-1)*Length(TH)}{[1..d]+(i-1)*d} := TH;
             od;
         fi;
+        new := [];
         for g in gens1 do
             gens := List( gens2, x -> x^g );
             b := [];
@@ -345,17 +346,20 @@ function( G, H )
             for i in [1..Length(gens)] do
                 m := PreImagesRepresentative( PointHomomorphism( H ), 
                                       gens[i]{[1..d]}{[1..d]} );
-                Append( b, gens[i][d]{[1..d]} -  m[d]{[1..d]} );
+                Append( b, gens[i][d+1]{[1..d]} -  m[d+1]{[1..d]} );
                 M{[1..Length(TG)]}{[1..d]+(i-1)*d} := 
                    TG * (I - g{[1..d]}{[1..d]}^-1 * gens[i]{[1..d]}{[1..d]} );
             od;
             M := Concatenation( M, M2 );
             sol := IntSolutionMat( M, b );
-            Assert( 0, IsList( sol ) );
-            sol := sol{[1..Length(TG)]} * TG;
-            g[d]{[1..d]} := g[d]{[1..d]} - sol;
-            Assert( 0, ForAll( gens2, x -> x^g in H ) );
+            if IsList( sol ) then
+                sol := sol{[1..Length(TG)]} * TG;
+                g[d+1]{[1..d]} := g[d+1]{[1..d]} - sol;
+                Assert( 0, ForAll( gens2, x -> x^g in H ) );
+                Add( new, g );
+            fi;
         od;
+        gens1 := new;
     fi;
 
     # construct the pure translations
