@@ -1,8 +1,8 @@
 
-The GAP 4 share package CrystGap 4.0 is the successor of the GAP 3 
-share package with the same name. During the porting process to
-GAP 4, large parts of the code have been rewritten, and the 
-functionality has been extended considerably. CrystGap provides a 
+The GAP 4 package Cryst, previously known as CrystGap, is the 
+successor of the CrystGap package for GAP 3. During the porting 
+process to GAP 4, large parts of the code have been rewritten, and 
+the functionality has been extended considerably. Cryst provides a 
 rich set of methods to compute with affine crystallographic groups, 
 in particular space groups. In constrast to the GAP 3 version, 
 affine crystallographic groups are now fully supported both in the 
@@ -11,32 +11,33 @@ acting from the left. The latter representation is the one preferred
 by crystallographers. There are also functions to determine 
 representatives of all space group types of a given dimension. 
 
-CrystGap is implemented in the GAP 4 language, and runs on any
+Cryst is implemented in the GAP 4 language, and runs on any
 system supporting GAP 4. It requires at least GAP version 4.1, 
-with fixes up 1,2 and 4 applied. However, certain commands may 
-need other share packages such as Carat or XGAP. Both Carat and 
-XGAP are available only under Unix. Carat may be required by 
+with fixes up 1,2 and 4 applied. It is recommended, however,
+to use the most recent version of GAP. Certain commands may 
+need other GAP packages such as CARAT or XGAP. Both CARAT 
+and XGAP are available only under Unix. CARAT may be required by 
 functions that need to know normalizers or conjugators of finite 
-unimodular groups in in GL(n,Z) (see Section 9 of the CrystGap 
-manual). The function WyckoffGraph needs the package XGAP.
+unimodular groups in in GL(n,Z) (see the section on normalizers 
+of the Cryst manual). The function WyckoffGraph needs the package XGAP.
 
-To install CrystGap, just unpack cryst.zoo in the pkg subdirectory
+To install Cryst, just unpack cryst.zoo in the pkg subdirectory
 of your GAP installation (or in the pkg subdirectory of any other
 GAP root directory) with the following command:
 
 unzoo -x cryst.zoo
 
-CrystGap is then loaded with the GAP command
+Cryst is then loaded with the GAP command
 
 gap> RequirePackage( "cryst" ); 
 
-CrystGap has been developed by
+Cryst has been developed by
 
 Bettina Eick,
-Fachbereich 17,
-Universit\"at Gesamthochschule Kassel,
-D-34109 Kassel, Germany
-e-mail: eick@mathematik.uni-kassel.de
+Fachbereich Mathematik und Informatik,
+Technische Universit\"at Braunschweig,
+Pockelsstr. 14, D-38106 Braunschweig, Germany
+e-mail: b.eick@tu-bs.de
 
 Franz G\"ahler,
 Institut f\"ur Theoretische und Angewandte Physik,

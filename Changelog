@@ -1,5 +1,10 @@
 
+Version 4.0: Initial release for GAP 4.
+
 Version 4.1:
+
+  - Name change from CrystGAP (or CrystGap) to just Cryst. This avoids
+    confusion, as even CrystGAP was always loaded as "cryst".
 
   - A second algorithm for the computation of Wyckoff positions 
     (due to Ad Thiers) has been implemented. It avoids the computation
@@ -10,17 +15,19 @@ Version 4.1:
     WyPosAT( S );    # algorithm due to Ad Thiers
     WyPosSGL( S );   # algorithm using the subgroup lattice
 
+    These functions are still undocumented.
+
   - A bug in WyckoffGraph was fixed. The labels of the lines in the 
     graph were not what was intended, and the manual was even 
     selfcontradictory in this respect. 
 
-    This needed code for intersections of affine subspace lattices, 
+    This required code for intersections of affine subspace lattices, 
     and a better subset test for affine subspace lattices. 
     These are still undocumented.
 
   - The function ConjugatorSpaceGroups is now documented.
 
-  - CrystGap now tries to load the package polycyclic, and then installs
+  - Cryst now tries to load the package polycyclic, and then installs
     methods for IsomorphismPcpGroup for PointGroups and AffineCrystGroups.
 
   - A method for ImagesRepresentative for an IsomorphismFpGroup of an 
