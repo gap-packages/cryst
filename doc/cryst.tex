@@ -291,6 +291,24 @@ returns an isomorphism from the `AffineCrystGroup' <S> to an isomorphic
 presentation. The presentation of <F> is an extension of the presentation
 of the point group <P> of <S> used in `IsomorphismFpGroup( <P> )'. 
 
+If the package polycyclic is installed, CrystGap automatically loads
+it, and then provides special methods for `IsomorphismPcpGroup'.
+
+\index{IsomorphismPcpGroup!for a PointGroup}
+\>IsomorphismPcpGroup( <P> ) A
+
+with <P> a solvable `PointGroup', returns an isomorphism from <P> 
+to an isomorphic `PcpGroup' <pcp>. For details about `PcpGroups', 
+we refer to the documentation of the package polycyclic.  
+
+\index{IsomorphismPcpGroup!for an AffineCrystGroup}
+\>IsomorphismPcpGroup( <S> ) A
+
+with <S> a solvable `AffineCrystGroup' (i.e., one with a solvable
+`PointGroup'), returns an isomorphism from <S> to an isomorphic
+`PcpGroup' <pcp>. The presentation of <pcp> is an extension of the 
+presentation of the point group <P> of <S> used in 
+`IsomorphismPcpGroup( <P> )'. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Maximal subgroups}
