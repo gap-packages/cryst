@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  orbstab.gi              CrystGap library                     Bettina Eick
+#A  orbstab.gi                Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##

@@ -1,12 +1,12 @@
 #############################################################################
 ##
-#A  color.gi                CrystGap library                     Bettina Eick
+#A  color.gi                  Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
 #Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
-##  CrystGap - the crystallographic groups package for GAP (color groups)
+##  Cryst - the crystallographic groups package for GAP (color groups)
 ##  
 
 #############################################################################
