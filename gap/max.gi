@@ -216,7 +216,7 @@ MatJacobianMatrix := function( G, mats )
             h := Subword( r,k,k );
             p := Position( gens, h );
             if not IsBool( p ) then
-                D := D * mats[p];
+                D := MutableMatrix( D * mats[p] );
                 for l in [1..d] do
                     D[(p-1)*d+l][l] := D[(p-1)*d+l][l] + 1;
                 od;
@@ -225,7 +225,7 @@ MatJacobianMatrix := function( G, mats )
                 for l in [1..d] do
                     D[(p-1)*d+l][l] := D[(p-1)*d+l][l] - 1;
                 od;
-                D := D * imats[p];
+                D := MutableMatrix( D * imats[p] );
             fi;
 
             J{[1..Length(gens)*d]}{[(j-1)*d+1..j*d]} := D;
