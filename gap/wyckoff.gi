@@ -294,11 +294,6 @@ end;
 ##
 ##                           x * M = b  (mod Z).
 ##
-##  RowEchelonFormT() returns a matrix Q such that Q * M is in row echelon
-##  form.  This means that (modulo column operations) we have the equation
-##         x * Q^-1 * D = b       with D a diagonal matrix.
-##  Solving y * D = b we get x = y * Q.
-##
 ##  If onRight = false, compute the set of solutions of the equation
 ##
 ##                           M * x = b  (mod Z).
