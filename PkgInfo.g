@@ -86,7 +86,8 @@ PackageDoc  := rec(
 Dependencies := rec(
   GAP := ">=4.2",
   NeededOtherPackages := [],
-  SuggestedOtherPackages := [ "Carat", "polycyclic" ],
+  SuggestedOtherPackages := [ [ "Carat", ">=1.1" ],
+                              [ "polycyclic", ">=1.0" ] ],
   ExternalConditions := []
 ),
 
