@@ -50,8 +50,12 @@ InstallMethod( ColorCosetList,
 #M  ColorOfElement( G, elm ) . . . . . . . . . . . . . . .color of an element
 ##
 InstallGlobalFunction( ColorOfElement, function( G, elm )
-    local cos, i;
-    cos := ColorCosetList( G );
+    local P, cos, i;
+    P := G;
+    while HasParent( P ) and Parent( P ) <> P do
+        P := Parent( P );
+    od;
+    cos := ColorCosetList( P );
     for i in [1..Length( cos )] do
         if elm in cos[i] then
             return i;
