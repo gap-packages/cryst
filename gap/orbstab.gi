@@ -401,7 +401,6 @@ end );
 InstallMethod( NormalizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G, H )
-    return Normalizer( TransposedMatrixGroup(G), TransposedMatrixGroup(H) );
+    return TransposedMatrixGroup(
+      Normalizer( TransposedMatrixGroup(G), TransposedMatrixGroup(H) ) );
 end );
-
-
