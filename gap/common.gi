@@ -317,9 +317,13 @@ IntersectionModule := function( M1, M2 )
     M := M * Lcm( List( Flat( M ), DenominatorRat ) );
 #    Q := IdentityMat( Length( M ) );
 #    M := RowEchelonFormT( M, Q );
-#    T := Q{[Length(M)+1..Length(Q)]}{[1..Length(M1)]} * M1;
+#    T := Q{[Length(M)+1..Length(Q)]}{[1..Length(M1)]};
+#    if not IsEmpty(T) then T := T * M1; fi;
     r := NormalFormIntMat( M, 4 );
-    T := r.rowtrans{[r.rank+1..Length(M)]}{[1..Length(M1)]} * M1;
+    T := r.rowtrans{[r.rank+1..Length(M)]}{[1..Length(M1)]};
+    if not IsEmpty( T ) then 
+        T := T * M1; 
+    fi;
     return ReducedLatticeBasis( T );
 
 end;

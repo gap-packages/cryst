@@ -115,12 +115,14 @@ end );
 #F  ImageAffineSubspaceLattice . . . .image of affine subspace modulo lattice
 ##
 InstallGlobalFunction( ImageAffineSubspaceLattice, function( s, g )
-    local d, m, t, r;
+    local d, m, t, b, r;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};
+    b := s.basis;
+    if not IsEmpty(b) then b := b * m; fi;
     r := rec( translation := s.translation * m + t,
-              basis       := s.basis * m,
+              basis       := b,
               spaceGroup  := s.spaceGroup );
     ReduceAffineSubspaceLattice( r );
     return r;
@@ -132,13 +134,15 @@ end );
 #F                                                    subspace modulo lattice
 ##
 InstallGlobalFunction( ImageAffineSubspaceLatticePointwise, function( s, g )
-    local d, m, t, L, r;
+    local d, m, t, b, L, r;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};
+    b := s.basis;
+    if not IsEmpty(b) then b := b * m; fi;
     L := TranslationBasis( s.spaceGroup );
     r := rec( translation := VectorModL( s.translation * m + t, L ),
-              basis       := s.basis * m,
+              basis       := b,
               spaceGroup  := s.spaceGroup );
     return r;
 end );
@@ -537,7 +541,9 @@ WyPosStep := function( idx, G, M, b, lst )
             d := Length( f.basis ) + 1; 
             stop := d=lst.dim+1;
             f.translation := f.translation * lst.T;
-            f.basis       := f.basis * lst.T;
+            if not IsEmpty( f.basis ) then
+                f.basis   := f.basis * lst.T;
+            fi;
             f.spaceGroup  := lst.S;
             ReduceAffineSubspaceLattice( f );
             if not f in lst.sp[d] then
