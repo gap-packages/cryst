@@ -426,7 +426,7 @@ CentralizerElement := function( G, u, TT )
     orb := [ MutableMatrix( u ) ];
     set := [ u ];
     rep := [ One( G ) ];
-    stb := Subgroup( Parent( G ), [] );
+    stb := TrivialSubgroup( G );
     for pnt  in orb  do
         for gen  in GeneratorsOfGroup( G ) do
             img := pnt^gen;
@@ -443,8 +443,8 @@ CentralizerElement := function( G, u, TT )
                 v := u^sch - u;
                 v := v[d+1]{[1..d]};
                 v := IntSolutionMat( U, v );
-                if v <> false then
-                    sch[d+1]{[1..d]} :=sch[d+1]{[1..d]} - v*U; 
+                if v <> fail then
+                    sch[d+1]{[1..d]} := sch[d+1]{[1..d]} + v*TT; 
                     if not sch in stb  then
                         stb := ClosureGroup( stb, sch );
                     fi;
