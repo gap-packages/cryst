@@ -18,7 +18,7 @@ to use the most recent version of GAP. Certain commands may
 need other GAP packages such as CARAT or XGAP. Both CARAT 
 and XGAP are available only under Unix. CARAT may be required by 
 functions that need to know normalizers or conjugators of finite 
-unimodular groups in in GL(n,Z) (see the section on normalizers 
+unimodular groups in GL(n,Z) (see the section on normalizers 
 of the Cryst manual). The function WyckoffGraph needs the package XGAP.
 
 To install Cryst, just unpack cryst.zoo in the pkg subdirectory
