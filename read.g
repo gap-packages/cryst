@@ -30,6 +30,11 @@ ReadPkg( "cryst/gap/max.gi" );     # methods for maximal subgroups
 ReadPkg( "cryst/gap/wyckoff.gi" ); # methods for Wyckoff positions
 ReadPkg( "cryst/gap/color.gi" );   # methods for color groups
 
+if IsBound( LOADED_PACKAGES.xgap ) then
+   ReadPkg("cryst/gap/wypopup.gi");  # popup menu for Wyckoff graph
+   ReadPkg("cryst/gap/wygraph.gi");  # Wyckoff graph methods; needs XGAP
+fi;
+
 #############################################################################
 ##
 #R  read the orbit stabilizer methods
