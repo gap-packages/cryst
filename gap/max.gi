@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  Routines for the determination of maximal subgroups of CrystGroups
 ##
@@ -182,7 +182,7 @@ end;
 ##                           X * M = 0.
 ##
 SolutionHomEquations := function( M )
-    return SolutionInhomEquations( M, Zero(Field(M[1][1]))*[1..Length(M)] );
+    return SolutionInhomEquations( M, Zero(Field(M[1][1]))*[1..Length(M[1])]);
 end;
 
 

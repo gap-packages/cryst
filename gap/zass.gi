@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  Routines for the determination of space groups for a given a point group
 ##
@@ -314,6 +314,8 @@ ZassFunc := function( grp, norm, orbsflag, transpose )
    gens := GeneratorsOfGroup( grp );
 
    # construct equations which determine the non-primitive translations
+   # an alternative would be
+   # mat := MatJacobianMatrix( F, gens );
    mat := GroupExtEquations( d, gens, rels );
 
    # now solve them modulo integers
