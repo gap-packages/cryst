@@ -90,7 +90,7 @@ Dependencies := rec(
   ExternalConditions := []
 ),
 
-AvailabilityTest := ReturnTrue;
+AvailabilityTest := ReturnTrue,
 
 Autoload := true,
 
