@@ -160,7 +160,7 @@ function( w1, w2 )
     gens := Filtered( GeneratorsOfGroup( S ),
                       x -> x{[1..d]}{[1..d]} <> One( PointGroup( S ) ) );
     U := SubgroupNC( S, gens );
-    rep := RepresentativeOperation( U, r1, r2, ImageAffineSubspaceLattice );
+    rep := RepresentativeAction( U, r1, r2, ImageAffineSubspaceLattice );
     return rep <> fail;
 end );
 
