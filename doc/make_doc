@@ -1,0 +1,7 @@
+#!/bin/sh
+rm manual.aux manual.dvi manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+tex manual
+../../../doc/manualindex manual
+tex manual
+../../../etc/convert.pl -c -i -n cryst . ../htm
+dvips manual
