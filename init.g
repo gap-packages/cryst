@@ -29,12 +29,20 @@ ReadPkg( "cryst/grp/spacegrp.gd" );  # the IT space group catalogue
 
 #############################################################################
 ##
-#R  try to read the CARAT package; don't complain if it is not available
+#R  try to read the CARAT and polycyclic packages; 
+#R  don't complain if they are not available
 ##
 OldWarningLevel := InfoLevel( InfoWarning );
 SetInfoLevel( InfoWarning, 0 );
+AutoloadTmp := IS_IN_AUTOLOAD;
+IS_IN_AUTOLOAD := false;
 RequirePackage( "carat" );
 RequirePackage( "polycyclic" );
+IS_IN_AUTOLOAD := AutoloadTmp;
+Unbind( AutoloadTmp );
 SetInfoLevel( InfoWarning, OldWarningLevel );
 Unbind( OldWarningLevel );
+
+
+
 
