@@ -597,6 +597,29 @@ end );
 
 #############################################################################
 ##
+#M  Normalizer( G, H ) . . . . . . . . . . . . . . . . . . . . . . normalizer
+##
+InstallMethod( NormalizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj, 
+    [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
+function( G, H )
+    local gens, orbstab;
+    gens    := GeneratorsOfGroup( G );
+    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
+    return orbstab.stabilizer;
+end );
+
+InstallMethod( NormalizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
+    [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
+function( G, H )
+    local gens, orbstab;
+    gens    := GeneratorsOfGroup( G );
+    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
+    return orbstab.stabilizer;
+end );
+
+
+#############################################################################
+##
 #M  TranslationNormalizer( S ) . . . . . . . . . . . . translation normalizer
 ##
 InstallMethod( TranslationNormalizer, "for SpaceGroup acting OnRight", 
@@ -895,7 +918,7 @@ RedispatchOnCondition( AffineNormalizer, true,
 ##
 InstallGlobalFunction( AffineInequivalentSubgroups, function( S, subs )
 
-    local C, A, opr, reps, orb, pnt, gen, img;
+    local C, A, opr, reps, orb, grp, gen, img;
 
     if subs = [] then
         return subs;
@@ -912,11 +935,11 @@ InstallGlobalFunction( AffineInequivalentSubgroups, function( S, subs )
             Error( "subs must be a list of subgroups of S" );
         fi;
         orb := [ C[1] ];
-        for pnt  in orb  do
-            for gen  in GeneratorsOfGroup( A )  do
-                img := ConjugateGroup( pnt, gen);
-                if not img in orb then
-                    Add( orb, img );
+        for grp in orb do
+            for gen in GeneratorsOfGroup( A ) do
+                img := List( GeneratorsOfGroup( grp ), x -> x^gen );
+                if not ForAny( orb, g -> ForAll( img, x -> x in g ) ) then
+                    Add( orb, ConjugateGroup( grp, gen ) );
                 fi;
             od;
         od;

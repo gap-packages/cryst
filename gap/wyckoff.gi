@@ -24,8 +24,9 @@ end );
 InstallMethod( PrintObj,
     "Wyckoff position", true, [ IsWyckoffPosition ], 0,
 function( w )
-    Print( "[ class: ", w!.class, ", translation: ",w!.translation,
-           ", basis: ", w!.basis, " ]" );
+    Print( "< Wyckoff position, point group ", w!.class, 
+           ", translation := ", w!.translation, 
+           ", \nbasis := ", w!.basis, " >\n" );
 end );
 
 #############################################################################
@@ -35,8 +36,9 @@ end );
 InstallMethod( ViewObj,
     "Wyckoff position", true, [ IsWyckoffPosition ], 0,
 function( w )
-    Print( "[ class: ", w!.class, ", translation: ",w!.translation,
-           ", basis: ", w!.basis, " ]" );
+    Print( "< Wyckoff position, point group ", w!.class, 
+           ", translation := ", w!.translation, 
+           ", \nbasis := ", w!.basis, " >\n" );
 end );
 
 #############################################################################
