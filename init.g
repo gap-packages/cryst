@@ -11,7 +11,7 @@
 ##                            GAP 4 Version
 ##
 
-DeclareAutoPackage( "cryst", "1.0", ReturnTrue );
+DeclareAutoPackage( "cryst", "0.9", ReturnTrue );
 DeclarePackageAutoDocumentation( "cryst", "doc" );
 
 #############################################################################
