@@ -1,9 +1,9 @@
 
-   C := LibraryCrystGroup( 3, 133 );
+   C := SpaceGroupIT( 3, 133 );
    m := IdentityMat(4);
-   ConjugatedCrystGroup( C, m );
+   C^m;
 
-   C := LibraryCrystGroup( 3, 133 );
+   C := SpaceGroupIT( 3, 133 );
    P := PointGroup( C );
    NormalizerInGLnZ( P );
 
@@ -13,8 +13,8 @@ einer CrystGroup aufgetreten.
 
 1.) Size einer ConjugacyClass von Elementen geht nicht immer:
 
-   G := CrystGroup( 4, 29, 7, 2, 1 );
-   S := WyckoffStabilizer der 11. WyckoffPosition von der Ordnung 72
+   G := SpaceGroupBBNWZ( 4, 29, 7, 2, 1 );
+   S := WyckoffStabilizer(WyckoffPositions(S)[1]);
    cl := ConjugacyClasses(S);
    Size( cl[1] );
 
