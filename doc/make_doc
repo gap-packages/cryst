@@ -4,4 +4,6 @@ tex manual
 ../../../doc/manualindex manual
 tex manual
 ../../../etc/convert.pl -c -i -n cryst . ../htm
-dvips manual
+dvips -o manual.ps manual
+ps2pdf manual.ps manual.pdf
+
