@@ -86,6 +86,7 @@ F 1.9. TranslationNormalizer
 I 1.9. normalizer!in affine group
 F 1.9. AffineNormalizer
 F 1.9. AffineInequivalentSubgroups
+F 1.9. ConjugatorSpaceGroups
 S 1.10. Color groups
 F 1.10. ColorGroup
 F 1.10. IsColorGroup
