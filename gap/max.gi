@@ -641,7 +641,7 @@ end;
 ##
 MaximalSubgroupRepsSG := function( G, p )
 
-    local iso, F, Fgens, Ggens, T, n, d, t, gens, A, kernel, 
+    local iso, F, Fgens, Frels, Ffree, Ggens, T, n, d, t, gens, A, kernel, 
           i, imgs, max, M, g, exp, h, j, pcgs, first, weights;
 
     if not IsSolvableGroup( G ) then
@@ -655,7 +655,9 @@ MaximalSubgroupRepsSG := function( G, p )
     fi;
 
     F     := Image( IsomorphismFpGroup( G ) );
-    Fgens := GeneratorsOfGroup( F );
+    Frels := RelatorsOfFpGroup( F );
+    Ffree := FreeGroupOfFpGroup( F );
+    Fgens := GeneratorsOfGroup( Ffree );
 
     T := TranslationBasis( G );
     n := Length( Ggens );
@@ -663,7 +665,7 @@ MaximalSubgroupRepsSG := function( G, p )
     t := Length( T );
 
     gens := List( [n+1..n+t], x -> Fgens[x]^p );
-    F := FactorGroup( F, gens );
+    F := Ffree / Concatenation( Frels, gens );
     A := PcGroupFpGroup( F );
 
     # compute maximal subgroups of S
