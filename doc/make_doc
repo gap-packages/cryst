@@ -1,5 +1,5 @@
 #!/bin/sh
-rm manual.aux manual.dvi manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+rm -f manual.aux manual.dvi manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
 tex manual
 ../../../doc/manualindex manual
 tex manual
