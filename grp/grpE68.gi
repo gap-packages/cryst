@@ -11,8 +11,8 @@ e6gen:=
       [ 0, 0, 0, 1, 1, 0 ], [ 0, 0, 0, 0, -1, 0 ], [ 0, 0, 0, 0, 1, 1 ] ], 
   [ [ 1, 0, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0, 0 ], [ 0, 0, 1, 0, 0, 0 ], 
       [ 0, 0, 0, 1, 0, 0 ], [ 0, 0, 0, 0, 1, 1 ], [ 0, 0, 0, 0, 0, -1 ] ] ];
-e8gen:=
 
+e8gen:=
 [ [ [ -1, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0, 0, 0, 0 ], 
       [ 1, 0, 1, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 1, 0, 0, 0, 0 ], 
       [ 0, 0, 0, 0, 1, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 1, 0, 0 ], 
@@ -48,7 +48,7 @@ e8gen:=
 
 E6 := GroupByGenerators( e6gen, IdentityMat( 6 ) );
 E8 := GroupByGenerators( e8gen, IdentityMat( 8 ) );
-
+E8b := GroupWithGenerators(GeneratorsOfGroup(ImfMatrixGroup(8,3)));
 
 SymmorphicSpaceGroup := function( P )
     local gens, n, aff, g, h, i, v, t;
