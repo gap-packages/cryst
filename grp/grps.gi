@@ -17,7 +17,7 @@ LibraryCrystGroup := function( d, i )
         Error("only dimensions 2 and 3 are available");
     fi;
 
-    S := AffineCrystGroupOnRight( List( gens[i], MutableMatrix ), 
+    S := AffineCrystGroupOnRightNC( List( gens[i], MutableMatrix ), 
                                   IdentityMat( d+1 ) );
     AddTranslationBasis( S, IdentityMat( d ) );
     P := PointGroup( S );

@@ -86,11 +86,11 @@ InstallGlobalFunction( SpaceGroupFunIT, function( r )
       gens := List( gens, TransposedMat );
       norm := List( data.normgens, TransposedMat );
       name := "SpaceGroupOnLeftIT(";
-      S := AffineCrystGroupOnLeft( gens, IdentityMat( r.dim+1 ) );
+      S := AffineCrystGroupOnLeftNC( gens, IdentityMat( r.dim+1 ) );
    else
       norm := data.normgens;
       name := "SpaceGroupOnRightIT(";
-      S := AffineCrystGroupOnRight( gens, IdentityMat( r.dim+1 ) );
+      S := AffineCrystGroupOnRightNC( gens, IdentityMat( r.dim+1 ) );
    fi;
    AddTranslationBasis( S, data.basis );
    SetName( S, Concatenation( name, String(r.dim), ",", String(r.nr),
