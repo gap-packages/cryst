@@ -9,9 +9,9 @@
 
 #############################################################################
 ##
-#A  Cocycles( <S> ) .  Cocycles of extension of point group with translations
+#A  CocVecs( <S> ) . . Cocycles of extension of point group with translations
 ##
-DeclareAttribute( "Cocycles", IsAffineCrystGroupOnLeftOrRight );
+DeclareAttribute( "CocVecs", IsAffineCrystGroupOnLeftOrRight );
 
 
 
