@@ -11,6 +11,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Affine crystallographic groups}
 
+The CrystGap package provides functions for the computation with
+affine crystallographic groups, in particular space groups.  For the
+definition of the standard crystallographic notions we refer to the
+International Tables \cite{IT}, in particular the chapter by 
+Wondratschek \cite{W}, and to the introductory chapter in 
+\cite{BBNWZ}. The principal algorithms used in this package are 
+described in \cite{EGN}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Affine crystallographic groups}
+
 An affine crystallographic group <G> is a subgroup of the group of all
 Euclidean motions of $d$-dimensional space, with the property that its
 subgroup <T> of all pure translations is a discrete normal subgroup of
@@ -123,7 +134,7 @@ the same argument, depending on the value of `CrystGroupDefaultAction'.
 calls `IsAffineCrystGroupOnRight' or `IsAffineCrystGroupOnLeft' with
 the same argument, depending on the value of `CrystGroupDefaultAction'.
 
-\>TransposedAffineCrystGroup( <S> ) A
+\>TransposedMatrixGroup( <S> ) A
 
 returns the transpose of the affine crystallographic group <S>. 
 If <S> is acting on the right, its transpose is acting on the left,
@@ -131,7 +142,7 @@ and vice versa.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The point group}
+\Section{Point group}
 
 \index{point group!of AffineCrystGroup}
 
@@ -167,7 +178,7 @@ returns `true' if and only if <H> has been constructed as the
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The translation lattice}
+\Section{Translation lattice}
 
 \index{translation lattice!of AffineCrystGroup}
 
@@ -250,12 +261,15 @@ crystallographic groups should work also in that case. In
 particular, there should be no restrictions for finite 
 `AffineCrystGroups'. For infinite groups, some restrictions 
 apply, however. For instance, algorithms from the orbit-stabilizer 
-family can work only if the orbits generated are finite.
+family can work only if the orbits generated are finite. Note,
+however, that `Normalizer', `Centralizer' and `RepresentativeAction'
+in an `AffineCrystGroup' work even if the corresponding orbit is
+infinite.
 
 Some methods installed for affine crystallographic groups have
 a special behavior.
 
-\>`\^{}( <S>, <conj> )'{AAA}@{`\^{}'!for AffineCrystGroup}
+\>`\^{}( <S>, <conj> )'{1}@{`\^{}'!for AffineCrystGroup}
 
 If <S> is an `AffineCrystGroupOnRight', the group <conj * S * conj^{-1}> 
 is returned. <conj> must be an affine matrix acting on the right.
@@ -329,7 +343,7 @@ is bound and `true'.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Space groups with a given PointGroup}
+\Section{Space groups with a given goint group}
 
 \index{space groups!for given point group}
 
@@ -381,7 +395,7 @@ group type representatives, but all space groups up to conjugacy in
 the full translation group are returned. These are then collected 
 into lists of space groups of the same space group type.
 
-\endexample
+\beginexample
 gap> SpaceGroupTypesByPointGroupOnRight( P );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
   <matrix group with 4 generators> ]
@@ -562,6 +576,50 @@ a second argument, <def>, is possible, which is a record with optional
 components `title', `width' and `height', specifying the title, width
 and height of the graphic sheet on which the graph will be displayed.
 
+Each vertex of the graph represents a Wyckoff position. Vertices are
+arranged in horizontal layers, determined by the dimension <s> of the 
+Wyckoff position and the size <s> of its stabilizer. For each layer, 
+the list <[ d, s ]> is displayed at the right border of the graphic 
+sheet. The vertical positions of the layers are ordered according to 
+the dimension of the Wyckoff position (primary criterion, smaller 
+dimension above) and the size of the stabilizer (secondary criterion, 
+bigger stabilizer above). Two Wyckoff positions are connected if the 
+closure of the lower one contains the upper one. Two Wyckoff positions
+are connected by a line only if there is no Wyckoff position in between. 
+The connection line is labelled with the index of the smaller stabilizer
+(of the lower Wyckoff position) in the bigger stabilizer. This index
+is the number of affine subspaces contained in the lower Wyckoff 
+position that contain a fixed representative affine subspace of the 
+upper Wyckoff position.
+
+The initial layout of the graph is not always optimal. In particular,
+several connection lines can be drawn on top of each other, so that
+it is not easy to see who is connected with whom. With the left
+mouse button, the graph can be rearranged, however. Just drag each 
+vertex to a more suitable place. Note, however, that a vertex can not 
+leave its layer. For more details, please consult the XGAP manual.
+
+By right-clicking on a vertex, a popup menu with information on the
+Wyckoff position of that vertex appears. It informs on the size of
+the `WyckoffStabilizer', the dimension of the Wyckoff position, 
+the length of the `WyckoffOrbit' (modulo lattice translations),
+the translation and basis of a representative affine subspace, the
+isomorphims type of the `WyckoffStabilizer', and the ConjugacyClassInfo
+of the point group <P> of the `WyckoffStabilizer'. The ConjugacyClassInfo
+lists for each conjugacy class of elements of <P> the number of that 
+class, the order, trace and determinant of its elements, and the 
+size of the class. This information is useful to identify the 
+geometric operation of the stabilizer. The isomorphism type and
+ConjugacyClassInfo may not be displayed initially. It this case,
+they can be obtained by left-clicking on them, or by left-clicking
+on the button labelled <all>. Unfortunately, the popup window 
+cannot be resized automatically, and since the ConjugacyClassInfo 
+needs several lines for the display, the information may be hidden 
+behind the border of the window. You will have to use the slider of
+the popup window to make it visible, or resize the window with the
+help of your window manager. Alternatively, you can right-click 
+again on the same vertex, in which case a new popup window of 
+sufficient size appears. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
