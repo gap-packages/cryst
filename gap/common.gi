@@ -179,24 +179,6 @@ end;
 
 #############################################################################
 ##
-#F  HermiteNormalForm . . . . . . .  Hermite normal form of an integer matrix
-##
-#HermiteNormalForm := function( mat )
-#    local new, tmp, n;
-#    if mat = [] then return []; fi;
-#    return HermiteNormalFormIntegerMat( mat );
-#    new := HermiteNormalFormIntegerMat( mat );
-#    tmp := [];
-#    for n in new do
-#        if 0*n <> n then
-#            Add( tmp, n );
-#        fi;
-#    od;
-#    return tmp;
-#end;
-
-#############################################################################
-##
 #F  FractionModOne  . . . . . . . . . . . . . . . . . . a fraction modulo one
 ##
 FractionModOne := function( q )
@@ -293,31 +275,24 @@ end;
 ##
 ReducedLatticeBasis := function ( trans )
 
-    local tmp, den, n, zero;
+    local tmp, den, r, L;
 
-    if trans = [] or Rank( trans ) = 0 then
+    if trans = [] then
         return [];
     else
-        tmp   := Flat( trans );
+        tmp := Flat( trans );
         if ForAll( tmp, IsInt ) then
-            trans := HermiteNormalFormIntegerMat( trans );
+            r   := NormalFormIntMat( trans, 2 );
+            L   := r.normal{[1..r.rank]};
         else
             den := Lcm( List( tmp, DenominatorRat ) );
-            trans := HermiteNormalFormIntegerMat( den*trans )/den;
+            r   := NormalFormIntMat( den * trans, 2 );
+            L   := r.normal{[1..r.rank]} / den;
         fi;
     fi;
-
-    tmp  := [];
-    zero := 0*trans[1];
-    for n in trans do
-        if n <> zero then
-            Add( tmp, n );
-        fi;
-    od;
-    return tmp;
+    return L;
 
 end;
-
 
 #############################################################################
 ##
@@ -327,23 +302,24 @@ UnionModule := function( M1, M2 )
     return ReducedLatticeBasis( Concatenation( M1, M2 ) );
 end;
 
-
 #############################################################################
 ##
 #F  IntersectionModule( M1, M2 ) . . . . . intersection of two free Z-modules
 ##
 IntersectionModule := function( M1, M2 )
 
-    local M, Q, T;
+    local M, Q, r, T;
 
     if M1 = [] or M2 = [] then
         return [];
     fi;
     M := Concatenation( M1, M2 );
-    M := M*Lcm( List( Flat( M ), DenominatorRat ) );
-    Q := IdentityMat( Length( M ) );
-    M := RowEchelonFormT( M, Q );
-    T := Q{[Length(M)+1..Length(Q)]}{[1..Length(M1)]}*M1;
+    M := M * Lcm( List( Flat( M ), DenominatorRat ) );
+#    Q := IdentityMat( Length( M ) );
+#    M := RowEchelonFormT( M, Q );
+#    T := Q{[Length(M)+1..Length(Q)]}{[1..Length(M1)]} * M1;
+    r := NormalFormIntMat( M, 4 );
+    T := r.rowtrans{[r.rank+1..Length(M)]}{[1..Length(M1)]} * M1;
     return ReducedLatticeBasis( T );
 
 end;
