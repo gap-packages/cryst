@@ -35,6 +35,7 @@ function ( P )
     gensF := GeneratorsOfGroup( F );
 
     iso := GroupHomomorphismByImagesNC( P, F, gensP, gensF );
+    SetMappingGeneratorsImages( iso, [ gensP, gensF ] );
     SetIsBijective( iso, true );
     SetKernelOfMultiplicativeGeneralMapping( iso, TrivialSubgroup( P ) );
     iso!.preimagesInAffineCrystGroup := Immutable( gensS );
@@ -86,15 +87,17 @@ function( S )
     # compute tails
     for rel in rels do
         tail := MappedWord( rel, gensR, matsP );
-        if IsAffineCrystGroupOnRight( S ) then
-            vec  := SolutionMat( T, - tail[d+1]{[1..d]} );
-        else
-            vec  := SolutionMat( T, - tail{[1..d]}[d+1] );
-        fi;
         word := rel;
-        for i in [1..t] do
-            word := word * gensT[i]^vec[i];
-        od;
+        if t > 0 then
+            if IsAffineCrystGroupOnRight( S ) then
+                vec  := SolutionMat( T, - tail[d+1]{[1..d]} );
+            else
+                vec  := SolutionMat( T, - tail{[1..d]}[d+1] );
+            fi;
+            for i in [1..t] do
+                word := word * gensT[i]^vec[i];
+            od;
+        fi;
         Add( relsR, word );
     od;
 
@@ -128,11 +131,55 @@ function( S )
     gens := Concatenation( matsP, matsT ); 
     ims  := GeneratorsOfGroup( R );
     iso  := GroupHomomorphismByImagesNC( S, R, gens, ims ); 
+    SetMappingGeneratorsImages( iso, [ gens, ims ] );
+    SetIsFromAffineCrystGroupToFpGroup( iso, true );
     SetIsBijective( iso, true );
     SetKernelOfMultiplicativeGeneralMapping( iso, TrivialSubgroup( S ) );
 
     return iso;
 
 end );
+
+#############################################################################
+##
+#M  ImagesRepresentative( <iso>, <elm> )  for IsFromAffineCrystGroupToFpGroup
+##
+InstallMethod( ImagesRepresentative, FamSourceEqFamElm,
+    [IsGroupGeneralMappingByImages and IsFromAffineCrystGroupToFpGroup,
+     IsMultiplicativeElementWithInverse ], 0,
+function( iso, elm )
+
+    local d, S, T, elmP, isoP, word, genP, len, genS, genF, elm2, v, i;
+
+    d := Length( elm ) - 1;
+    S := Source( iso );
+    T := TranslationBasis( S );
+
+    elmP := elm{[1..d]}{[1..d]};
+    isoP := IsomorphismFpGroup( PointGroup( S ) );
+    word := ImagesRepresentative( isoP, elmP );
+
+    genP := MappingGeneratorsImages( isoP )[2];
+    len  := Length( genP );
+    genS := MappingGeneratorsImages( iso  )[1];
+    genF := MappingGeneratorsImages( iso  )[2];
+    elm2 := MappedWord( word, genP, genS{[1..len]} );
+    word := MappedWord( word, genP, genF{[1..len]} );
+
+    if Length( T ) > 0 then
+        if IsAffineCrystGroupOnRight( S ) then
+            v := elm[d+1]{[1..d]} - elm2[d+1]{[1..d]};
+        else
+            v := elm{[1..d]}[d+1] - elm2{[1..d]}[d+1];
+        fi;
+        for i in [1..Length(v)] do
+            word := word * genF[len+i]^v[i];
+        od;
+    fi;
+    return word;
+
+end );
+
+
 
 

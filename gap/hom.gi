@@ -79,3 +79,30 @@ InstallGlobalFunction( NiceToCrystStdRep, function( P, perm )
         return S!.lconj * m * S!.rconj;
     fi;
 end );
+
+#############################################################################
+##
+#M  NaturalHomomorphismByNormalSubgroup( <G>, <N> ) . .  for AffineCrystGroup
+##
+InstallMethod( NaturalHomomorphismByNormalSubgroupOp, 
+    "for AffineCrystGroup", IsIdenticalObj,
+    [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
+function( G, N )
+    if IsFinite(G) or
+        Length( TranslationBasis(G) ) <> Length( TranslationBasis(N) ) then
+            TryNextMethod();
+    fi;
+    return SparseActionHomomorphism( G, [ RightCoset(N,()) ], OnRight );
+end );
+
+InstallMethod( NaturalHomomorphismByNormalSubgroupOp,
+    "for AffineCrystGroup", IsIdenticalObj,
+    [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
+function( G, N )
+    if IsFinite(G) or
+        Length( TranslationBasis(G) ) <> Length( TranslationBasis(N) ) then
+            TryNextMethod();
+    fi;
+    return SparseActionHomomorphism( G, [ RightCoset(N,()) ], OnRight );
+end );
+
