@@ -64,46 +64,49 @@ InstallMethod( WyckoffBasis,
 
 #############################################################################
 ##
-#F  ReduceAffineSubspaceLattice . . . . reduce affine subspace modulo lattice
+#M  ReduceAffineSubspaceLattice . . . . reduce affine subspace modulo lattice
 ##
-InstallGlobalFunction( ReduceAffineSubspaceLattice, function( r )
+InstallGlobalFunction( ReduceAffineSubspaceLattice, 
+function( r )
 
-    local v, d, L, N, i, n, l, x, k;
+    local rk, d, T, Ti, M, R, Q, Qi, P, v, j;
 
-    v := r.translation;
-    d := Length( v );
-    r.basis   := ReducedLatticeBasis( r.basis );
-    L := TranslationBasis( r.spaceGroup );
+    r.basis := ReducedLatticeBasis( r.basis );
+    rk := Length( r.basis );
+    d  := Length( r.translation );
+    T  := TranslationBasis( r.spaceGroup );
+    Ti := T^-1;
 
-    #  reduce the translation
-    if r.basis <> [] then
-        L := ReducedLatticeBasis( Concatenation(  L, r.basis ) );
-        N := List( r.basis, ShallowCopy );
-        for i in [1..d] do
-            if N <> [] then
-                n := N[1];
-                l := L[1]; 
-                if n[i] <> 0 then
-                    v := v - n * v[i] / n[i];
-                    n := n * l[i] / n[i] - l;
-                    L := ShallowCopy( L );
-                    L[1] := n;
-                    L := ReducedLatticeBasis( L ); 
-                    N := N{[2..Length(N)]};
-                else
-                    x :=  v[i] / l[i];
-                    k := Int( x );
-                    if x < 0 and not IsInt( x ) then k := k-1; fi;
-                    if k <> 0 then
-                        v := v - k * l;
-                    fi; 
-                    L := L{[2..Length(L)]};
-                fi;
-            fi;
-        od;
+    if rk = d then
+        v := 0 * r.translation;
+    elif rk > 0 then
+        M := r.basis;
+        v := r.translation;
+        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+            M := M * Ti;
+            v := v * Ti;
+        fi;
+
+        # these three lines are faster than the other four
+        Q := IdentityMat(d);
+        RowEchelonFormT(TransposedMat(M),Q);
+        Q := TransposedMat(Q);
+
+        # R := NormalFormIntMat( TransposedMat( M ), 4 );
+        # Q := TransposedMat( R.rowtrans );
+        # R := NormalFormIntMat( M, 9 );
+        # Q := R.coltrans; 
+
+        Qi := Q^-1;
+        P := Q{[1..d]}{[rk+1..d]} * Qi{[rk+1..d]};
+        v := List( v * P, FractionModOne );
+        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+            v := v * T;
+        fi;
+    else
+        v := VectorModL( r.translation, T );
     fi;
-
-    r.translation := VectorModL( v, L );
+    r.translation := v;
 
 end );
 
@@ -140,6 +143,10 @@ InstallGlobalFunction( ImageAffineSubspaceLatticePointwise, function( s, g )
     return r;
 end );
 
+#############################################################################
+##
+#M  \= . . . . . . . . . . . . . . . . . . . . . . .for two Wyckoff positions 
+##
 InstallMethod( \=, IsIdenticalObj,
     [ IsWyckoffPosition, IsWyckoffPosition ], 0,
 function( w1, w2 )
@@ -164,7 +171,10 @@ function( w1, w2 )
     return rep <> fail;
 end );
 
-
+#############################################################################
+##
+#M  \< . . . . . . . . . . . . . . . . . . . . . . .for two Wyckoff positions 
+##
 InstallMethod( \<, IsIdenticalObj,
     [ IsWyckoffPosition, IsWyckoffPosition ], 0,
 function( w1, w2 )
@@ -191,7 +201,6 @@ function( w1, w2 )
     o2 := Set( List( o2, x -> rec( t := x.translation, b := x.basis ) ) ); 
     return o1[1] < o2[1];
 end );
-
 
 #############################################################################
 ##
@@ -274,7 +283,6 @@ end );
 ##  Note that 0 < b <  1, so 0 < b/a and (a-1)/a + b/a < 1.
 ##
 SolveOneInhomEquationModZ := function( a, b )
-    
     return [0..a-1] / a + b/a;
 end;
 
@@ -282,7 +290,7 @@ end;
 ##
 #F  SolveInhomEquationsModZ . . . . .solve an inhom system of equations mod Z
 ##
-##  This function computes the set of solutions of the equation
+##  If onRight = true, compute the set of solutions of the equation
 ##
 ##                           x * M = b  (mod Z).
 ##
@@ -291,14 +299,28 @@ end;
 ##         x * Q^-1 * D = b       with D a diagonal matrix.
 ##  Solving y * D = b we get x = y * Q.
 ##
-SolveInhomEquationsModZ := function( M, b )
+##  If onRight = false, compute the set of solutions of the equation
+##
+##                           M * x = b  (mod Z).
+##
+##  RowEchelonFormT() returns a matrix Q such that Q * M is in row echelon
+##  form.  This means that (modulo column operations) we have the equation
+##         x * Q^-1 * D = b       with D a diagonal matrix.
+##  Solving y * D = b we get x = y * Q.
+##
+SolveInhomEquationsModZ := function( M, b, onRight )
+
     local   Q,  j,  L,  space,  i,  v;
     
     b := ShallowCopy(b);
-    Q := IdentityMat( Length(M) );
-    
-    M := TransposedMat(M);
-    M := RowEchelonFormVector( M,b );
+    if onRight = true then
+        Q := IdentityMat( Length(M) );
+        M := TransposedMat(M);
+        M := RowEchelonFormVector( M,b );
+    else
+        Q := IdentityMat( Length(M[1]) );
+    fi;
+
     while not IsDiagonalMat(M) do
         M := TransposedMat(M);
         M := RowEchelonFormT(M,Q);
@@ -357,7 +379,7 @@ FixedPointsModZ := function( gens, d )
     if Length(M[1]) = 0 then M := List( [1..d], x->[0] ); b := [0]; fi;
     
     ##  Compute the spaces of points fixed modulo translations.
-    F := SolveInhomEquationsModZ( M, b );
+    F := SolveInhomEquationsModZ( M, b, true );
     return List( F[1], f -> rec( translation := f, basis := F[2] ) );
 
 end;
@@ -375,7 +397,7 @@ IntersectionsAffineSubspaceLattice := function( U, V )
     t  := V.translation - U.translation;
     Ti := T^-1;
 
-    s  := SolveInhomEquationsModZ( m*Ti, t*Ti );
+    s  := SolveInhomEquationsModZ( m*Ti, t*Ti, true );
 
     if s[1] = [] then
         return fail;
@@ -471,18 +493,11 @@ end;
 
 #############################################################################
 ##
-#M  WyckoffPositions( S ) . . . . . . . . . . . . . . . . . Wyckoff positions 
+#F  WyPosSGL( S ) . . . Wyckoff positions via subgroup lattice of point group 
 ##
-InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight", 
-    true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
-function( S )
+WyPosSGL := function( S )
 
     local P, N, lift, stabs, W;
-
-    # check if we have indeed a space group
-    if not IsSpaceGroup( S ) then
-        Error("S must be a space group");
-    fi;
 
     # get point group P, and its nice representation N
     P := PointGroup( S );
@@ -495,6 +510,141 @@ function( S )
 
     # now get the Wyckoff positions
     return WyPos( S, stabs, lift );
+
+end;
+
+#############################################################################
+##
+#F  WyPosStep . . . . . . . . . . . . . . . . . . .induction step for WyPosAT 
+##
+WyPosStep := function( idx, G, M, b, lst )
+
+    local g, G2, M2, b2, F, c, added, stop, f, d, w, O;
+
+    g := lst.z[idx];
+    if not g in G then
+        G2 := ClosureGroup( G, g );
+        M2 := Concatenation( M, lst.mat[idx] );
+        b2 := Concatenation( b, lst.vec[idx] );
+        if M <> [] then
+            M2 := RowEchelonFormVector( M2, b2 );
+        fi;
+        if ForAll( b2{[Length(M2)+1..Length(b2)]}, IsInt ) then
+            b2 := b2{[1..Length(M2)]};
+            F := SolveInhomEquationsModZ( M2, b2, false );
+            F := List( F[1], f -> rec( translation := f, basis := F[2] ) );
+        else
+            F := [];
+        fi;
+        c := lst.c + 1;
+        added := false;
+        for f in F do
+            d := Length( f.basis ) + 1; 
+            stop := d=lst.dim+1;
+            f.translation := f.translation * lst.T;
+            f.basis       := f.basis * lst.T;
+            f.spaceGroup  := lst.S;
+            ReduceAffineSubspaceLattice( f );
+            if not f in lst.sp[d] then
+                O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
+                w := ShallowCopy( f );
+                w.class := c;
+                UniteSet( lst.sp[d], O );
+                Add( lst.W[d], WyckoffPositionObject(w) );
+                added := true;
+            fi;
+        od;
+        if added and not stop then
+            lst.c := lst.c+1;
+            if idx < Length(lst.z) then
+                WyPosStep( idx+1, G2, M2, b2, lst );
+            fi;
+        fi;
+    fi;
+    if idx < Length(lst.z) then
+        WyPosStep( idx+1, G, M, b, lst );
+    fi;
+
+end;
+
+#############################################################################
+##
+#F  WyPosAT( S ) . . . . Wyckoff positions with recursive method by Ad Thiers 
+##
+WyPosAT := function( S )
+
+    local d, P, gen, S2, lst, zz, mat, vec, g, m, M, b, s, w;
+
+    d := DimensionOfMatrixGroup(S)-1;
+    P := PointGroup( S );
+    gen := Filtered( GeneratorsOfGroup(S), x -> x{[1..d]}{[1..d]} <> One(P) );
+    S2 := Subgroup( S, gen );
+    if IsAffineCrystGroupOnLeft( S ) then
+        S2 := TransposedMatrixGroup( S2 );
+    fi;
+    
+    lst := rec( dim := d, T := TranslationBasis(S), S := S, c := 1,
+                S2 := S2 );
+
+    zz := []; mat := []; vec := [];
+    for g in Zuppos( NiceObject( P ) ) do
+        if g <> () then
+            m := NiceToCrystStdRep(P,g);
+            if IsAffineCrystGroupOnRight( S ) then
+                m := TransposedMat(m);
+            fi;
+            M := m{[1..d]}{[1..d]}-IdentityMat(d);
+            b := m{[1..d]}[d+1];
+            M := RowEchelonFormVector(M,b);
+            if ForAll( b{[Length(M)+1..Length(b)]}, IsInt ) then
+                Add( zz,  g );
+                Add( mat, M );
+                Add( vec, -b{[1..Length(M)]} );
+            fi;
+        fi;
+    od;
+    lst.z   := zz;
+    lst.mat := mat;
+    lst.vec := vec;
+
+    s := rec( translation := ListWithIdenticalEntries(d,0),
+              basis       := TranslationBasis(S),
+              spaceGroup  := S );
+    ReduceAffineSubspaceLattice(s);
+    lst.sp := List( [1..d+1], x-> [] ); Add( lst.sp[d+1], s );
+
+    w := ShallowCopy( s );
+    w.class := 1;
+    w := WyckoffPositionObject( w );
+    lst.W := List( [1..d+1], x -> [] ); Add( lst.W[d+1], w );
+
+    if 1 <= Length(lst.z) then
+        WyPosStep(1,TrivialGroup(IsPermGroup),[],[],lst);
+    fi;
+
+    return Flat(lst.W);
+
+end;
+
+#############################################################################
+##
+#M  WyckoffPositions( S ) . . . . . . . . . . . . . . . . . Wyckoff positions 
+##
+InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight", 
+    true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
+function( S )
+
+    # check if we indeed have a space group
+    if not IsSpaceGroup( S ) then
+        Error("S must be a space group");
+    fi;
+
+    # for small dimensions, the recursive method is faster
+    if DimensionOfMatrixGroup( S ) < 6 then
+        return WyPosAT( S );
+    else
+        return WyPosSGL( S );
+    fi;
 
 end );
 
