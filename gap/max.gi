@@ -572,7 +572,7 @@ MaximalSubgroupRepsKG := function( G, primes )
 
     pres  := Image( iso );
     rep   := List( Ggens, x -> x{[1..n]}{[1..n]} );
-    coc   := CocycleInfo( G );
+    coc   := CocycleInfo( G ) * T^-1;
     d     := DimensionOfMatrixGroup( G ) - 1;
     trans := List( T, x -> IdentityMat( d+1 ) );
     for i in [1..n] do
