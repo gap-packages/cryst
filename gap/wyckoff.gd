@@ -82,4 +82,21 @@ DeclareAttribute( "WyckoffPositions", IsAffineCrystGroupOnLeftOrRight );
 ##
 DeclareGlobalFunction( "WyckoffPositionsByStabilizer" );
 
+#############################################################################
+##
+#F  IsWyckoffGraph( G ) . . . . . . . . . . . . . . . . . . . .IsWyckoffGraph 
+##
+DeclareFilter( "IsWyckoffGraph" );
 
+#############################################################################
+##
+#F  WyckoffGraphFun( W, def ) . . . . . . . . . . . . display a Wyckoff graph 
+##
+DeclareGlobalFunction( "WyckoffGraphFun" ); 
+
+#############################################################################
+##
+#O  WyckoffGraph( S, def ) . . . . . . . . . . . . . .display a Wyckoff graph 
+##
+DeclareOperation( "WyckoffGraph", 
+    [ IsAffineCrystGroupOnLeftOrRight, IsRecord ] );

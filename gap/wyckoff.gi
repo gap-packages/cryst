@@ -140,6 +140,59 @@ InstallGlobalFunction( ImageAffineSubspaceLatticePointwise, function( s, g )
     return r;
 end );
 
+InstallMethod( \=, IsIdenticalObj,
+    [ IsWyckoffPosition, IsWyckoffPosition ], 0,
+function( w1, w2 )
+    local S, r1, r2, d, gens, U, rep;
+    S := WyckoffSpaceGroup( w1 );
+    if S <> WyckoffSpaceGroup( w2 ) then
+        return false;
+    fi;
+    r1 := rec( translation := WyckoffTranslation( w1 ),
+               basis       := WyckoffBasis( w1 ),
+               spaceGroup  := WyckoffSpaceGroup( w1 ) );
+    r2 := rec( translation := WyckoffTranslation( w2 ),
+               basis       := WyckoffBasis( w2 ),
+               spaceGroup  := WyckoffSpaceGroup( w2 ) );
+    r1 := ImageAffineSubspaceLattice( r1, One(S) );
+    r2 := ImageAffineSubspaceLattice( r2, One(S) );
+    d := DimensionOfMatrixGroup( S ) - 1;
+    gens := Filtered( GeneratorsOfGroup( S ),
+                      x -> x{[1..d]}{[1..d]} <> One( PointGroup( S ) ) );
+    U := SubgroupNC( S, gens );
+    rep := RepresentativeOperation( U, r1, r2, ImageAffineSubspaceLattice );
+    return rep <> fail;
+end );
+
+
+InstallMethod( \<, IsIdenticalObj,
+    [ IsWyckoffPosition, IsWyckoffPosition ], 0,
+function( w1, w2 )
+    local S, r1, r2, d, gens, U, o1, o2;
+    S := WyckoffSpaceGroup( w1 );
+    if S <> WyckoffSpaceGroup( w2 ) then
+        return S < WyckoffSpaceGroup( w2 );
+    fi;
+    r1 := rec( translation := WyckoffTranslation( w1 ),
+               basis       := WyckoffBasis( w1 ),
+               spaceGroup  := WyckoffSpaceGroup( w1 ) );
+    r2 := rec( translation := WyckoffTranslation( w2 ),
+               basis       := WyckoffBasis( w2 ),
+               spaceGroup  := WyckoffSpaceGroup( w2 ) );
+    r1 := ImageAffineSubspaceLattice( r1, One(S) );
+    r2 := ImageAffineSubspaceLattice( r2, One(S) );
+    d := DimensionOfMatrixGroup( S ) - 1;
+    gens := Filtered( GeneratorsOfGroup( S ),
+                      x -> x{[1..d]}{[1..d]} <> One( PointGroup( S ) ) );
+    U := SubgroupNC( S, gens );
+    o1 := Orbit( U, r1, ImageAffineSubspaceLattice );
+    o2 := Orbit( U, r2, ImageAffineSubspaceLattice );
+    o1 := Set( List( o1, x -> rec( t := x.translation, b := x.basis ) ) );
+    o2 := Set( List( o2, x -> rec( t := x.translation, b := x.basis ) ) ); 
+    return o1[1] < o2[1];
+end );
+
+
 #############################################################################
 ##
 #M  WyckoffStabilizer . . . . . . . . . . .stabilizer of representative space
@@ -200,7 +253,11 @@ function( w )
     U := AffineCrystGroupOnRight( gen, One( S ) );
     r := rec( translation := t, basis := B, spaceGroup  := S );
     o := Orbit( U, r, ImageAffineSubspaceLatticePointwise );
-    s := List( o, x -> rec( translation := x.translation, basis := x.basis));
+    s := List( o, x -> WyckoffPositionObject( 
+                              rec( translation := x.translation, 
+                                   basis       := x.basis, 
+                                   spaceGroup  := w!.spaceGroup,
+                                   class       := w!.class ) ) );
     return s;
 end );
 
@@ -421,5 +478,40 @@ InstallGlobalFunction( WyckoffPositionsByStabilizer, function( S, stb )
     return WyPos( S, stabs, lift );
 
 end );
+
+#############################################################################
+##
+#M  WyckoffGraphFun( S, def ) . . . . . . . . . . . . display a Wyckoff graph 
+##
+InstallMethod( WyckoffGraph, true, 
+    [ IsAffineCrystGroupOnLeftOrRight, IsRecord ], 0,
+function( S, def )
+    return WyckoffGraphFun( WyckoffPositions( S ), def );
+end );
+
+InstallOtherMethod( WyckoffGraph, true, 
+    [ IsAffineCrystGroupOnLeftOrRight ], 0,
+function( S )
+    return WyckoffGraphFun( WyckoffPositions( S ), rec() );
+end );
+
+InstallOtherMethod( WyckoffGraph, true, 
+    [ IsList, IsRecord ], 0,
+function( L, def )
+    if not ForAll( L, IsWyckoffPosition ) then
+       Error("L must be a list of Wyckoff positions of the same space group");
+    fi;
+    return WyckoffGraphFun( L, def );
+end );
+
+InstallOtherMethod( WyckoffGraph, true, 
+    [ IsList ], 0,
+function( L )
+    if not ForAll( L, IsWyckoffPosition ) then
+       Error("L must be a list of Wyckoff positions of the same space group");
+    fi;
+    return WyckoffGraphFun( L, rec() );
+end );
+
 
 
