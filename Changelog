@@ -39,4 +39,6 @@ Version 4.1:
   - A bug in ConjugacyClassesMaximalSubgroups for space groups was fixed; 
     their size was set to a wrong value in certain cases. 
 
+  - A mutability bug in AffineNormalizer was fixed.
+
 
