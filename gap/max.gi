@@ -819,7 +819,7 @@ function( S, flags )
     cls := [];
     for M in reps do
         c := ConjugacyClassSubgroups( S, M );
-        if IsNormal( M ) then
+        if IsNormal( S, M ) then
             SetSize( c, IndexInParent( M ) );
         fi;
         Add( cls, c );

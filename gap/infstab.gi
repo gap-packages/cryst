@@ -50,6 +50,7 @@ InstallGlobalFunction( StabilizerInfiniteGroup, function ( G, d, opr )
         for pnt in d do
             stb := StabilizerInfiniteGroup( stb, pnt, OnPoints );
         od;
+        return stb;
 
     # other operation
     else

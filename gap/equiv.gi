@@ -46,7 +46,7 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
     fi;
 
     # if we arrive here, we need the normalizer
-    Print("#I need normalizer\n");
+#    Print("#I need normalizer\n");
     Ngen := GeneratorsOfGroup( NormalizerPointGroupInGLnZ( P ) );
     Ngen := Filtered( Ngen, x -> not x in P );
 
@@ -140,8 +140,12 @@ function( S1, S2 )
     local S1tr, S2tr, C;
     S1tr := TransposedAffineCrystGroup( S1 );
     S2tr := TransposedAffineCrystGroup( S2 );
-    C    := ConjugatorSpaceGroups( S1, S2 );
-    return TransposedMat( C );
+    C    := ConjugatorSpaceGroups( S1tr, S2tr );
+    if C = fail then
+        return fail;
+    else
+        return TransposedMat( C );
+    fi;
 end );
 
 

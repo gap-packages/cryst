@@ -81,8 +81,7 @@ function( G, elm )
     fi;
 
     # make the closure group
-    C:= GroupByGenerators( Concatenation( gens, [ elm ] ) );
-    SetIsAffineCrystGroupOnRight( C, true );
+    C := AffineCrystGroupOnRight( Concatenation( gens, [ elm ] ) );
 
     # if <G> is infinite then so is <C>
     if HasIsFinite( G ) and not IsFinite( G ) then
@@ -117,8 +116,7 @@ function( G, elm )
     fi;
 
     # make the closure group
-    C:= GroupByGenerators( Concatenation( gens, [ elm ] ) );
-    SetIsAffineCrystGroupOnLeft( C, true );
+    C := AffineCrystGroupOnLeft( Concatenation( gens, [ elm ] ) );
 
     # if <G> is infinite then so is <C>
     if HasIsFinite( G ) and not IsFinite( G ) then
@@ -184,7 +182,7 @@ function( G, g )
 
     # create the domain
     gen := List( GeneratorsOfGroup( G ), x -> g * x * g^-1 );
-    H := AffineCrystGroupOnRight( gen, One( G ) );
+    H := AffineCrystGroupOnLeft( gen, One( G ) );
     if HasTranslationBasis( G ) then
         d := DimensionOfMatrixGroup( G ) - 1;
         T := TranslationBasis( G );
@@ -416,7 +414,7 @@ function( G )
     N := NormalizerPointGroupInGLnZ( G );
     gens := GeneratorsOfGroup( G );
     if IsFinite( N ) then
-        return Stabilizer( N, gens, OnTuples );
+        return Centralizer( N, G );
     else
         return StabilizerInfiniteGroup( N, gens, OnTuples );
     fi;
@@ -830,7 +828,7 @@ function( S )
         od;
     od;
 
-    if HasIsFinite( N ) and IsFinite( N ) then
+    if IsFinite( N ) then
         nn := Subgroup( N, [] );
         normgens := [];
         for g in lst do
@@ -855,6 +853,14 @@ function( S )
     AN := Group( normgens, One( S ) );
     AN!.continuousTranslations := TN!.continuousTranslations;
 
+    # can AN be made an AffineCrystGroup?
+    if IsFinite( N ) and AN!.continuousTranslations = [] then
+        SetIsAffineCrystGroupOnRight( AN, true );
+        lst := List( GeneratorsOfGroup( TN ), x -> x[d+1]{[1..d]} );
+        lst := ReducedLatticeBasis( lst );
+        AddTranslationBasis( AN, lst );
+    fi;
+
     return AN;
 
 end );
@@ -862,10 +868,14 @@ end );
 InstallMethod( AffineNormalizer, "for SpaceGroup acting OnLeft", true, 
     [ IsAffineCrystGroupOnLeft and IsSpaceGroup ], 0,
 function( S )
-    local A1, gen, A;
-    A1  := AffineNormalizer( TransposedAffineCrystGroup( S ) );
-    gen := List( GeneratorsOfGroup( A1 ), TransposedMat );
-    A   := Group( gen, One( A1 ) );
+    local A1, A, gen;
+    A1 := AffineNormalizer( TransposedAffineCrystGroup( S ) );
+    if IsAffineCrystGroupOnRight( A1 ) then
+        A := TransposedAffineCrystGroup( A1 );
+    else
+        gen := List( GeneratorsOfGroup( A1 ), TransposedMat );
+        A   := Group( gen, One( A1 ) );
+    fi;
     A!.continuousTranslations := A1!.continuousTranslations;
     return A;
 end );
@@ -892,6 +902,9 @@ InstallGlobalFunction( AffineInequivalentSubgroups, function( S, subs )
     fi;
     C := ShallowCopy( subs );
     A := AffineNormalizer( S );
+    if A!.continuousTranslations <> [] then
+        return fail;
+    fi;
 
     reps := [];
     while C <> []  do

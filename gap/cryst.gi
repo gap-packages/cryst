@@ -349,7 +349,7 @@ function ( S, conj )
     for i in [1..Length(gens)] do
         gens[i] := C * gens[i] * Ci;
     od;
-    R := AffineCrystGroupOnRight( gens, One( S ) );
+    R := AffineCrystGroupOnLeft( gens, One( S ) );
 
     # add translations if known
     if HasTranslationBasis( S ) then

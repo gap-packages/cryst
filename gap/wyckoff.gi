@@ -79,14 +79,15 @@ InstallGlobalFunction( ReduceAffineSubspaceLattice, function( r )
         N := List( r.basis, ShallowCopy );
         for i in [1..d] do
             if N <> [] then
-                n := N[1]; N := N{[2..Length(N)]};
+                n := N[1];
                 l := L[1]; 
                 if n[i] <> 0 then
                     v := v - n * v[i] / n[i];
                     n := n * l[i] / n[i] - l;
                     L := ShallowCopy( L );
                     L[1] := n;
-                    L := ReducedLatticeBasis( L );
+                    L := ReducedLatticeBasis( L ); 
+                    N := N{[2..Length(N)]};
                 else
                     x :=  v[i] / l[i];
                     k := Int( x );
@@ -165,7 +166,7 @@ function( w )
     for g in gen do
         v := t * g - t;
         n := List( g, ShallowCopy );
-        n{[1..d]} := g{[1..d]} - v;
+        n[d+1] := g[d+1] - v;
         if n <> One( S ) then
             AddSet( new, n );
         fi;

@@ -33,7 +33,8 @@ function( G )
     while HasParent( P ) and P <> Parent( P ) do
         P := Parent( P );
     od;
-    return Stabilizer( G, ColorCosetList( P )[1], OnPoints );
+    return Intersection( ColorSubgroup( P ), G );
+#    return Stabilizer( G, ColorCosetList( P )[1], OnRight );
 end );
 
 #############################################################################
@@ -67,10 +68,10 @@ end );
 ColorPermGroupHomomorphism := function( G )
     local P, pmg, hom;
     P := G;
-    while HasParent( P ) do
+    while HasParent( P ) and P <> Parent( P ) do
         P := Parent( P );
     od;
-    pmg := Operation( G, ColorCosetList( P ) );
+    pmg := Operation( G, ColorCosetList( P ), OnRight );
     hom := OperationHomomorphism( G, pmg );
     return [ pmg, hom ];
 end;
@@ -112,21 +113,22 @@ InstallMethod( PointGroup, "for colored AffineCrystGroups",
     true, [ IsColorGroup and IsAffineCrystGroupOnLeftOrRight ], 0,
 function( G )
 
-    local tmp, P, H, reps;
+    local tmp, P, hom, H, reps;
 
     tmp := PointGroupHomomorphism( G );
-    SetPointGroup( G, tmp[1] );
-    SetPointHomomorphism( G, tmp[2] );
+    P   := tmp[1];
+    hom := tmp[2];
+    SetPointGroup( G, P );
+    SetPointHomomorphism( G, hom );
 
     # color the point group if possible
     H := ColorSubgroup( G );
     if TranslationBasis( G ) = TranslationBasis( H ) then
-        P := tmp[1];
         H := PointGroup( H );
         SetIsColorGroup( P, true );
         SetColorSubgroup( P, H );
         reps := List( ColorCosetList( G ), 
-                x -> ImagesRepresentative( tmp[2], Representative( x ) ) );
+                x -> ImagesRepresentative( hom, Representative( x ) ) );
         SetColorCosetList( P, List( reps, x -> RightCoset( H, x ) ) );
     fi;
     
@@ -161,21 +163,21 @@ InstallGlobalFunction( ColorGroup, function( G, H )
         if IsAffineCrystGroupOnRight( G ) then
             SetIsAffineCrystGroupOnRight( C, true );
             SetIsAffineCrystGroupOnRight( U, true );
-            if HasTranslationBasis( G ) then
-                AddTranslationBasis( C, TranslationBasis( G ) );
-            fi;
             if HasTranslationBasis( H ) then
                 AddTranslationBasis( U, TranslationBasis( H ) );
+            fi;
+            if HasTranslationBasis( G ) then
+                AddTranslationBasis( C, TranslationBasis( G ) );
             fi;
         fi;
         if IsAffineCrystGroupOnLeft( G ) then
             SetIsAffineCrystGroupOnLeft( C, true );
             SetIsAffineCrystGroupOnLeft( U, true );
-            if HasTranslationBasis( G ) then
-                AddTranslationBasis( C, TranslationBasis( G ) );
-            fi;
             if HasTranslationBasis( H ) then
                 AddTranslationBasis( U, TranslationBasis( H ) );
+            fi;
+            if HasTranslationBasis( G ) then
+                AddTranslationBasis( C, TranslationBasis( G ) );
             fi;
         fi;
     fi;

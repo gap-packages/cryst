@@ -20,6 +20,21 @@ end;
 
 #############################################################################
 ##
+#F  FlattenedBlockMat( < BlockMat > ). . . . . . . . . flattened block matrix
+##
+FlattenedBlockMat := function( mat )
+   # flatten a matrix whose entries are matrices to a normal matrix
+   local m;
+   m := mat;
+   m := List( [1..Length(m[1])], 
+              j -> Concatenation( List([1..Length(m)], i -> m[i][j] ) ) );
+   m := TransposedMat( Concatenation( List( [1..Length(m)], 
+                                      i -> TransposedMat(m[i]) ) ) );
+   return m;
+end;
+
+#############################################################################
+##
 #F  AugmentedMatrix( <matrix>, <trans> ). . . . .  construct augmented matrix
 ##
 AugmentedMatrix := function( m, b )
@@ -66,7 +81,7 @@ end;
 ##
 GroupExtEquations := function( d, gens, rels )
    # construct equations which determine the non-primitive translations
-   local mat, i, j, k, r, r0, prod;
+   local mat, i, j, k, r, r0, max, prod;
 
    mat := NullBlockMat( d, Length(gens), Length(rels) );
    for i in [1..Length(rels)] do
@@ -74,9 +89,16 @@ GroupExtEquations := function( d, gens, rels )
       # interface to GAP-3 format
       r0 := rels[i]; r := [];
       for k in [1..Length(r0)/2] do
-          for j in [1..r0[2*k]] do 
-              Add( r, r0[2*k-1] );
-          od;
+          max := r0[2*k];
+          if max > 0 then
+              for j in [1..max] do 
+                  Add( r, r0[2*k-1] );
+              od;
+          else
+              for j in [1..-max] do 
+                  Add( r, -r0[2*k-1] );
+              od;
+          fi;
       od; 
 
       prod := IdentityMat(d);
@@ -91,7 +113,7 @@ GroupExtEquations := function( d, gens, rels )
       od;
 
    od;
-   return FlatBlockMat( mat );
+   return FlattenedBlockMat( mat );
 end;
 
 
@@ -270,6 +292,10 @@ InstallGlobalFunction( SpaceGroupsByPointGroupOnRight, function( arg )
    if IsTrivial( grp ) then
 #      return [ [ List( [1..d], i -> 0 ) ], [ IdentityMat(d), [] ] ];
       return [ MakeSpaceGroup( d, [], [] ) ];
+   fi;
+
+   if not IsFinite( grp ) then
+       Error("the point group must be finite" );
    fi;
 
    # first get group relators for grp
