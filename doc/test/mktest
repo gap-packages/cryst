@@ -25,7 +25,7 @@
 ##  If '-i' is specified save the input file for the examples in a file
 ##  'file.in'.
 ##
-##  If '-o' is specified save the ouput file of the examples in a file
+##  If '-o' is specified save the output file of the examples in a file
 ##  'file.out'.
 ##
 ##  If '-d' is specified save the differences between the old and the new
