@@ -33,13 +33,14 @@ ReadPkg( "cryst/gap/color.gi" );   # methods for color groups
 if IsBound( LOADED_PACKAGES.xgap ) then
    ReadPkg("cryst/gap/wypopup.gi");  # popup menu for Wyckoff graph
    ReadPkg("cryst/gap/wygraph.gi");  # Wyckoff graph methods; needs XGAP
+else
+   ReadPkg("cryst/gap/noxgap.gi");   # dummy for WyckoffGraph
 fi;
 
 #############################################################################
 ##
 #R  read the orbit stabilizer methods
 ##
-ReadPkg( "cryst/gap/infstab.gi" ); # Stabilizer without membership test
 ReadPkg( "cryst/gap/orbstab.gi" ); # Orbit, Stabilizer & Co.
 ReadPkg( "cryst/gap/equiv.gi" );   # conjugator between space groups
 
@@ -47,14 +48,14 @@ ReadPkg( "cryst/gap/equiv.gi" );   # conjugator between space groups
 ##
 #R  load the space group catalogue
 ##
-ReadPkg( "cryst/grp/grp2D.gi" );   # the 2D space groups
-ReadPkg( "cryst/grp/grp3D.gi" );   # the 3D space groups
-ReadPkg( "cryst/grp/grps.gi" );    # access function
-ReadPkg( "cryst/grp/grpE68.gi" );  # the groups E6 and E8
+#ReadPkg( "cryst/grp/grp2D.gi" );   # the 2D space groups
+#ReadPkg( "cryst/grp/grp3D.gi" );   # the 3D space groups
+#ReadPkg( "cryst/grp/grps.gi" );    # access function
+#ReadPkg( "cryst/grp/grpE68.gi" );  # the groups E6 and E8
 
 #############################################################################
 ##
-#R  load the new IT space group catalogue
+#R  load the IT space group catalogue
 ##
 ReadPkg( "cryst/grp/spacegrps.grp" ); # the catalogue
 ReadPkg( "cryst/grp/spacegrps.gi" );  # access functions
