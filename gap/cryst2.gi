@@ -418,7 +418,7 @@ CentralizerElement := function( G, u, TT )
    
     orb := [ MutableMatrix( u ) ];
     set := [ u ];
-    rep := [ One( G ) ];
+    rep := [ MutableMatrix( One( G ) ) ];
     stb := TrivialSubgroup( G );
     for pnt  in orb  do
         for gen  in GeneratorsOfGroup( G ) do
