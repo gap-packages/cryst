@@ -15,14 +15,8 @@ S2^c=S;
 C1 := AugmentedMatrix( RandomInvertibleMat(2), [1/5,1/7] );
 C2 := AugmentedMatrix( RandomInvertibleMat(2), [1/9,1/13] );
 
-S1 := S^C1;
-S2 := S^C2;
+S1 := S^C1; IsSpaceGroup(S1);
+S2 := S^C2; IsSpaceGroup(S2);
 C  := ConjugatorSpaceGroups( S1, S2 );
 S1^C = S2;
-
-P1:=Group([ [ [ -1, 2 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ] ]);
-P2:=Group([ [ [ 1, 0 ], [ 2, -1 ] ], [ [ -1, 0 ], [ 0, -1 ] ] ]);
-n:=[[0,1],[1,0]]; 
-P1^n=P2;
-RepresentativeOperation( GL( d, Integers ), P2, P1 );
 
