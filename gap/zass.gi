@@ -51,15 +51,15 @@ end;
 
 #############################################################################
 ##
-#F  MakeSpaceGroup( <d>, <Pgens>, <trans> ). . . . . . .construct space group
+#F  MakeSpaceGroup( <d>, <Pgens>, <transl>, <transp> )  construct space group
 ##
-MakeSpaceGroup := function( d, Pgens, t )
+MakeSpaceGroup := function( d, Pgens, transl, transp )
    # construct space group from point group and translation vector
    local Sgens, i, m, S;
 
    # first the non-translational generators
-   Sgens := List( [1..Length( Pgens )], 
-                  i -> AugmentedMatrix( Pgens[i], t{[(i-1)*d+1..i*d]} ) );
+   Sgens := List( [1..Length( Pgens )], i -> 
+                  AugmentedMatrix( Pgens[i], transl{[(i-1)*d+1..i*d]} ) );
 
    # the pure translation generators
    for i in [1..d] do
@@ -69,7 +69,12 @@ MakeSpaceGroup := function( d, Pgens, t )
    od;
 
    # make the space group and return it
-   S := AffineCrystGroupOnRight( Sgens, IdentityMat(d+1) );
+   if transp then
+      Sgens := List( Sgens, TransposedMat );
+      S := AffineCrystGroupOnLeftNC( Sgens, IdentityMat(d+1) );
+   else
+      S := AffineCrystGroupOnRightNC( Sgens, IdentityMat(d+1) );
+   fi;
    AddTranslationBasis( S, IdentityMat( d ) );
    return S;
 
@@ -207,15 +212,16 @@ end;
 
 #############################################################################
 ##
-#F  EliminateEquivExtensions( <trans>, <nullspace>, <norm>, <grp> ) . . . . .
-#F  . .  . . remove extensions equivalent by conjugation with elems from norm
+#F  CollectEquivExtensions( <trans>, <nullspace>, <norm>, <grp> ) . . . . . .
+#F  . . . . collect extensions equivalent by conjugation with elems from norm
 ##
-EliminateEquivExtensions := function( ll, nn, norm, grp )
+CollectEquivExtensions := function( ll, nn, norm, grp )
 
    # check for conjugacy with generators of the normalizer of grp in GL(n,Z)
 
    local cent, d, gens, sgens, res, orb, x, y, c, n, i, j, sg, h, m;
 
+   norm := Set( Filtered( norm, x -> not x in grp ) );
    cent := Filtered( norm, 
              x -> ForAll( GeneratorsOfGroup( grp ), g -> x*g=g*x ) );
    SubtractSet( norm, cent );
@@ -226,7 +232,6 @@ EliminateEquivExtensions := function( ll, nn, norm, grp )
 
    res := [ ];
    while ll<>[] do
-      Add( res, ll[1] );
       orb := [ ll[1] ]; 
       for x in orb do
 
@@ -261,6 +266,7 @@ EliminateEquivExtensions := function( ll, nn, norm, grp )
          od;
 
       od;
+      Add( res, orb );
       SubtractSet( ll, orb );
    od;
 
@@ -271,31 +277,34 @@ end;
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroupOnRight( <grp> [, <norm>] ) . . . . .compute group
-#F     . . . . . extensions, inequivalent by conjugation with elems from norm
+#F  ZassFunc( <grp>, <norm>, <orbsflag>, <transpose> ) . Zassenhaus algorithm
 ##
-InstallGlobalFunction( SpaceGroupsByPointGroupOnRight, function( arg )
+ZassFunc := function( grp, norm, orbsflag, transpose )
 
-# construct group extensions of Z^d by grp
+   local d, S, N, F, Fam, rels, gens, mat, ext, lst, res;
 
-   local d, grp, norm, N, F, Fam, rels, gens, mat, ext;
-
-   grp := arg[1];
-   if Length(arg)>1 then 
-      norm := arg[2]; 
-   else 
-      norm := []; 
-   fi;
    d := DimensionOfMatrixGroup( grp );
+   if transpose then
+      grp  := TransposedMatrixGroup( grp );
+      norm := List( norm, TransposedMat );
+   fi;
 
-   # catch the trivial case
-   if IsTrivial( grp ) then
-#      return [ [ List( [1..d], i -> 0 ) ], [ IdentityMat(d), [] ] ];
-      return [ MakeSpaceGroup( d, [], [] ) ];
+   if not IsIntegerMatrixGroup( grp ) then
+      Error( "the point group must be an integer matrix group" );
    fi;
 
    if not IsFinite( grp ) then
-       Error("the point group must be finite" );
+      Error("the point group must be finite" );
+   fi;
+
+   # catch the trivial case
+   if IsTrivial( grp ) then
+      S := MakeSpaceGroup( d, [], [], transpose );
+      if orbsflag then
+         return [[S]];
+      else
+         return [ S ];
+      fi;
    fi;
 
    # first get group relators for grp
@@ -310,110 +319,153 @@ InstallGlobalFunction( SpaceGroupsByPointGroupOnRight, function( arg )
    # now solve them modulo integers
    ext := SolveHomEquationsModZ( mat );
    
-   # eliminate group extensions which are equivalent as space groups
-   if Length( ext[1] ) > 2 then
-      norm := Set( Filtered( norm, x -> not x in grp ) );
-      if Length( norm ) > 0 then
-         ext[1] := EliminateEquivExtensions( ext[1], ext[2], norm, grp );
-      fi;
+   # collect group extensions which are equivalent as space groups
+   lst := CollectEquivExtensions( ext[1], ext[2], norm, grp );
+
+   # make the space groups
+   if orbsflag then 
+      res := List( lst, x -> List( x, 
+                   y -> MakeSpaceGroup( d, gens, y, transpose ) ) );
+   else
+      res := List( lst, x -> MakeSpaceGroup( d, gens, x[1], transpose ) );
    fi;
-   
-#   return ext;
-   return List( ext[1], x -> MakeSpaceGroup( d, gens, x ) );
 
+   return res;
+
+end;
+
+
+#############################################################################
+##
+#M  SpaceGroupsByPointGroupOnRight( <grp> [, <norm> [, <orbsflag> ] ] )
+##
+InstallMethod( SpaceGroupsByPointGroupOnRight, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   return ZassFunc( grp, [], false, false );
+end );
+
+InstallOtherMethod( SpaceGroupsByPointGroupOnRight, IsIdenticalObj,
+   [ IsCyclotomicMatrixGroup, IsList ], 0,
+function( grp, norm )
+   return ZassFunc( grp, norm, false, false );
+end );
+
+InstallOtherMethod( SpaceGroupsByPointGroupOnRight,
+   function(a,b,c) return IsIdenticalObj(a,b); end,
+   [ IsCyclotomicMatrixGroup, IsList, IsBool ], 0,
+function( grp, norm, orbsflag )
+   return ZassFunc( grp, norm, orbsflag, false );
 end );
 
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroupOnLeft( <grp> [, <norm>] ) . . . . . compute group
-#F     . . . . . extensions, inequivalent by conjugation with elems from norm
+#M  SpaceGroupsByPointGroupOnLeft( <grp> [, <norm>, [ <orbsflag> ] ] )
 ##
-InstallGlobalFunction( SpaceGroupsByPointGroupOnLeft, function( arg )
-   local gen, norm, G, tmp, lst, S, R;
-   gen := List( GeneratorsOfGroup( arg[1] ), TransposedMat );
-   if Length(arg)>1 then 
-      norm := List( arg[2], TransposedMat ); 
-   else 
-      norm := []; 
-   fi;
-   G := Group( gen, One( arg[1] ) );
-   tmp := SpaceGroupsByPointGroupOnRight( G, norm );
-   lst := [];
-   for S in tmp do
-       gen := List( GeneratorsOfGroup( S ), TransposedMat );
-       R := AffineCrystGroupOnLeft( gen, One( S ) );
-       AddTranslationBasis( R, TranslationBasis( S ) );
-       Add( lst, R );
-   od;
-   return lst;
+InstallMethod( SpaceGroupsByPointGroupOnLeft, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   return ZassFunc( grp, [], false, true );
+end );
+
+InstallOtherMethod( SpaceGroupsByPointGroupOnLeft, IsIdenticalObj,
+   [ IsCyclotomicMatrixGroup, IsList ], 0,
+function( grp, norm )
+   return ZassFunc( grp, norm, false, true );
+end );
+
+InstallOtherMethod( SpaceGroupsByPointGroupOnLeft,
+   function(a,b,c) return IsIdenticalObj(a,b); end,
+   [ IsCyclotomicMatrixGroup, IsList, IsBool ], 0,
+function( grp, norm, orbsflag )
+   return ZassFunc( grp, norm, orbsflag, true );
 end );
 
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroup( <grp> [, <norm>] ) . . compute group extensions,
-#F     . . . . . . . . . . . inequivalent by conjugation with elems from norm
+#M  SpaceGroupsByPointGroup( <grp> [, <norm> [, <orbsflag> ] ] )
 ##
-InstallGlobalFunction( SpaceGroupsByPointGroup, function( arg )
-    local G, norm;
-    G := arg[1];
-    if Length( arg ) > 1 then
-        norm := arg[2];
-    else
-        norm := [];
-    fi;
-    if CrystGroupDefaultAction = RightAction then
-        return SpaceGroupsByPointGroupOnRight( G, norm );
-    else
-        return SpaceGroupsByPointGroupOnLeft( G, norm );
-    fi;
+InstallMethod( SpaceGroupsByPointGroup, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   return ZassFunc( grp, [], false, CrystGroupDefaultAction=LeftAction );
 end );
+
+InstallOtherMethod( SpaceGroupsByPointGroup, IsIdenticalObj,
+   [ IsCyclotomicMatrixGroup, IsList ], 0,
+function( grp, norm )
+   return ZassFunc( grp, norm, false, CrystGroupDefaultAction=LeftAction );
+end );
+
+InstallOtherMethod( SpaceGroupsByPointGroup,
+   function(a,b,c) return IsIdenticalObj(a,b); end,
+   [ IsCyclotomicMatrixGroup, IsList, IsBool ], 0,
+function( grp, norm, orbsflag )
+   return ZassFunc( grp, norm, orbsflag, CrystGroupDefaultAction=LeftAction );
+end );
+
 
 #############################################################################
 ##
-#M  SpaceGroupTypesByPointGroupOnRight( <G> ) . . . . . space group type reps
+#M  SpaceGroupTypesByPointGroupOnRight( <grp> [, <orbsflag>] )
 ##
-InstallGlobalFunction( SpaceGroupTypesByPointGroupOnRight, function( G )
-    local N;
-    if not IsIntegerMatrixGroup( G ) then
-        Error( "G must be an integer matrix group" );
-    fi;
-    if not IsFinite( G ) then
-        Error( "G must be finite" );
-    fi;
-    N := NormalizerInGLnZ( G );
-    return SpaceGroupsByPointGroupOnRight( G, GeneratorsOfGroup( N ) );
+InstallMethod( SpaceGroupTypesByPointGroupOnRight, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, false, false );
 end );
+
+InstallOtherMethod( SpaceGroupTypesByPointGroupOnRight, true,
+   [ IsCyclotomicMatrixGroup, IsBool ], 0,
+function( grp, orbsflag )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, orbsflag, false );
+end );
+
 
 #############################################################################
 ##
-#M  SpaceGroupTypesByPointGroupOnLeft( <G> ) . . . . . .space group type reps
+#M  SpaceGroupTypesByPointGroupOnLeft( <grp> [, <orbsflag> ] )
 ##
-InstallGlobalFunction( SpaceGroupTypesByPointGroupOnLeft, function( G )
-    local N;
-    if not IsIntegerMatrixGroup( G ) then
-        Error( "G must be an integer matrix group" );
-    fi;
-    if not IsFinite( G ) then
-        Error( "G must be finite" );
-    fi;
-    N := NormalizerInGLnZ( G );
-    return SpaceGroupsByPointGroupOnLeft( G, GeneratorsOfGroup( N ) );
+InstallMethod( SpaceGroupTypesByPointGroupOnLeft, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, false, true );
 end );
+
+InstallOtherMethod( SpaceGroupTypesByPointGroupOnLeft, true,
+   [ IsCyclotomicMatrixGroup, IsBool ], 0,
+function( grp, orbsflag )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, orbsflag, true );
+end );
+
 
 #############################################################################
 ##
-#M  SpaceGroupTypesByPointGroup( <G> ) . . . . . . . . .space group type reps
+#M  SpaceGroupTypesByPointGroup( <grp> [, <orbsflag> ] )
 ##
-InstallGlobalFunction( SpaceGroupTypesByPointGroup, function( G )
-    local N;
-    if not IsIntegerMatrixGroup( G ) then
-        Error( "G must be an integer matrix group" );
-    fi;
-    if not IsFinite( G ) then
-        Error( "G must be finite" );
-    fi;
-    N := NormalizerInGLnZ( G );
-    return SpaceGroupsByPointGroup( G, GeneratorsOfGroup( N ) );
+InstallMethod( SpaceGroupTypesByPointGroup, true,
+   [ IsCyclotomicMatrixGroup ], 0,
+function( grp )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, false, CrystGroupDefaultAction=LeftAction );
 end );
+
+InstallOtherMethod( SpaceGroupTypesByPointGroup, true,
+   [ IsCyclotomicMatrixGroup, IsBool ], 0,
+function( grp, orbsflag )
+   local norm;
+   norm := GeneratorsOfGroup( NormalizerInGLnZ( grp ) );
+   return ZassFunc( grp, norm, orbsflag, CrystGroupDefaultAction=LeftAction );
+end );
+

@@ -11,40 +11,39 @@
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroupOnRight( <grp> [, <norm>] ) . . . . .compute group
-#F     . . . . . extensions, inequivalent by conjugation with elems from norm
+#O  SpaceGroupsByPointGroupOnRight( <grp> [, <norm> [, <orbsflag> ] ] )
 ##
-DeclareGlobalFunction( "SpaceGroupsByPointGroupOnRight" );
+DeclareOperation("SpaceGroupsByPointGroupOnRight",[IsCyclotomicMatrixGroup]);
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroupOnLeft( <grp> [, <norm>] ) . . . . . compute group
-#F     . . . . . extensions, inequivalent by conjugation with elems from norm
+#O  SpaceGroupsByPointGroupOnLeft( <grp> [, <norm> [, <orbsflag> ] ] )
 ##
-DeclareGlobalFunction( "SpaceGroupsByPointGroupOnLeft" );
+DeclareOperation("SpaceGroupsByPointGroupOnLeft", [IsCyclotomicMatrixGroup]);
 
 #############################################################################
 ##
-#F  SpaceGroupsByPointGroup( <grp> [, <norm>] ) . . compute group extensions,
-#F     . . . . . . . . . . . inequivalent by conjugation with elems from norm
+#O  SpaceGroupsByPointGroup( <grp> [, <norm> [, <orbsflag> ] ] )
 ##
-DeclareGlobalFunction( "SpaceGroupsByPointGroup" );
+DeclareOperation( "SpaceGroupsByPointGroup", [ IsCyclotomicMatrixGroup ] );
 
 #############################################################################
 ##
-#F  SpaceGroupTypesByPointGroupOnRight( <G> ) . . . . . space group type reps
+#O  SpaceGroupTypesByPointGroupOnRight( <grp> [, <orbsflag> ] )
 ##
-DeclareGlobalFunction( "SpaceGroupTypesByPointGroupOnRight" );
+DeclareOperation("SpaceGroupTypesByPointGroupOnRight", 
+                                               [ IsCyclotomicMatrixGroup ] );
 
 #############################################################################
 ##
-#F  SpaceGroupTypesByPointGroupOnLeft( <G> ) . . . . . .space group type reps
+#O  SpaceGroupTypesByPointGroupOnLeft( <grp> [, <orbsflag> ] )
 ##
-DeclareGlobalFunction( "SpaceGroupTypesByPointGroupOnLeft" );
+DeclareOperation("SpaceGroupTypesByPointGroupOnLeft", 
+                                               [ IsCyclotomicMatrixGroup ] );
 
 #############################################################################
 ##
-#F  SpaceGroupTypesByPointGroup( <G> ) . . . . . . . . .space group type reps
+#O  SpaceGroupTypesByPointGroup( <grp> [, <orbsflag> ] )
 ##
-DeclareGlobalFunction( "SpaceGroupTypesByPointGroup" );
+DeclareOperation( "SpaceGroupTypesByPointGroup", [IsCyclotomicMatrixGroup] );
 
