@@ -16,15 +16,15 @@ TestMaximals := function( dim )
 
         # lattice
         Print("max, start lattice equal of group ",[dim,i],"\n");
-        n := Length( MaximalSubgroupRepresentatives( G, le ) );
+        n := Length( MaximalSubgroupClassReps( G, le ) );
 
         # class
         Print("max, start class equal of group ",[dim,i],"\n");
-        m := Length( Flat( MaximalSubgroupRepresentatives( G, ce ) ));
+        m := Length( Flat( MaximalSubgroupClassReps( G, ce ) ));
 
         # primes
         Print("max, start with primes of group ",[dim,i],"\n");
-        k := Length( MaximalSubgroupRepresentatives( G, so ) );
+        k := Length( MaximalSubgroupClassReps( G, so ) );
 
         # compare
         Print("\n");
@@ -61,7 +61,7 @@ TestZassenhaus := function( dim )
     for i in [1..l] do
         G := LibraryCrystGroup( dim, l );
         Print("zass, start group ",[dim,i],"\n");
-        SpaceGroupsPointGroup( PointGroup(G) );
+        SpaceGroupsByPointGroup( PointGroup(G) );
     od;
 
 end;
