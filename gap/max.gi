@@ -595,6 +595,7 @@ MaximalSubgroupRepsKG := function( G, primes )
 
             # use complement routine
             comp := ComplementsSG( pres, repin, cocin );
+Error();
 
             # compute generators of G corresponding to complements
             for i in [1..Length( comp )] do
