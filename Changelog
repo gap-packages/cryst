@@ -22,8 +22,6 @@ Version 4.1:
 
   - CrystGap now tries to load the package polycyclic, and then installs
     methods for IsomorphismPcpGroup for PointGroups and AffineCrystGroups.
-    As polycyclic is not publicly available, these methods are not yet 
-    documented.
 
   - A method for ImagesRepresentative for an IsomorphismFpGroup of an 
     AffineCrystGroup has been added, so that the resulting isomorphism
