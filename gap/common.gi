@@ -35,12 +35,6 @@ end;
 
 #############################################################################
 ##
-#M  IsDiagonalMat . . . . . . . . . . . . . . . . . . is the matrix diagonal?
-##
-InstallOtherMethod( IsDiagonalMat, true, [ IsEmpty ], 0, ReturnTrue );
-
-#############################################################################
-##
 #F  RowEchelonForm  . . . . . . . . . . row echelon form of an integer matrix
 ##
 RowEchelonForm := function( M )
