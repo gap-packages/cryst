@@ -272,118 +272,123 @@ end );
 
 #############################################################################
 ##
+#F  ConjugatingTranslation( G, gen, T)
+##
+##  returns a translation t from the Z-span of T such that the elements
+##  of gen conjugated with t are in G (or fail if no such t exists)
+##
+ConjugatingTranslation := function( G, gen, T )
+
+    local d, b, TG, lt, lg, M, I, i, g, m, sol, t;
+
+    d  := DimensionOfMatrixGroup( G ) - 1;
+    TG := TranslationBasis( G );
+    lt := Length( T  );
+    lg := Length( TG );
+    b  := [];
+    M  := NullMat( lt + lg * Length(gen), d * Length(gen) );
+    I  := IdentityMat( d );
+    for i in [1..Length(gen)] do
+        g := gen[i]{[1..d]}{[1..d]};
+        if not g in PointGroup( G ) then
+            return fail;
+        fi;
+        m := PreImagesRepresentative( PointHomomorphism( G ), g );
+        Append( b, -gen[i][d+1]{[1..d]} +  m[d+1]{[1..d]} );
+        M{[1..lt]}{[1..d]+(i-1)*d} := T * (I - g);
+        if lg > 0 then
+            M{[1..lg]+lt+(i-1)*lg}{[1..d]+(i-1)*d} := TG;
+        fi;
+    od;
+    sol := IntSolutionMat( M, b );
+    if IsList( sol ) then
+        sol := sol{[1..lt]} * T;
+#        t   := AugmentedMatrix( I, sol );
+#        for g in gen do
+#            Assert( 0, g^t in G );
+#        od;
+        return sol;
+    else
+        return fail;
+    fi;
+
+end;
+
+
+#############################################################################
+##
 #M  Normalizer( G, H ) . . . . . . . . . . . . . . . . . . . . . . normalizer
 ##
 InstallMethod( NormalizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj, 
     [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
 function( G, H )
 
-    local P, TH, TG, d, I, gens1, gens2, gens, T, t, orb, rep, stb, 
-          H2, grp, gen, img, i, sch, g, b, M, M2, m, sol, Q, N, new;
+    local P, TH, TG, d, I, gens, T, t, trn, orb, rep, stb, 
+          grp, gen, img, i, sch, g, b, M, m, sol, Q, N;
 
-    # the point group of the normalizer
+    # we must normalize the point group and the translation subgroup
     P  := Normalizer( PointGroup( G ), PointGroup( H ) );
     TH := TranslationBasis( H );
     if TH <> [] then
         P := Stabilizer( P, TH, OnRight );
     fi;
 
-    # lift of the normalizer point group to G
+    # lift P to G
     d := DimensionOfMatrixGroup( P );
     I := IdentityMat( d );
-    gens1 := List( GeneratorsOfGroup( P ), x ->
-                   PreImagesRepresentative( PointHomomorphism( G ), x ) );
+    gens := List( GeneratorsOfGroup( P ), 
+                  x -> PreImagesRepresentative( PointHomomorphism( G ), x ) );
 
-    # enlarge H by translations in G if necessary
-    TG := TranslationBasis( G );
-    T  := ReducedLatticeBasis( Concatenation( TG, TH ) );
-    if Length( T ) = Length( TH ) then
-        H2 := H;
-    else
-        gens2 := Filtered( GeneratorsOfGroup( H ), x -> x{[1..d]}{[1..d]}<>I );
-        for t in T do
-            Add( gens2, AugmentedMatrix( I, t ) );
-        od;
-        H2 := AffineCrystGroupOnRight( gens2, One( H ) );
-    fi;
-
-    # normalizer modulo translations
-    orb := [ H2 ];
+    # stabilizer of translation conjugacy class of H
+    TG  := TranslationBasis( G );
+    orb := [ H ];
     rep := [ One( G ) ];
     stb := TrivialSubgroup( G );
     for grp in orb do
-        for gen in gens1 do
+        for gen in gens do
             img := List( GeneratorsOfGroup( grp ), x -> x^gen );
-            i   := PositionProperty( orb, g -> ForAll( img, x -> x in g ) );
+            i   := PositionProperty( orb, 
+                      g -> ConjugatingTranslation( g, img, TG ) <> fail );
             if i = fail then
                 Add( orb, ConjugateGroup( grp, gen ) );
                 Add( rep, rep[Position(orb,grp)] * gen );
             else
                 sch := rep[Position(orb,grp)] * gen / rep[i];
-                if not sch in stb then
-                    stb := ClosureGroup( stb, sch );
-                fi;
+                stb := ClosureGroup( stb, sch );
             fi;
         od;
     od;
-    gens1 := List( GeneratorsOfGroup( stb ), MutableMatrix );
+    gens := List( GeneratorsOfGroup( stb ), MutableMatrix );
 
-    # fix the translations if H2 <> H
-    if not IsIdenticalObj( H, H2 ) then
-        gens2 := Filtered( GeneratorsOfGroup( H ), x -> x{[1..d]}{[1..d]}<>I );
-        M2 := NullMat( Length(gens2) * Length(TH), d * Length(gens2) );
-        if TH <> [] then
-            for i in [1..Length(gens2)] do
-                M2{[1..Length(TH)]+(i-1)*Length(TH)}{[1..d]+(i-1)*d} := TH;
-            od;
-        fi;
-        new := [];
-        for g in gens1 do
-            gens := List( gens2, x -> x^g );
-            b := [];
-            M := List( [1..Length(TG)], x -> [] );
-
-            for i in [1..Length(gens)] do
-                m := PreImagesRepresentative( PointHomomorphism( H ), 
-                                      gens[i]{[1..d]}{[1..d]} );
-                Append( b, gens[i][d+1]{[1..d]} -  m[d+1]{[1..d]} );
-                M{[1..Length(TG)]}{[1..d]+(i-1)*d} := 
-                   TG * (I - g{[1..d]}{[1..d]}^-1 * gens[i]{[1..d]}{[1..d]} );
-            od;
-            M := Concatenation( M, M2 );
-            sol := IntSolutionMat( M, b );
-            if IsList( sol ) then
-                sol := sol{[1..Length(TG)]} * TG;
-                g[d+1]{[1..d]} := g[d+1]{[1..d]} - sol;
-                Assert( 0, ForAll( gens2, x -> x^g in H ) );
-                Add( new, g );
-            fi;
-        od;
-        gens1 := new;
-    fi;
+    # fix the translations
+    for gen in gens do
+        img := List( GeneratorsOfGroup( H ), x -> x^gen );
+        trn := ConjugatingTranslation( H, img, TG );
+        gen[d+1]{[1..d]} := gen[d+1]{[1..d]} + trn;
+    od;
 
     # construct the pure translations
     T := TG;
-    if not IsIdenticalObj( H, H2 ) or ForAny( TG,
-                t -> VectorModL( t, TH ) <> 0 * [1..d] ) then
-        # G contains more translations than H
-        for g in GeneratorsOfGroup( PointGroup( H ) ) do
-            if T <> [] then
-                M := Concatenation( T * (g-I), TH );
-                M := M * Lcm( List( Flat( M ), DenominatorRat ) );
-                Q := IdentityMat( Length( M ) );
-                M := RowEchelonFormT( M, Q );
-                T := Q{[Length(M)+1..Length(Q)]}{[1..Length(T)]} * T;
-                T := ReducedLatticeBasis( T );
-            fi;
-        od;
-    fi;
+    for g in GeneratorsOfGroup( PointGroup( H ) ) do
+        if  T <> [] then
+            M := Concatenation( T * (g-I), TH );
+            M := M * Lcm( List( Flat( M ), DenominatorRat ) );
+            Q := IdentityMat( Length( M ) );
+            M := RowEchelonFormT( M, Q );
+            T := Q{[Length(M)+1..Length(Q)]}{[1..Length(T)]} * T;
+            T := ReducedLatticeBasis( T );
+        fi;
+    od;
     for t in T do
-        Add( gens1, AugmentedMatrix( I, t ) );
+        Add( gens, AugmentedMatrix( I, t ) );
     od;
 
+#    for g in gens do
+#        Assert( 0, H^g = H );
+#    od;
+
     # construct the normalizer
-    N := AffineCrystGroupOnRight( gens1, One( G ) );
+    N := AffineCrystGroupOnRight( gens, One( G ) );
     AddTranslationBasis( N, T );
 
     return N;
