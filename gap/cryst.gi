@@ -180,7 +180,7 @@ TranslationBasisFun := function ( S )
     fi;
 
     # then the hidden translations
-    Append( trans, Cocycles( S ) );
+    Append( trans, CocVecs( S ) );
 
     # make translations invariant under point group
     trans := Set( Union( Orbits( P, trans ) ) );
@@ -529,7 +529,7 @@ end );
 ##
 InstallMethod( IsSymmorphicSpaceGroup,
     "generic method", true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
-    S -> Cocycles( S ) = [] );
+    S -> CocVecs( S ) = [] );
 
 #############################################################################
 ##

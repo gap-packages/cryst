@@ -489,16 +489,16 @@ end;
 
 #############################################################################
 ##
-#M  Cocycles( <S> ) .  Cocycles of extension of point group with translations
+#M  CocVecs( <S> ) . . Cocycles of extension of point group with translations
 ##
-InstallMethod( Cocycles, true, [ IsAffineCrystGroupOnRight ], 0,
+InstallMethod( CocVecs, true, [ IsAffineCrystGroupOnRight ], 0,
 function( S )
     return ReducedLatticeBasis( CocycleInfo( S ) );
 end );
 
-InstallMethod( Cocycles, true, [ IsAffineCrystGroupOnLeft ], 0,
+InstallMethod( CocVecs, true, [ IsAffineCrystGroupOnLeft ], 0,
 function( S )
-    return Cocycles( TransposedMatrixGroup( S ) );
+    return CocVecs( TransposedMatrixGroup( S ) );
 end );
 
 
