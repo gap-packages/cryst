@@ -21,6 +21,7 @@ echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/doc/make_doc
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/init.g
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/read.g
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/README
+echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/Changelog
 for file in cryst/gap/*.g[di] ; do
   echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo $file
 done
