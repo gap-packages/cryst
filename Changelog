@@ -47,3 +47,9 @@ Version 4.1:
     their size was set to a wrong value in certain cases. 
 
   - A mutability bug in AffineNormalizer was fixed.
+
+Version 4.1.1:
+
+  - Online help should now work for all functions.
+
+  - Fixed several manual examples changed output or wrong input.
