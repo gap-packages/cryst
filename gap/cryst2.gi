@@ -373,8 +373,8 @@ InstallMethod( Intersection2, "two AffineCrystGroupsOnLeft", IsIdenticalObj,
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G1, G2 )
     local T1, T2, I, g, I2; 
-    T1 := TransposedAffineCrystGroup( G1 );
-    T2 := TransposedAffineCrystGroup( G2 );
+    T1 := TransposedMatrixGroup( G1 );
+    T2 := TransposedMatrixGroup( G2 );
     I  := Intersection2( T1, T2 );
     g  := List( GeneratorsOfGroup( I ), TransposedMat );
     I2 := AffineCrystGroupOnLeft( g, One( I ) );
@@ -563,7 +563,7 @@ function( G, m )
     if not IsAffineMatrixOnLeft( m ) then
         Error( "m must be an affine matrix acting OnLeft" );
     fi;
-    T := TransposedAffineCrystGroup( G );
+    T := TransposedMatrixGroup( G );
     C := CentralizerAffineCrystGroup( T, TransposedMat( m ) );
     g := List( GeneratorsOfGroup( C ), TransposedMat );
     R := AffineCrystGroupOnLeft( g, One( C ) );
@@ -583,8 +583,8 @@ InstallMethod( CentralizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj,
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G1, G2 )
     local G, U, C, g, R;
-    G := TransposedAffineCrystGroup( G1 );
-    U := TransposedAffineCrystGroup( G2 );
+    G := TransposedMatrixGroup( G1 );
+    U := TransposedMatrixGroup( G2 );
     C := CentralizerAffineCrystGroup( G, U );
     g := List( GeneratorsOfGroup( C ), TransposedMat );
     R := AffineCrystGroupOnLeft( g, One( C ) );
@@ -713,7 +713,7 @@ InstallMethod( TranslationNormalizer, "for SpaceGroup acting OnLeft",
     true, [ IsAffineCrystGroupOnLeft and IsSpaceGroup ], 0,
 function( S )
     local N1, gen, N;
-    N1  := TranslationNormalizer( TransposedAffineCrystGroup( S ) );
+    N1  := TranslationNormalizer( TransposedMatrixGroup( S ) );
     gen := List( GeneratorsOfGroup( N1 ), TransposedMat );
     N   := GroupByGenerators( gen, One( N1 ) );
     N!.continuousTranslations := N1!.continuousTranslations;
@@ -892,9 +892,9 @@ InstallMethod( AffineNormalizer, "for SpaceGroup acting OnLeft", true,
     [ IsAffineCrystGroupOnLeft and IsSpaceGroup ], 0,
 function( S )
     local A1, A, gen;
-    A1 := AffineNormalizer( TransposedAffineCrystGroup( S ) );
+    A1 := AffineNormalizer( TransposedMatrixGroup( S ) );
     if IsAffineCrystGroupOnRight( A1 ) then
-        A := TransposedAffineCrystGroup( A1 );
+        A := TransposedMatrixGroup( A1 );
     else
         gen := List( GeneratorsOfGroup( A1 ), TransposedMat );
         A   := Group( gen, One( A1 ) );

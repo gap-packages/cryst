@@ -168,13 +168,6 @@ DeclareAttribute( "AffineCrystGroupOfPointGroup", IsPointGroup );
 
 #############################################################################
 ##
-#A  TransposedAffineCrystGroup( <S> ) . . . . . transpose of AffineCrystGroup
-##
-DeclareAttribute( "TransposedAffineCrystGroup",
-                  IsAffineCrystGroupOnLeftOrRight );
-
-#############################################################################
-##
 #A  PointGroup( <S> ) . . . . . . . . . . . PointGroup of an AffineCrystGroup
 ##
 DeclareAttribute( "PointGroup", IsAffineCrystGroupOnLeftOrRight );

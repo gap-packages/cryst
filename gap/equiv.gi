@@ -138,8 +138,8 @@ InstallMethod( ConjugatorSpaceGroups, IsIdenticalObj,
       IsAffineCrystGroupOnLeft and IsSpaceGroup ], 0,
 function( S1, S2 )
     local S1tr, S2tr, C;
-    S1tr := TransposedAffineCrystGroup( S1 );
-    S2tr := TransposedAffineCrystGroup( S2 );
+    S1tr := TransposedMatrixGroup( S1 );
+    S2tr := TransposedMatrixGroup( S2 );
     C    := ConjugatorSpaceGroups( S1tr, S2tr );
     if C = fail then
         return fail;

@@ -483,7 +483,7 @@ end );
 
 InstallMethod( Cocycles, true, [ IsAffineCrystGroupOnLeft ], 0,
 function( S )
-    return Cocycles( TransposedAffineCrystGroup( S ) );
+    return Cocycles( TransposedMatrixGroup( S ) );
 end );
 
 
@@ -791,7 +791,7 @@ InstallOtherMethod( MaximalSubgroupClassReps,
     true, [ IsAffineCrystGroupOnLeft, IsRecord ], 0,
 function( S, flags )
     local G, reps, lst, max, gen, new;
-    G := TransposedAffineCrystGroup( S );
+    G := TransposedMatrixGroup( S );
     reps := MaximalSubgroupClassReps( G, flags );
     lst := [];
     for max in reps do

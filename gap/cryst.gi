@@ -60,22 +60,23 @@ InstallTrueMethod(IsAffineCrystGroupOnLeftOrRight,IsAffineCrystGroupOnLeft);
 
 #############################################################################
 ##
-#M  TransposedAffineCrystGroup( <S> ) . . . . . transpose of AffineCrystGroup
+#M  TransposedMatrixGroup( <S> ) . . . . . . . .transpose of AffineCrystGroup
 ##
-InstallMethod( TransposedAffineCrystGroup, 
+InstallMethod( TransposedMatrixGroup, 
     true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
     local gen, grp;
     gen := List( GeneratorsOfGroup( S ), TransposedMat );
+    grp := Group( gen, One( S ) );
     if IsAffineCrystGroupOnRight( S ) then
-        grp := AsAffineCrystGroupOnLeft( Group( gen, One( S ) ) );
+        SetIsAffineCrystGroupOnLeft( grp );
     else
-        grp := AsAffineCrystGroupOnRight( Group( gen, One( S ) ) );
+        SetIsAffineCrystGroupOnRight( grp );
     fi;
     if HasTranslationBasis( S ) then
         AddTranslationBasis( grp, TranslationBasis( S ) );
     fi;
-    SetTransposedAffineCrystGroup( grp, S );
+    SetTransposedMatrixGroup( grp, S );
     return grp;
 end );
 
@@ -249,7 +250,7 @@ function( S )
     if IsAffineCrystGroupOnRight( S ) then
         T := TranslationBasisFun( S );
     else
-        T := TranslationBasisFun( TransposedAffineCrystGroup( S ) );
+        T := TranslationBasis( TransposedMatrixGroup( S ) );
     fi;
     AddTranslationBasis( S, T );
     return T;
@@ -264,7 +265,7 @@ InstallGlobalFunction( CheckTranslationBasis, function( S )
     if IsAffineCrystGroupOnRight( S ) then
         T := TranslationBasisFun( S );
     else
-        T := TranslationBasisFun( TransposedAffineCrystGroup( S ) );
+        T := TranslationBasisFun( TransposedMatrixGroup( S ) );
     fi;
     if HasTranslationBasis( S ) then
         if T <> TranslationBasis( S ) then
