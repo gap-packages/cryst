@@ -220,6 +220,15 @@ IntSolutionMat := function( M, b )
         return fail;
     fi;
 
+    # the trivial solution
+    if RankMat( M ) = 0 then
+        if b = 0 * M[1] then
+            return List( M, x -> 0 );
+        else
+            return fail;
+        fi;
+    fi;
+
     den := Lcm( List( Flat( M ), x -> DenominatorRat( x ) ) );
     if den <> 1 then
         M := den*M;
