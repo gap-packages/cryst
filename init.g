@@ -24,7 +24,6 @@ ReadPkg( "cryst/gap/wyckoff.gd" );   # declarations for Wyckoff position
 ReadPkg( "cryst/gap/zass.gd" );      # declarations for Zassenhaus algorithm
 ReadPkg( "cryst/gap/max.gd" );       # declarations for maximal subgroups
 ReadPkg( "cryst/gap/color.gd" );     # declarations for color groups
-ReadPkg( "cryst/gap/infstab.gd" );   # declarations for inf. stabilizer alg.
 ReadPkg( "cryst/gap/equiv.gd" );     # isomorphism test for space groups
 ReadPkg( "cryst/grp/spacegrps.gd" ); # the IT space group catalogue
 
