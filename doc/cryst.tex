@@ -614,6 +614,10 @@ are connected by a line only if there is no Wyckoff position in between.
 The connection line is labelled with the number of affine subspaces 
 contained in the lower Wyckoff position that contain a fixed 
 representative affine subspace of the upper Wyckoff position.
+For instance, if the lower Wyckoff position consists of a space
+group orbit of lines (and thus the upper one of an orbit of points), 
+the label of the connection line is the number of lines in the orbit 
+which cross a fixed representative point of the upper Wyckoff position.
 
 The initial layout of the graph is not always optimal. In particular,
 several connection lines can be drawn on top of each other, so that
@@ -710,6 +714,15 @@ and returns a sublist of affine inequivalent subgroups.
 Note that the affine normalizer of <S> must be discrete in the
 current implementation. If it is not, `fail' is returned. 
 
+For two space groups <S1> and <S2> of the same dimension (and
+acting from the same side), 
+
+\>ConjugatorSpaceGroups( <S1>, <S2> ) F
+
+returns an affine matrix <m> such that `S1\^{}m = S2', of `fail'
+if no such matrix exists, i.e., if the two space groups are not
+equivalent. This function requires that the package Carat is
+installed (and compiled).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Color groups}
