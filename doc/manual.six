@@ -44,6 +44,10 @@ I 1.5. IsomorphismFpGroup!for a PointGroup
 F 1.5. IsomorphismFpGroup
 I 1.5. IsomorphismFpGroup!for an AffineCrystGroup
 F 1.5. IsomorphismFpGroup
+I 1.5. IsomorphismPcpGroup!for a PointGroup
+F 1.5. IsomorphismPcpGroup
+I 1.5. IsomorphismPcpGroup!for an AffineCrystGroup
+F 1.5. IsomorphismPcpGroup
 S 1.6. Maximal subgroups
 I 1.6. subgroups!maximal!for AffineCrystGroups
 I 1.6. maximal subgroups!for AffineCrystGroups
