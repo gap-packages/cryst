@@ -1,3 +1,13 @@
+#############################################################################
+##
+#A  spacegrp.gi             CrystGap library                     Bettina Eick
+#A                                                              Franz G"ahler
+#A                                                              Werner Nickel
+##
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
+##
+##  Extraction functions for IT space groups
+##
 
 #############################################################################
 ##
