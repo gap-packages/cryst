@@ -47,5 +47,3 @@ Version 4.1:
     their size was set to a wrong value in certain cases. 
 
   - A mutability bug in AffineNormalizer was fixed.
-
-
