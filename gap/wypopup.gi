@@ -1,16 +1,51 @@
+#############################################################################
+##
+#A  wypopup.gi              CrystGap library                     Bettina Eick
+#A                                                              Franz G"ahler
+#A                                                              Werner Nickel
+##
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
+##
+##  Routines for text selector popup for Wyckoff graph
+##
 
+############################################################################
+##
+#F  CCInfo . . . . . . . . . . . . . ConjugacyClassInfo of WyckoffStabilizer
+##
+CCInfo := function( W )
+    local G, C, R, L, max;
+    G := PointGroup( WyckoffStabilizer( W ) );
+    C := ConjugacyClasses( G );
+    R := List( C, Representative );
+    L := [ [1..Length(C)],
+           List( R, Order ),
+           List( R, TraceMat ),
+           List( R, DeterminantMat ),
+           List( C, Size )
+         ];
+    L := TransposedMat( L );
+    L := Concatenation( [[ "cl", "ord", "tr", "det", "sz" ]], L );
+    max := Maximum( List( L, l -> Maximum(
+                    List( l, x -> Length( String(x) ) ) ) ) ); 
+    max := max + 1;
+    L := List( L, l -> Concatenation( List( l, x -> String( x, max ) ) ) ); 
+    return L;
+end;
+
+############################################################################
+##
+#F  WyckoffInfoDisplays . . . . functions call by WyckoffGraph text selector
+##
 BindGlobal( "WyckoffInfoDisplays",
   rec( 
-    Default     := rec( name := "",            func := Ignore ),
-    StabSize    := rec( name := "StabSize",    func := Ignore ),
-    StabDim     := rec( name := "StabDim",     func := Ignore ),
-    OrbitLength := rec( name := "OrbitLength", func := Ignore ),
-    Translation := rec( name := "Translation", func := Ignore ),
-    Basis       := rec( name := "Basis",       func := Ignore ),
     Isomorphism := rec( name := "Isomorphism", func := 
-                        x -> IdGroup( PointGroup( WyckoffStabilizer( x ) ) ) )
+                        x -> IdGroup( PointGroup( WyckoffStabilizer(x) ) ) ),
+    ConjugacyClassInfo := rec( name := "ConjugacyClassInfo", 
+                               func := x -> CCInfo( x ) )
   ) 
 );
+
 
 ############################################################################
 ##
@@ -26,8 +61,10 @@ InstallMethod( GGLRightClickPopup, "for a Wyckoff graph", true,
 function(sheet,v,x,y)
 
   local w, r, textselectfunc, text, pg, ps, i, str, basis, vec,
-        funcclose, funcall, maxlengthofname;
+        funcclose, funcall, maxlengthofname, names;
   
+  maxlengthofname := 11;
+
   # did we get a vertex?
   if v = fail then
     return;
@@ -44,38 +81,44 @@ function(sheet,v,x,y)
   
   # how long are the names of the info displays?
   r := sheet!.infodisplays;
-  maxlengthofname := Maximum( List( RecNames(r), x -> Length( r.(x).name ) ) );
+# maxlengthofname := Maximum( List( RecNames(r), x -> Length( r.(x).name ) ) );
 
   # text select function
   textselectfunc := function( sel, name )
     local tid, text, str, curr, value;
     
     tid  := sel!.selected;
+    name := sel!.names[tid];
     text := ShallowCopy(sel!.labels);
-    str  := text[tid]{[1..maxlengthofname+1]};
-    name := str{[1..Position(str,' ')-1]};
-    if name = "" then
-      name := "Default";
+    if name = "ConjugacyClassInfo" then
+        str  := text[tid]{[1..Length(name)]};
+    else
+        str  := text[tid]{[1..maxlengthofname+1]};
+    fi;
+
+    if name = "dummy" then
+        return true;
     fi;
     curr := sheet!.infodisplays.(name);
 
-    if IsIdenticalObj( curr.func, Ignore ) then
-      return true;
-    fi;
-
-    if not IsBound( v!.data.info.(name) ) then
-      value := curr.func( w );
-      v!.data.info.(name) := value;
-    else
-      value := v!.data.info.(name);
-    fi;
-    if IsBound( curr.tostr ) then
-      Append( str, curr.tostr( value ) );
+    value := curr.func( w );
+    v!.data.info.(name) := value;
+    if name = "ConjugacyClassInfo" then
+      Append( str, ":" );
     else
       Append( str, String( value ) );
     fi;
     text[tid] := str;
+#    if name = "ConjugacyClassInfo" then
+#        for str in value do
+#            Add( text, str );
+#            Add( sel!.textFuncs, textselectfunc );
+#            Add( sel!.names, "dummy" );
+#        od;
+#    fi;
+
     Relabel( sel, text );
+    SetName( sel, tid, "dummy" );
     LastResultOfInfoDisplay := value;
     
     return true;
@@ -83,6 +126,7 @@ function(sheet,v,x,y)
 
   # construct the initial text selector
   text := [];
+  names := [];
   pg := PointGroup( WyckoffStabilizer( w ) );
   ps := PointGroup( WyckoffSpaceGroup( w ) );
 
@@ -90,21 +134,25 @@ function(sheet,v,x,y)
   str := String( "StabSize", -(maxlengthofname+1) );
   Append( str, String( Size( pg ) ) );
   Append( text, [ str, textselectfunc ] );
+  Add( names, "dummy" );
 
   # the stabilizer dimension
   str := String( "StabDim", -(maxlengthofname+1) );
   Append( str, String( Length( WyckoffBasis( w ) ) ) );
   Append( text, [ str, textselectfunc ] );
+  Add( names, "dummy" );
 
   # the orbit length modulo lattice translations
   str := String( "OrbitLength", -(maxlengthofname+1) );
   Append( str, String( Size( ps ) / Size( pg ) ) );
   Append( text, [ str, textselectfunc ] );
+  Add( names, "dummy" );
 
   # the translation of the affine subspace
   str := String( "Translation", -(maxlengthofname+1) );
   Append( str, String( WyckoffTranslation( w ) ) );
   Append( text, [ str, textselectfunc ] );
+  Add( names, "dummy" );
 
   # the basis of the affine subspace
   basis := WyckoffBasis( w );
@@ -112,19 +160,23 @@ function(sheet,v,x,y)
   if basis = [] then
     Append( str, "[ ]" );
     Append( text, [ str, textselectfunc ] );
+    Add( names, "dummy" );
   elif Length( basis ) = 1 then
     Append( str, String( basis ) );
     Append( text, [ str, textselectfunc ] );
+    Add( names, "dummy" );
   else
     Append( str, "[ " );
     Append( str, String( basis[1] ) );
     for vec in basis{[2..Length(basis)]} do
       Append( text, [ str, textselectfunc ] );
+      Add( names, "dummy" );
       str := String( " ", -(maxlengthofname+3) );
       Append( str, String( vec ) );
     od;
     Append( str, " ]" );
     Append( text, [ str, textselectfunc ] );
+    Add( names, "dummy" );
   fi;
 
   # the isomorphism type
@@ -135,6 +187,24 @@ function(sheet,v,x,y)
     Append( str, "unknown" );
   fi;
   Append( text, [ str, textselectfunc ] );
+  Add( names, "Isomorphism" );
+
+  # the conjugacy class info
+  str := "ConjugacyClassInfo";
+  if IsBound( v!.data.info.ConjugacyClassInfo ) then
+      Append( str, ":" );
+      Add( names, "dummy" );
+  else
+      Add( names, "ConjugacyClassInfo" );
+  fi;
+  Append( text, [ str, textselectfunc ] );
+  Add( names, "Isomorphism" );
+  if IsBound( v!.data.info.ConjugacyClassInfo ) then
+      for str in v!.data.info.ConjugacyClassInfo do
+          Append( text, [ str, textselectfunc ] );
+          Add( names, "dummy" );
+      od;
+  fi;
 
   # button select functions:
   funcclose := function( sel, bt )
@@ -158,5 +228,13 @@ function(sheet,v,x,y)
         text,
         [ "all", funcall, "close", funcclose ] );
 
+  # set entry names
+  for i in [1..Length(names)] do
+      SetName( sheet!.selector, i, names[i] );
+  od;
+
 end);
+
+
+
 
