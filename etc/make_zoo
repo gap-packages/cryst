@@ -1,11 +1,9 @@
 #!/bin/sh
 
-PKGZOO=cryst-4.1.1.zoo
-DOCZOO=cryst-doc-4.1.1.zoo
+PKGZOO=cryst-4.1.3.zoo
 
-# remove old archives
+# remove old archive
 rm -f $PKGZOO
-rm -f $DOCZOO
 
 # goto <gaproot>/pkg
 cd ../..
@@ -21,6 +19,7 @@ echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.tex
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.bbl
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.six
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.lab
+echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.toc
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.mst
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.ps
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/introduction.tex
@@ -41,17 +40,6 @@ for file in cryst/htm/*.htm ; do
   echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO $file
 done
 
-# make the package documentation archive
-
-echo "!BINARY!" | zoo ach cryst/etc/$DOCZOO cryst/doc/manual.pdf
-echo "!TEXT!"   | zoo ach cryst/etc/$DOCZOO cryst/doc/manual.six
-for file in cryst/htm/*.htm ; do
-  echo "!TEXT!" | zoo ach cryst/etc/$DOCZOO $file
-done
-
 # check the results
-
 cd cryst/etc
 zoo -list $PKGZOO
-zoo -list $DOCZOO
-

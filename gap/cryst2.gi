@@ -385,6 +385,7 @@ function( G1, G2 )
     new := [];
     for g in GeneratorsOfGroup( stb ) do
         g1 := PreImagesRepresentative( PointHomomorphism( G1 ), g );
+        g1 := AffMatMutableTrans( g1 );
         if Length(T1) > 0 then
             g2 := PreImagesRepresentative( PointHomomorphism( G2 ), g );
             t1 := g1[d+1]{[1..d]};

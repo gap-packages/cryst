@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  read.g                  CrystGap library                     Bettina Eick
+#A  read.g                    Cryst library                     Bettina Eick
 #A                                                              Franz Gaehler
 #A                                                              Werner Nickel
 ##
