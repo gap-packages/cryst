@@ -40,7 +40,7 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
              x -> PreImagesRepresentative( PointHomomorphism( S2 ), x ) );
     t2   := Concatenation( List( gen2, x -> x[d+1]{[1..d]} ) );
 
-    sol  := SolveInhomEquationsModZ( M, t1-t2 )[1];
+    sol  := SolveInhomEquationsModZ( M, t1-t2, true )[1];
     if sol <> [] then
         return AugmentedMatrix( IdentityMat( d ), sol[1] );
     fi;
@@ -62,7 +62,7 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
                 gen2 := List( img, x -> PreImagesRepresentative( 
                                         PointHomomorphism( S2 ), x ) );
                 t2 := Concatenation( List( gen2, x -> x[d+1]{[1..d]}*nn^-1));
-                sol  := SolveInhomEquationsModZ( M, t1-t2 )[1];
+                sol  := SolveInhomEquationsModZ( M, t1-t2, true )[1];
                 if sol <> [] then
                     return AugmentedMatrix( nn, sol[1]*nn );
                 fi;
