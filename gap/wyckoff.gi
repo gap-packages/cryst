@@ -354,7 +354,7 @@ FixedPointsModZ := function( gens, d )
     od;
 
     # Catch trivial case
-    if Length(M[1]) = 0 then M := List( [1..d], x->[0] ); b := [1..d]*0; fi;
+    if Length(M[1]) = 0 then M := List( [1..d], x->[0] ); b := [0]; fi;
     
     ##  Compute the spaces of points fixed modulo translations.
     F := SolveInhomEquationsModZ( M, b );
@@ -368,13 +368,14 @@ end;
 ##
 IntersectionsAffineSubspaceLattice := function( U, V )
 
-    local T, m, t, s, b, lst, x, len, tt;
+    local T, m, t, Ti, s, b, lst, x, len, tt;
 
     T  := TranslationBasis( U.spaceGroup );
     m  := Concatenation( U.basis, -V.basis );
     t  := V.translation - U.translation;
+    Ti := T^-1;
 
-    s  := SolveInhomEquationsModZ( m*T, t*T );
+    s  := SolveInhomEquationsModZ( m*Ti, t*Ti );
 
     if s[1] = [] then
         return fail;
@@ -407,7 +408,7 @@ IsSubspaceAffineSubspaceLattice := function( U, V )
     if s = fail then
         return false;
     else
-        return r in s;
+        return V in s;
     fi;
 end;
 
