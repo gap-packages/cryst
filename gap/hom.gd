@@ -42,7 +42,7 @@ DeclareProperty( "IsFromAffineCrystGroupToPcpGroup",
 ##
 #A  MappingGeneratorsImages - for compatibility with GAP 4.2 and GAP 4.1
 ##
-if CompareVersionNumbers( "4r2", VERSION ) then
+if not CompareVersionNumbers( VERSION, "4.3" ) then
     if not IsBound( MappingGeneratorsImages ) then
         DeclareAttribute( "MappingGeneratorsImages", IsGeneralMapping );
     fi;
