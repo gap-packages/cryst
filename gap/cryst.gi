@@ -835,5 +835,45 @@ InstallGlobalFunction( AsAffineCrystGroup, function( S )
     fi;
 end );
 
+#############################################################################
+##
+#M  CanEasilyTestMembership( <grp> )
+##
+InstallTrueMethod( CanEasilyTestMembership, IsAffineCrystGroupOnLeftOrRight);
+
+#############################################################################
+##
+#M  CanComputeSize( <grp> )
+##
+InstallTrueMethod( CanComputeSize, IsAffineCrystGroupOnLeftOrRight );
+
+#############################################################################
+##
+#M  CanComputeSizeAnySubgroup( <grp> )
+##
+InstallTrueMethod(CanComputeSizeAnySubgroup,IsAffineCrystGroupOnLeftOrRight);
+
+#############################################################################
+##
+#M  CanComputeIndex( <G>, <H> )
+##
+InstallMethod( CanComputeIndex, IsIdenticalObj, 
+    [IsAffineCrystGroupOnRight,IsAffineCrystGroupOnRight], 0, ReturnTrue );
+
+InstallMethod( CanComputeIndex, IsIdenticalObj, 
+    [IsAffineCrystGroupOnLeft,IsAffineCrystGroupOnLeft], 0, ReturnTrue );
+
+#############################################################################
+##
+#M  CanComputeIsSubset( <G>, <H> )
+##
+InstallMethod( CanComputeIsSubset, IsIdenticalObj, 
+    [IsAffineCrystGroupOnRight,IsAffineCrystGroupOnRight], 0, ReturnTrue );
+
+InstallMethod( CanComputeIsSubset, IsIdenticalObj, 
+    [IsAffineCrystGroupOnLeft,IsAffineCrystGroupOnLeft], 0, ReturnTrue );
+
+
+
 
 
