@@ -699,6 +699,14 @@ function( S )
     return N;
 end );
 
+RedispatchOnCondition( TranslationNormalizer, true,
+  [IsAffineCrystGroupOnRight], 
+  [IsAffineCrystGroupOnRight and IsSpaceGroup], 0);
+
+RedispatchOnCondition( TranslationNormalizer, true,
+  [IsAffineCrystGroupOnLeft], 
+  [IsAffineCrystGroupOnLeft and IsSpaceGroup], 0);
+
 #############################################################################
 ##
 #F  AffineLift( pnt, d )
@@ -862,6 +870,14 @@ function( S )
     return A;
 end );
 
+
+RedispatchOnCondition( AffineNormalizer, true,
+  [IsAffineCrystGroupOnRight], 
+  [IsAffineCrystGroupOnRight and IsSpaceGroup], 0);
+
+RedispatchOnCondition( AffineNormalizer, true,
+  [IsAffineCrystGroupOnLeft], 
+  [IsAffineCrystGroupOnLeft and IsSpaceGroup], 0);
 
 #############################################################################
 ##

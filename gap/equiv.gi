@@ -143,3 +143,15 @@ function( S1, S2 )
     C    := ConjugatorSpaceGroups( S1, S2 );
     return TransposedMat( C );
 end );
+
+
+RedispatchOnCondition( ConjugatorSpaceGroups, IsIdenticalObj,
+  [IsAffineCrystGroupOnRight,IsAffineCrystGroupOnRight],
+  [IsAffineCrystGroupOnRight and IsSpaceGroup,
+   IsAffineCrystGroupOnRight and IsSpaceGroup],0);
+
+RedispatchOnCondition( ConjugatorSpaceGroups, IsIdenticalObj,
+  [IsAffineCrystGroupOnLeft,IsAffineCrystGroupOnLeft],
+  [IsAffineCrystGroupOnLeft and IsSpaceGroup,
+   IsAffineCrystGroupOnLeft and IsSpaceGroup],0);
+
