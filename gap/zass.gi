@@ -35,22 +35,6 @@ end;
 
 #############################################################################
 ##
-#F  AugmentedMatrix( <matrix>, <trans> ). . . . .  construct augmented matrix
-##
-AugmentedMatrix := function( m, b )
-   local g, t, x;
-   g := MutableMatrix( m ); 
-   for x in g do 
-       Add( x, 0 ); 
-   od;
-   t := ShallowCopy( b ); 
-   Add( t, 1 );
-   Add( g, t );
-   return g;
-end;
-
-#############################################################################
-##
 #F  MakeSpaceGroup( <d>, <Pgens>, <transl>, <transp> )  construct space group
 ##
 MakeSpaceGroup := function( d, Pgens, transl, transp )
