@@ -330,10 +330,17 @@ end );
 #F     . . . . . . . . . . . inequivalent by conjugation with elems from norm
 ##
 InstallGlobalFunction( SpaceGroupsByPointGroup, function( arg )
-    if CrystGroupDefaultAction = RightAction then
-        return SpaceGroupsByPointGroupOnRight( arg );
+    local G, norm;
+    G := arg[1];
+    if Length( arg ) > 1 then
+        norm := arg[2];
     else
-        return SpaceGroupsByPointGroupOnLeft( arg );
+        norm := [];
+    fi;
+    if CrystGroupDefaultAction = RightAction then
+        return SpaceGroupsByPointGroupOnRight( G, norm );
+    else
+        return SpaceGroupsByPointGroupOnLeft( G, norm );
     fi;
 end );
 
