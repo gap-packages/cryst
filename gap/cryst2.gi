@@ -357,7 +357,7 @@ function( G1, G2 )
         Add( new, g1 );
     od;
 
-    R := AffineCrystGroupOnRightNC( new );
+    R := AffineCrystGroupOnRightNC( new, One( G1 ) );
     AddTranslationBasis( R, T );
     return R;
 
