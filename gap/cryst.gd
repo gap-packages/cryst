@@ -48,6 +48,7 @@ DeclareGlobalFunction( "IsAffineCrystGroup" );
 #F  AffineCrystGroupOnRight( <genlist>, <identity> )  . . . . . . constructor
 ##
 DeclareGlobalFunction( "AffineCrystGroupOnRight" );
+DeclareGlobalFunction( "AffineCrystGroupOnRightNC" );
 
 #############################################################################
 ##
@@ -56,6 +57,7 @@ DeclareGlobalFunction( "AffineCrystGroupOnRight" );
 #F  AffineCrystGroupOnLeft( <genlist>, <identity> ) . . . . . . . constructor
 ##
 DeclareGlobalFunction( "AffineCrystGroupOnLeft" );
+DeclareGlobalFunction( "AffineCrystGroupOnLeftNC" );
 
 #############################################################################
 ##
@@ -64,6 +66,7 @@ DeclareGlobalFunction( "AffineCrystGroupOnLeft" );
 #F  AffineCrystGroup( <genlist>, <identity> ) . . . . . . . . . . constructor
 ##
 DeclareGlobalFunction( "AffineCrystGroup" );
+DeclareGlobalFunction( "AffineCrystGroupNC" );
 
 #############################################################################
 ##

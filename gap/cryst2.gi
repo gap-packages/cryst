@@ -72,16 +72,12 @@ function( G, elm )
     gens:= GeneratorsOfGroup( G );
 
     # try to avoid adding an element to a group that already contains it
-    if   elm in gens
-      or elm^-1 in gens
-      or ( HasAsSSortedList( G ) and elm in AsSSortedList( G ) )
-      or elm = One( G )
-    then
+    if elm in gens or elm^-1 in gens or elm = One( G ) then
         return G;
     fi;
 
     # make the closure group
-    C := AffineCrystGroupOnRight( Concatenation( gens, [ elm ] ) );
+    C := AffineCrystGroupOnRightNC( Concatenation( gens, [ elm ] ) );
 
     # if <G> is infinite then so is <C>
     if HasIsFinite( G ) and not IsFinite( G ) then
@@ -107,16 +103,12 @@ function( G, elm )
     gens:= GeneratorsOfGroup( G );
 
     # try to avoid adding an element to a group that already contains it
-    if   elm in gens
-      or elm^-1 in gens
-      or ( HasAsSSortedList( G ) and elm in AsSSortedList( G ) )
-      or elm = One( G )
-    then
+    if elm in gens or elm^-1 in gens or elm = One( G ) then
         return G;
     fi;
 
     # make the closure group
-    C := AffineCrystGroupOnLeft( Concatenation( gens, [ elm ] ) );
+    C := AffineCrystGroupOnLeftNC( Concatenation( gens, [ elm ] ) );
 
     # if <G> is infinite then so is <C>
     if HasIsFinite( G ) and not IsFinite( G ) then
@@ -151,7 +143,7 @@ function( G, g )
 
     # create the domain
     gen := List( GeneratorsOfGroup( G ), x -> g^-1 * x * g );
-    H := AffineCrystGroupOnRight( gen, One( G ) );
+    H := AffineCrystGroupOnRightNC( gen );
     if HasTranslationBasis( G ) then
         d := DimensionOfMatrixGroup( G ) - 1;
         T := TranslationBasis( G );
@@ -182,7 +174,7 @@ function( G, g )
 
     # create the domain
     gen := List( GeneratorsOfGroup( G ), x -> g * x * g^-1 );
-    H := AffineCrystGroupOnLeft( gen, One( G ) );
+    H := AffineCrystGroupOnLeftNC( gen );
     if HasTranslationBasis( G ) then
         d := DimensionOfMatrixGroup( G ) - 1;
         T := TranslationBasis( G );
@@ -363,7 +355,7 @@ function( G1, G2 )
         Add( new, g1 );
     od;
 
-    R := AffineCrystGroupOnRight( new );
+    R := AffineCrystGroupOnRightNC( new );
     AddTranslationBasis( R, T );
     return R;
 
@@ -372,16 +364,11 @@ end );
 InstallMethod( Intersection2, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G1, G2 )
-    local T1, T2, I, g, I2; 
+    local T1, T2, I; 
     T1 := TransposedMatrixGroup( G1 );
     T2 := TransposedMatrixGroup( G2 );
     I  := Intersection2( T1, T2 );
-    g  := List( GeneratorsOfGroup( I ), TransposedMat );
-    I2 := AffineCrystGroupOnLeft( g, One( I ) );
-    if HasTranslationBasis( I ) then
-        AddTranslationBasis( I2, TranslationBasis( I ) );
-    fi;
-    return I2;
+    return TransposedMatrixGroup( I );
 end );
 
 
@@ -553,24 +540,22 @@ end;
 InstallMethod( CentralizerOp, "AffineCrystGroupOnRight and element", 
     IsCollsElms, [ IsAffineCrystGroupOnRight, IsMatrix ], 0,
 function( G, m )
+    if not IsAffineMatrixOnRight( m ) then
+        Error( "m must be an affine matrix acting OnRight" );
+    fi;
     return CentralizerAffineCrystGroup( G, m );
 end );
 
 InstallMethod( CentralizerOp, "AffineCrystGroupOnLeft and element", 
     IsCollsElms, [ IsAffineCrystGroupOnLeft, IsMatrix ], 0,
 function( G, m )
-    local T, C, g, R;
+    local T, C;
     if not IsAffineMatrixOnLeft( m ) then
         Error( "m must be an affine matrix acting OnLeft" );
     fi;
     T := TransposedMatrixGroup( G );
     C := CentralizerAffineCrystGroup( T, TransposedMat( m ) );
-    g := List( GeneratorsOfGroup( C ), TransposedMat );
-    R := AffineCrystGroupOnLeft( g, One( C ) );
-    if HasTranslationBasis( C ) then
-        AddTranslationBasis( R, TranslationBasis( C ) );
-    fi;
-    return R;
+    return TransposedMatrixGroup( C );
 end );
 
 InstallMethod( CentralizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj, 
@@ -582,16 +567,11 @@ end );
 InstallMethod( CentralizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G1, G2 )
-    local G, U, C, g, R;
+    local G, U, C;
     G := TransposedMatrixGroup( G1 );
     U := TransposedMatrixGroup( G2 );
     C := CentralizerAffineCrystGroup( G, U );
-    g := List( GeneratorsOfGroup( C ), TransposedMat );
-    R := AffineCrystGroupOnLeft( g, One( C ) );
-    if HasTranslationBasis( C ) then
-        AddTranslationBasis( R, TranslationBasis( C ) );
-    fi;
-    return R;
+    return TransposedMatrixGroup( C );
 end );
 
 

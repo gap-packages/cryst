@@ -69,14 +69,15 @@ function( S )
     gen := List( GeneratorsOfGroup( S ), TransposedMat );
     grp := Group( gen, One( S ) );
     if IsAffineCrystGroupOnRight( S ) then
-        SetIsAffineCrystGroupOnLeft( grp );
+        SetIsAffineCrystGroupOnLeft( grp, true );
     else
-        SetIsAffineCrystGroupOnRight( grp );
+        SetIsAffineCrystGroupOnRight( grp, true );
     fi;
     if HasTranslationBasis( S ) then
         AddTranslationBasis( grp, TranslationBasis( S ) );
     fi;
     SetTransposedMatrixGroup( grp, S );
+    UseIsomorphismRelation( S, grp );
     return grp;
 end );
 
@@ -193,48 +194,22 @@ end;
 ##
 InstallGlobalFunction( AddTranslationBasis, function ( S, basis )
 
-    local P, d, T, B, g, l, r;
+    local T;
 
     if not IsAffineCrystGroupOnLeftOrRight( S ) then
         Error("S must be an AffineCrystGroup");
     fi;
 
-    # if translations are already known, do nothing
-    if not HasTranslationBasis( S ) then
+    T := ReducedLatticeBasis( basis );
 
-        P := PointGroup( S );
-        d := DimensionOfMatrixGroup( P );
-        T := ReducedLatticeBasis( basis );
-        SetTranslationBasis( S, T );
-
-        # conjugate internal generators if necessary
-        if not IsStandardAffineCrystGroup( S ) then
-
-            B := InternalBasis( S );
-            if IsAffineCrystGroupOnRight( S ) then
-                l := B; r := B^-1;
-            else
-                r := TransposedMat( B ); l := r^-1;
-            fi;
-
-            # conjugate internal point group generators
-            P!.internalGenerators := List( P!.internalGenerators, 
-                                           x -> l * x * r );
-
-            # conjugate internal space group generators
-            S!.internalGenerators := List( S!.internalGenerators,
-                                           x -> S!.lconj * x * S!.rconj );
+    if HasTranslationBasis( S ) then
+        if T <> TranslationBasis( S ) then
+            Error("adding incompatible translation basis attempted");
         fi;
-
-        # reduce S!.internalGenerators
-        if IsAffineCrystGroupOnRight( S ) then
-            for g in S!.internalGenerators do
-                g[d+1]{[1..d]} := VectorModL( g[d+1]{[1..d]}, T );
-            od;
-        else
-            for g in S!.internalGenerators do
-                g{[1..d]}[d+1] := VectorModL( g{[1..d]}[d+1], T );
-            od;
+    else
+        SetTranslationBasis( S, T );
+        if not IsStandardAffineCrystGroup( S ) then
+            InternalBasis( S );  # computes S!.lconj, S!.rconj
         fi;
     fi;
 
@@ -578,7 +553,7 @@ end );
 ##
 PointGroupHomomorphism := function( S )
 
-    local d, gen, im, I, Pgens, Sgens, i, P, nice, N, perms, lift, H, tmp;
+    local d, gen, im, I, Pgens, Sgens, i, P, nice, N, perms, lift, H;
 
     d   := DimensionOfMatrixGroup( S ) - 1;
     gen := GeneratorsOfGroup( S );
@@ -597,8 +572,6 @@ PointGroupHomomorphism := function( S )
     P := GroupByGenerators( Pgens, I );
     SetIsPointGroup( P, true );
     SetAffineCrystGroupOfPointGroup( P, S );
-    P!.internalGenerators := Pgens;
-    S!.internalGenerators := Sgens;
     if not IsFinite( P ) then
         Error( "AffineCrystGroups must have a *finite* point group" );
     fi;
@@ -606,8 +579,7 @@ PointGroupHomomorphism := function( S )
     nice  := NiceMonomorphism( P ); 
     N     := NiceObject( P );
     perms := List( Pgens, x -> ImagesRepresentative( nice, x ) );
-    tmp   := Immutable( S!.internalGenerators );
-    lift  := GroupHomomorphismByImagesNC( N, S, perms, tmp );
+    lift  := GroupHomomorphismByImagesNC( N, S, perms, Sgens );
     SetNiceToCryst( P, lift );
 
     H := GroupHomomorphismByImagesNC( S, P, gen, im );
@@ -715,18 +687,15 @@ end );
 ##
 InstallGlobalFunction( AffineCrystGroupOnRight, function( arg )
     local G;
-    if Length( arg ) = 1 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 2 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 1 and IsList( arg[1] ) and 0 < Length( arg[1] ) then
-        G := GroupByGenerators( arg[1] );
-    elif Length( arg ) = 2 and IsList( arg[1] ) then
-        G := GroupByGenerators( arg[1], arg[2] );
-    elif 0 < Length( arg ) then
-        G := GroupByGenerators( arg );
-    fi;
+    G := CallFuncList( Group, arg );
     return AsAffineCrystGroupOnRight( G );
+end );
+
+InstallGlobalFunction( AffineCrystGroupOnRightNC, function( arg )
+    local G;
+    G := CallFuncList( Group, arg );
+    SetIsAffineCrystGroupOnRight( G, true );
+    return G;
 end );
 
 #############################################################################
@@ -737,18 +706,15 @@ end );
 ##
 InstallGlobalFunction( AffineCrystGroupOnLeft, function( arg )
     local G;
-    if Length( arg ) = 1 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 2 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 1 and IsList( arg[1] ) and 0 < Length( arg[1] ) then
-        G := GroupByGenerators( arg[1] );
-    elif Length( arg ) = 2 and IsList( arg[1] ) then
-        G := GroupByGenerators( arg[1], arg[2] );
-    elif 0 < Length( arg ) then
-        G := GroupByGenerators( arg );
-    fi;
+    G := CallFuncList( Group, arg );
     return AsAffineCrystGroupOnLeft( G );
+end );
+
+InstallGlobalFunction( AffineCrystGroupOnLeftNC, function( arg )
+    local G;
+    G := CallFuncList( Group, arg );
+    SetIsAffineCrystGroupOnLeft( G, true );
+    return G;
 end );
 
 #############################################################################
@@ -759,21 +725,23 @@ end );
 ##
 InstallGlobalFunction( AffineCrystGroup, function( arg )
     local G;
-    if Length( arg ) = 1 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 2 and IsMatrix( arg[1] ) then
-        G := GroupByGenerators( arg );
-    elif Length( arg ) = 1 and IsList( arg[1] ) and 0 < Length( arg[1] ) then
-        G := GroupByGenerators( arg[1] );
-    elif Length( arg ) = 2 and IsList( arg[1] ) then
-        G := GroupByGenerators( arg[1], arg[2] );
-    elif 0 < Length( arg ) then
-        G := GroupByGenerators( arg );
-    fi;
+    G := CallFuncList( Group, arg );
     if CrystGroupDefaultAction = RightAction then
         return AsAffineCrystGroupOnRight( G );
     else
         return AsAffineCrystGroupOnLeft( G );
+    fi;
+end );
+
+InstallGlobalFunction( AffineCrystGroupNC, function( arg )
+    local G;
+    G := CallFuncList( Group, arg );
+    if CrystGroupDefaultAction = RightAction then
+        SetIsAffineCrystGroupOnRight( G, true );
+        return G;
+    else
+        SetIsAffineCrystGroupOnLeft( G, true );
+        return G;
     fi;
 end );
 
