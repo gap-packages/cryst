@@ -157,24 +157,26 @@ InstallGlobalFunction( ColorGroup, function( G, H )
     SetColorSubgroup( C, U ); 
 
     # if G is an AffineCrystGroup, make C am AffineCrystGroup
-    if IsAffineCrystGroupOnRight( G ) then
-        SetIsAffineCrystGroupOnRight( C, true );
-        SetIsAffineCrystGroupOnRight( U, true );
-        if HasTranslationBasis( G ) then
-            AddTranslationBasis( C, TranslationBasis( G ) );
+    if IsCyclotomicMatrixGroup( G ) then
+        if IsAffineCrystGroupOnRight( G ) then
+            SetIsAffineCrystGroupOnRight( C, true );
+            SetIsAffineCrystGroupOnRight( U, true );
+            if HasTranslationBasis( G ) then
+                AddTranslationBasis( C, TranslationBasis( G ) );
+            fi;
+            if HasTranslationBasis( H ) then
+                AddTranslationBasis( U, TranslationBasis( H ) );
+            fi;
         fi;
-        if HasTranslationBasis( H ) then
-            AddTranslationBasis( U, TranslationBasis( H ) );
-        fi;
-    fi;
-    if IsAffineCrystGroupOnLeft( G ) then
-        SetIsAffineCrystGroupOnLeft( C, true );
-        SetIsAffineCrystGroupOnLeft( U, true );
-        if HasTranslationBasis( G ) then
-            AddTranslationBasis( C, TranslationBasis( G ) );
-        fi;
-        if HasTranslationBasis( H ) then
-            AddTranslationBasis( U, TranslationBasis( H ) );
+        if IsAffineCrystGroupOnLeft( G ) then
+            SetIsAffineCrystGroupOnLeft( C, true );
+            SetIsAffineCrystGroupOnLeft( U, true );
+            if HasTranslationBasis( G ) then
+                AddTranslationBasis( C, TranslationBasis( G ) );
+            fi;
+            if HasTranslationBasis( H ) then
+                AddTranslationBasis( U, TranslationBasis( H ) );
+            fi;
         fi;
     fi;
 
