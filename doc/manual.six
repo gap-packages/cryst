@@ -40,8 +40,8 @@ F 2.3. StandardAffineCrystGroup
 F 2.3. IsSymmorphicSpaceGroup
 S 2.4. Special methods
 I 2.4. methods!for an AffineCrystGroup
-I 2.4. {\accent 94 }!for an AffineCrystGroup
-F 2.4. power
+I 2.4. \\{\accent 94 }!for an `AffineCrystGroup'
+F 2.4. power!for an `AffineCrystGroup'
 F 2.4. IsomorphismFpGroup!for a `PointGroup'
 F 2.4. IsomorphismFpGroup!for an `AffineCrystGroup'
 F 2.4. IsomorphismPcpGroup!for a `PointGroup'
