@@ -402,7 +402,7 @@ function( G1, G2 )
         Add( new, g1 );
     od;
 
-    R := AffineCrystGroupOnRightNC( new );
+    R := AffineCrystGroupOnRightNC( new, One( G1 ) );
     AddTranslationBasis( R, T );
     return R;
 
@@ -454,24 +454,17 @@ end );
 ##
 CentralizerElement := function( G, u, TT )
 
-    local d, P, T, I, L, U, orb, set, rep, stb, pnt, gen, img, sch, v;
+    local d, I, U, L, orb, set, rep, stb, pnt, gen, img, sch, v;
 
     d := DimensionOfMatrixGroup( G ) - 1;
-    P := PointGroup( G );
-    T := TranslationBasis( G );
     I := IdentityMat( d );
-
-    L := Concatenation( List( GeneratorsOfGroup( P ), x -> T*(x - I) ) );
-    if Length( L ) > 0 then
-        L := ReducedLatticeBasis( L );
-    fi;
-
     U := TT*(u{[1..d]}{[1..d]} - I);
+    L := ReducedLatticeBasis( U );
    
     orb := [ MutableMatrix( u ) ];
     set := [ u ];
-    rep := [ One( G ) ];
-    stb := Subgroup( Parent( G ), [] );
+    rep := [ MutableMatrix( One( G ) ) ];
+    stb := TrivialSubgroup( G );
     for pnt  in orb  do
         for gen  in GeneratorsOfGroup( G ) do
             img := pnt^gen;
@@ -487,13 +480,13 @@ CentralizerElement := function( G, u, TT )
                 # check if a translation conjugate of sch is in stabilizer
                 v := u^sch - u;
                 v := v[d+1]{[1..d]};
-                v := IntSolutionMat( U, v );
-                if v <> false then
-                    sch[d+1]{[1..d]} :=sch[d+1]{[1..d]} - v*U; 
-                    if not sch in stb  then
-                        stb := ClosureGroup( stb, sch );
-                    fi;
+                if v <> 0 * v then
+                     Assert(0, U <> [] );
+                     v := IntSolutionMat( U, v );
+                     Assert( 0, v <> fail );
+                     sch[d+1]{[1..d]} := sch[d+1]{[1..d]} + v*TT; 
                 fi;
+                stb := ClosureGroup( stb, sch );
             fi;
         od;
     od;
@@ -525,7 +518,7 @@ CentralizerAffineCrystGroup := function ( G, obj )
         for i in [ 1..Length( gen ) ] do
             L{[1..e]}{[1..d]+(i-1)*d} := T*(gen[i]-I);
         od;
-        P := Centralizer( P, Subgroup( P, gen ) );
+        P := Centralizer( P, M );
         P := Stabilizer( P, TranslationBasis( obj ), OnRight );
         U := Filtered( GeneratorsOfGroup(obj), x -> x{[1..d]}{[1..d]} <> I );
     else
@@ -555,9 +548,7 @@ CentralizerAffineCrystGroup := function ( G, obj )
         L := RowEchelonFormT( L, Q );
     fi;
     for i in [ Length( L )+1..e ] do
-        M := IdentityMat( d+1 );
-        M[d+1]{[1..d]} := Q[i]*T;
-        Add( gen, M );
+        Add( gen, AugmentedMatrix( I, Q[i]*T ) );
     od;
 
     # C centralizes the point group and the translation group of obj
@@ -566,6 +557,7 @@ CentralizerAffineCrystGroup := function ( G, obj )
     # now find the centralizer for each u in U
     for u in U do
         C := CentralizerElement( C, u, T );
+        T := TranslationBasis( C );
     od;
 
     return C;
@@ -612,29 +604,6 @@ function( G1, G2 )
     U := TransposedMatrixGroup( G2 );
     C := CentralizerAffineCrystGroup( G, U );
     return TransposedMatrixGroup( C );
-end );
-
-
-#############################################################################
-##
-#M  Normalizer( G, H ) . . . . . . . . . . . . . . . . . . . . . . normalizer
-##
-InstallMethod( NormalizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj, 
-    [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
-function( G, H )
-    local gens, orbstab;
-    gens    := GeneratorsOfGroup( G );
-    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
-    return orbstab.stabilizer;
-end );
-
-InstallMethod( NormalizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
-    [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
-function( G, H )
-    local gens, orbstab;
-    gens    := GeneratorsOfGroup( G );
-    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
-    return orbstab.stabilizer;
 end );
 
 
