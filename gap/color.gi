@@ -75,8 +75,8 @@ ColorPermGroupHomomorphism := function( G )
     while HasParent( P ) and P <> Parent( P ) do
         P := Parent( P );
     od;
-    pmg := Operation( G, ColorCosetList( P ), OnRight );
-    hom := OperationHomomorphism( G, pmg );
+    pmg := Action( G, ColorCosetList( P ), OnRight );
+    hom := ActionHomomorphism( G, pmg );
     return [ pmg, hom ];
 end;
 
