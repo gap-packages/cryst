@@ -802,7 +802,7 @@ function( S )
         if m = mm then
             res := [ data[1], List( data[2]*g, FractionModOne ) ];
         else
-           m := PreImagesRepresentative( hom, mm );
+           m := AffMatMutableTrans( PreImagesRepresentative( hom, mm ) );
            m[d+1]{[1..d]} := List( m[d+1]{[1..d]}, FractionModOne );
            res := [ m, List( data[2]*g, FractionModOne ) ];
         fi;
