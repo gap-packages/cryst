@@ -106,6 +106,13 @@ Autoload := true,
 
 #TestFile := "tst/testall.g",
 
-Keywords := [ "crystallographic groups", "space groups" ]
-
+Keywords := [ "crystallographic groups", 
+              "affine crystallographic groups",
+              "space groups",
+              "color groups",
+              "point group",
+              "Wyckoff positions",
+              "International Tables for Cystallography",
+              "maximal subgroups",
+              "normalizer" ]
 ));
