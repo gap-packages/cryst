@@ -145,4 +145,92 @@ end );
 
 
 
+#############################################################################
+##
+#M  RepresentativeAction( G, d, e, gens, oprs, opr )  for an AffineCrystGroup
+##
+InstallOtherMethod( RepresentativeActionOp,
+        "G, d, e, gens, oprs, opr for AffineCrystGroups", true,
+        [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight, 
+          IsAffineCrystGroupOnRight, IsList, IsList, IsFunction ], 0,
+function( G, d, e, gens, oprs, opr )
 
+    local orb, by, frm, grp, k, img, pos, rep, i;
+
+    orb := [ d ];
+    by  := [ oprs[1]^0 ];
+    frm := [ 1 ];
+    if d = e then return by[1]; fi;
+
+    if opr = OnPoints then
+        for grp in orb do
+            for k in [1..Length(gens)] do
+                img := List( GeneratorsOfGroup( grp ), x -> x^oprs[k] );
+                if ForAll( img, x -> x in e ) then
+                    rep := gens[k];
+                    while grp <> d  do
+                        pos := Position( orb, grp );
+                        rep := by[ pos ] * rep;
+                        grp := orb[ frm[ pos ] ];
+                    od;
+                    return rep;
+                else
+                    i := PositionProperty( orb, 
+                              g -> ForAll( img, x -> x in g ) );
+                    if i = fail then
+                        Add( frm, Position( orb, grp ) );
+                        Add( orb, ConjugateGroup( grp, oprs[k] ) );
+                        Add( by,  gens[k] );
+                    fi;
+                fi;
+            od;
+        od;
+        return fail ;
+    else
+        TryNextMethod();
+    fi;
+
+end );
+
+InstallOtherMethod( RepresentativeActionOp,
+        "G, d, e, gens, oprs, opr for AffineCrystGroups", true,
+        [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft, 
+          IsAffineCrystGroupOnLeft, IsList, IsList, IsFunction ], 0,
+function( G, d, e, gens, oprs, opr )
+
+    local orb, by, frm, grp, k, img, pos, rep, i;
+
+    orb := [ d ];
+    by  := [ oprs[1]^0 ];
+    frm := [ 1 ];
+    if d = e then return by[1]; fi;
+
+    if opr = OnPoints then
+        for grp in orb do
+            for k in [1..Length(gens)] do
+                img := List( GeneratorsOfGroup( grp ), x -> x^oprs[k] );
+                if ForAll( img, x -> x in e ) then
+                    rep := gens[k];
+                    while grp <> d  do
+                        pos := Position( orb, grp );
+                        rep := by[ pos ] * rep;
+                        grp := orb[ frm[ pos ] ];
+                    od;
+                    return rep;
+                else
+                    i := PositionProperty( orb, 
+                              g -> ForAll( img, x -> x in g ) );
+                    if i = fail then
+                        Add( frm, Position( orb, grp ) );
+                        Add( orb, ConjugateGroup( grp, oprs[k] ) );
+                        Add( by,  gens[k] );
+                    fi;
+                fi;
+            od;
+        od;
+        return fail ;
+    else
+        TryNextMethod();
+    fi;
+
+end );
