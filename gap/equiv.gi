@@ -113,7 +113,7 @@ function( S1, S2 )
         C3 := IdentityMat( d+1 );
         S3 := S2std;
     else
-        c  := RepresentativeOperation( GL(d,Integers), P2std, P1std );
+        c  := RepresentativeAction( GL(d,Integers), P2std, P1std );
         if c = fail then
             return fail;
         fi;
