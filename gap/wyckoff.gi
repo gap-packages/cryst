@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  wyckoff.gi              CrystGap library                     Bettina Eick
+#A  wyckoff.gi                Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##

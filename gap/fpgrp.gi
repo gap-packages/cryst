@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  fpgrp.gi                CrystGap library                     Bettina Eick
+#A  fpgrp.gi                  Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##

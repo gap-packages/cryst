@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  spacegrp.gi             CrystGap library                     Bettina Eick
+#A  spacegrp.gi               Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##

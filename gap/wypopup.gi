@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  wypopup.gi              CrystGap library                     Bettina Eick
+#A  wypopup.gi                Cryst library                      Bettina Eick
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
