@@ -25,7 +25,7 @@ ReadPkg( "cryst/gap/zass.gd" );      # declarations for Zassenhaus algorithm
 ReadPkg( "cryst/gap/max.gd" );       # declarations for maximal subgroups
 ReadPkg( "cryst/gap/color.gd" );     # declarations for color groups
 ReadPkg( "cryst/gap/equiv.gd" );     # isomorphism test for space groups
-ReadPkg( "cryst/grp/spacegrps.gd" ); # the IT space group catalogue
+ReadPkg( "cryst/grp/spacegrp.gd" );  # the IT space group catalogue
 
 #############################################################################
 ##

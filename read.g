@@ -57,5 +57,5 @@ ReadPkg( "cryst/gap/equiv.gi" );   # conjugator between space groups
 ##
 #R  load the IT space group catalogue
 ##
-ReadPkg( "cryst/grp/spacegrps.grp" ); # the catalogue
-ReadPkg( "cryst/grp/spacegrps.gi" );  # access functions
+ReadPkg( "cryst/grp/spacegrp.grp" ); # the catalogue
+ReadPkg( "cryst/grp/spacegrp.gi" );  # access functions
