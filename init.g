@@ -6,7 +6,7 @@
 ##
 #Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
 ##
-##              CrystGap - the crystallographic groups package
+##               Cryst - the crystallographic groups package
 ##  
 ##                            GAP 4 Version
 ##
@@ -31,18 +31,9 @@ ReadPkg( "cryst/grp/spacegrp.gd" );  # the IT space group catalogue
 ##
 #R  try to read the CARAT and polycyclic packages; 
 #R  don't complain if they are not available
-##
-OldWarningLevel := InfoLevel( InfoWarning );
-SetInfoLevel( InfoWarning, 0 );
-AutoloadTmp := IS_IN_AUTOLOAD;
-IS_IN_AUTOLOAD := false;
-RequirePackage( "carat" );
-RequirePackage( "polycyclic" );
-IS_IN_AUTOLOAD := AutoloadTmp;
-Unbind( AutoloadTmp );
-SetInfoLevel( InfoWarning, OldWarningLevel );
-Unbind( OldWarningLevel );
-
-
-
-
+if TestPackageAvailability("carat", "1.0") <> fail then
+  RequirePackage( "carat" );
+fi;
+if TestPackageAvailability("polycyclic", "1.0") <> fail then
+  RequirePackage( "polycyclic" );
+fi;
