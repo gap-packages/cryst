@@ -109,13 +109,14 @@ function(sheet,v,x,y)
       Append( str, String( value ) );
     fi;
     text[tid] := str;
-#    if name = "ConjugacyClassInfo" then
-#        for str in value do
-#            Add( text, str );
-#            Add( sel!.textFuncs, textselectfunc );
-#            Add( sel!.names, "dummy" );
-#        od;
-#    fi;
+    if name = "ConjugacyClassInfo" then
+        for str in value do
+            Add( text, str );
+            Add( sel!.textFuncs, textselectfunc );
+            Add( sel!.names, "dummy" );
+        od;
+        sel!.labels := text;
+    fi;
 
     Relabel( sel, text );
     SetName( sel, tid, "dummy" );
