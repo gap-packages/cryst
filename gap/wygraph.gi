@@ -35,48 +35,10 @@ end );
 
 #############################################################################
 ##
-#F  IsSubspaceAffineSubspace( <U>, <V>, <T> ) . . . . . . . V subspace of U ?
-##
-IsSubspaceAffineSubspace := function( U, V, T )
-
-    local W, w, h, u;
-
-    # span(V.basis) contained in span(U.basis)?
-    W := ShallowCopy( V.basis );
-    for w in W do
-        h:=1;
-        for u in U.basis do
-            while u[h] = 0 do h := h+1; od;
-            if w[h] <> 0 then
-                w := w - w[h] * u / u[h];
-            fi;
-        od;
-        if w <> 0*w then
-            return false;
-        fi;
-    od;
-
-    # are translations compatible?
-    w := U.translation - V.translation;
-    h := 1;
-    for u in U.basis do
-        while u[h] = 0 do h := h+1; od;
-        if w[h] <> 0 then
-            w := w - w[h] * u / u[h];
-        fi;
-    od;
-    w := VectorModL( w, T );
-
-    return w = 0*w;
-
-end;
-
-#############################################################################
-##
 #F  WyckoffPosRelations( <W> ) . . . incidence relations of Wyckoff positions
 ##
 WyckoffPosRelations := function( W )
-    local S, T, d, len, gens, G, L, m, O, o, i, j, k, index;
+    local S, T, d, len, gens, G, L, m, O, o, i, j, k, Si, Sj, index, lst;
 
     S := WyckoffSpaceGroup( W[1] );
     T := TranslationBasis( S );
@@ -96,12 +58,12 @@ WyckoffPosRelations := function( W )
     for i in [1..len] do
         O := Orbit( G, L[i], ImageAffineSubspaceLattice );
         for j in [1..len] do
-            index := Size( WyckoffStabilizer( W[j] ) ) /   
-                     Size( WyckoffStabilizer( W[i] ) );
+            Sj := WyckoffStabilizer( W[j] );
+            Si := WyckoffStabilizer( W[i] );
+            index := Size(Sj) / Size(Si);
             if Length(L[j].basis) < Length(L[i].basis) and IsInt(index) then
-                if ForAny( O, o -> IsSubspaceAffineSubspace(o,L[j],T) ) then
-                    m[j][i] := index;
-                fi;
+                lst := Filtered(O,o->IsSubspaceAffineSubspaceLattice(o,L[j]));
+                m[j][i] := Length( lst );
             fi;
         od;
     od;
