@@ -572,29 +572,6 @@ end );
 
 #############################################################################
 ##
-#M  Normalizer( G, H ) . . . . . . . . . . . . . . . . . . . . . . normalizer
-##
-InstallMethod( NormalizerOp, "two AffineCrystGroupsOnRight", IsIdenticalObj, 
-    [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
-function( G, H )
-    local gens, orbstab;
-    gens    := GeneratorsOfGroup( G );
-    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
-    return orbstab.stabilizer;
-end );
-
-InstallMethod( NormalizerOp, "two AffineCrystGroupsOnLeft", IsIdenticalObj, 
-    [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
-function( G, H )
-    local gens, orbstab;
-    gens    := GeneratorsOfGroup( G );
-    orbstab := OrbitStabilizerOp( G, H, gens, gens, OnPoints );
-    return orbstab.stabilizer;
-end );
-
-
-#############################################################################
-##
 #M  TranslationNormalizer( S ) . . . . . . . . . . . . translation normalizer
 ##
 InstallMethod( TranslationNormalizer, "for SpaceGroup acting OnRight", 
