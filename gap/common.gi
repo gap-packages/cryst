@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  Common utility routines, most of which deal with integral matrices
 ##
@@ -35,22 +35,9 @@ end;
 
 #############################################################################
 ##
-#F  IsDiagonalMat . . . . . . . . . . . . . . . . . . is the matrix diagonal?
+#M  IsDiagonalMat . . . . . . . . . . . . . . . . . . is the matrix diagonal?
 ##
-IsDiagonalMat := function( M )
-    
-    local i, j;
-    
-    if Length(M) = 0 then return true; fi;
-    if Length(M) <> Length(M[1]) then return false; fi;
-    for i in [1..Length(M)] do
-        for j in [i+1..Length(M[1])] do
-            if M[i][j] <> 0 then return false; fi;
-            if M[j][i] <> 0 then return false; fi;
-        od;
-    od;
-    return true;
-end;
+InstallOtherMethod( IsDiagonalMat, true, [ IsEmpty ], 0, ReturnTrue );
 
 #############################################################################
 ##
@@ -236,7 +223,7 @@ IntSolutionMat := function( M, b )
     local Q, den, sol, i, x;
 
     if M = [] then
-        return false;
+        return fail;
     fi;
 
     den := Lcm( List( Flat( M ), x -> DenominatorRat( x ) ) );
@@ -266,14 +253,14 @@ IntSolutionMat := function( M, b )
         if IsInt( x ) then
             Add( sol, x );
         else 
-            return false;
+            return fail;
         fi;
     od;
 
     # are there solutions at all?
     for i in [Length(M)+1..Length(b)] do
         if b[i]<>0 then
-            return false;
+            return fail;
         fi;
     od;
 

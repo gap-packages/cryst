@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  More methods for affine crystallographic groups
 ##
@@ -340,11 +340,13 @@ function( G1, G2 )
     new := [];
     for g in GeneratorsOfGroup( stb ) do
         g1 := PreImagesRepresentative( PointHomomorphism( G1 ), g );
-        g2 := PreImagesRepresentative( PointHomomorphism( G2 ), g );
-        t1 := g1[d+1]{[1..d]};
-        t2 := g2[d+1]{[1..d]};
-        s  := IntSolutionMat( Concatenation( T1, -T2 ), t2-t1 ); 
-        g1[d+1]{[1..d]} := t1+s{[1..Length(T1)]}*T1;
+        if Length(T1) > 0 then
+            g2 := PreImagesRepresentative( PointHomomorphism( G2 ), g );
+            t1 := g1[d+1]{[1..d]};
+            t2 := g2[d+1]{[1..d]};
+            s  := IntSolutionMat( Concatenation( T1, -T2 ), t2-t1 ); 
+            g1[d+1]{[1..d]} := t1+s{[1..Length(T1)]}*T1;
+        fi;
         Add( new, g1 );
     od;
 
@@ -397,14 +399,7 @@ end );
 InstallMethod( CentralizerPointGroupInGLnZ, "via NormalizerPointGroupInGLnZ", 
     true, [ IsPointGroup ], 0,
 function( G )
-    local N, gens;
-    N := NormalizerPointGroupInGLnZ( G );
-    gens := GeneratorsOfGroup( G );
-    if IsFinite( N ) then
-        return Centralizer( N, G );
-    else
-        return StabilizerInfiniteGroup( N, gens, OnTuples );
-    fi;
+    return Centralizer( NormalizerPointGroupInGLnZ( G ), G );
 end );
 
 
