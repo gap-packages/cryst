@@ -147,25 +147,25 @@ end );
 
 #############################################################################
 ##
-#M  RepresentativeAction( G, d, e, gens, oprs, opr )  for an AffineCrystGroup
+#M  RepresentativeAction( G, d, e, opr ) . . . . . .  for an AffineCrystGroup
 ##
 InstallOtherMethod( RepresentativeActionOp,
-        "G, d, e, gens, oprs, opr for AffineCrystGroups", true,
+        "G, d, e, opr for AffineCrystGroups", true,
         [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight, 
-          IsAffineCrystGroupOnRight, IsList, IsList, IsFunction ], 0,
-function( G, d, e, gens, oprs, opr )
+          IsAffineCrystGroupOnRight, IsFunction ], 0,
+function( G, d, e, opr )
 
-    local orb, by, frm, grp, k, img, pos, rep, i;
+    local orb, by, frm, gens, grp, k, img, pos, rep, i;
 
-    orb := [ d ];
-    by  := [ oprs[1]^0 ];
-    frm := [ 1 ];
-    if d = e then return by[1]; fi;
+    orb  := [ d ];
+    by   := [ One( G ) ];
+    frm  := [ 1 ];
+    gens := GeneratorsOfGroup( G );
 
     if opr = OnPoints then
         for grp in orb do
             for k in [1..Length(gens)] do
-                img := List( GeneratorsOfGroup( grp ), x -> x^oprs[k] );
+                img := List( GeneratorsOfGroup( grp ), x -> x^gens[k] );
                 if ForAll( img, x -> x in e ) then
                     rep := gens[k];
                     while grp <> d  do
@@ -179,7 +179,7 @@ function( G, d, e, gens, oprs, opr )
                               g -> ForAll( img, x -> x in g ) );
                     if i = fail then
                         Add( frm, Position( orb, grp ) );
-                        Add( orb, ConjugateGroup( grp, oprs[k] ) );
+                        Add( orb, ConjugateGroup( grp, gens[k] ) );
                         Add( by,  gens[k] );
                     fi;
                 fi;
@@ -193,22 +193,22 @@ function( G, d, e, gens, oprs, opr )
 end );
 
 InstallOtherMethod( RepresentativeActionOp,
-        "G, d, e, gens, oprs, opr for AffineCrystGroups", true,
+        "G, d, e, opr for AffineCrystGroups", true,
         [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft, 
-          IsAffineCrystGroupOnLeft, IsList, IsList, IsFunction ], 0,
-function( G, d, e, gens, oprs, opr )
+          IsAffineCrystGroupOnLeft, IsFunction ], 0,
+function( G, d, e, opr )
 
-    local orb, by, frm, grp, k, img, pos, rep, i;
+    local orb, by, frm, gens, grp, k, img, pos, rep, i;
 
-    orb := [ d ];
-    by  := [ oprs[1]^0 ];
-    frm := [ 1 ];
-    if d = e then return by[1]; fi;
+    orb  := [ d ];
+    by   := [ One( G ) ];
+    frm  := [ 1 ];
+    gens := GeneratorsOfGroup( G );
 
     if opr = OnPoints then
         for grp in orb do
             for k in [1..Length(gens)] do
-                img := List( GeneratorsOfGroup( grp ), x -> x^oprs[k] );
+                img := List( GeneratorsOfGroup( grp ), x -> x^gens[k] );
                 if ForAll( img, x -> x in e ) then
                     rep := gens[k];
                     while grp <> d  do
@@ -222,7 +222,7 @@ function( G, d, e, gens, oprs, opr )
                               g -> ForAll( img, x -> x in g ) );
                     if i = fail then
                         Add( frm, Position( orb, grp ) );
-                        Add( orb, ConjugateGroup( grp, oprs[k] ) );
+                        Add( orb, ConjugateGroup( grp, gens[k] ) );
                         Add( by,  gens[k] );
                     fi;
                 fi;
