@@ -2,14 +2,14 @@ gap> START_TEST("wyckoff");
 gap> lst:=[];
 [  ]
 gap> for i in [1..17] do
->    Add( lst, Length( WyckoffPositions( CrystGroup(2,i) ) ) );
+>    Add( lst, Length( WyckoffPositions( SpaceGroupIT(2,i) ) ) );
 > od;
 gap> lst;
 [ 1, 5, 3, 1, 2, 9, 4, 3, 6, 4, 7, 4, 4, 5, 4, 4, 6 ]
 gap> lst:=[];
 [  ]
 gap> for i in [1..230] do
->    Add( lst, Length( WyckoffPositions( CrystGroup(3,i) ) ) );
+>    Add( lst, Length( WyckoffPositions( SpaceGroupIT(3,i) ) ) );
 > od;
 gap> lst;
 [ 1, 9, 5, 1, 3, 3, 1, 2, 1, 15, 6, 10, 7, 5, 6, 21, 5, 3, 1, 3, 12, 11, 11, 
@@ -23,4 +23,5 @@ gap> lst;
   9, 6, 4, 4, 4, 15, 12, 12, 9, 18, 13, 12, 12, 10, 8, 6, 2, 3, 12, 8, 9, 7, 
   8, 4, 5, 11, 13, 10, 8, 10, 5, 5, 9, 10, 9, 8, 9, 8, 5, 14, 9, 12, 12, 12, 
   10, 9, 8, 12, 8 ]
-gap> STOP_TEST( "wyckoff.tst", 10000 );
+gap> STOP_TEST( "wy3d.tst", 10000 );
+

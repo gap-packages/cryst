@@ -1,5 +1,5 @@
 
-S := LibraryCrystGroup(2,7);
+S := SpaceGroupIT(2,7);
 P := PointGroup(S);
 N := NormalizerInGLnZ(P);
 gen := Filtered( GeneratorsOfGroup(N), x -> not x in P );

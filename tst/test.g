@@ -12,7 +12,7 @@ TestMaximals := function( dim )
 
     # loop
     for i in [1..l] do
-        G := SpaceGroupIT( dim, l );
+        G := SpaceGroupIT( dim, i );
 
         # lattice
         Print("max, start lattice equal of group ",[dim,i],"\n");
@@ -45,7 +45,7 @@ TestWyckoff := function( dim )
 
     # just loop
     for i in [1..l] do
-        G := SpaceGroupIT( dim, l );
+        G := SpaceGroupIT( dim, i );
         Print("wyckoff, start group ",[dim,i],"\n");
         WyckoffPositions( G );
     od;
@@ -61,7 +61,7 @@ TestZassenhaus := function( dim )
 
     # just loop
     for i in [1..l] do
-        G := SpaceGroupIT( dim, l );
+        G := SpaceGroupIT( dim, i );
         Print("zass, start group ",[dim,i],"\n");
         SpaceGroupsByPointGroup( PointGroup(G) );
     od;
