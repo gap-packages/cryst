@@ -6,7 +6,7 @@
 ##
 #Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
 ##
-##              CrystGap - the crystallographic groups package
+##               Cryst - the crystallographic groups package
 ##  
 ##                            GAP 4 Version
 ##
@@ -47,15 +47,6 @@ fi;
 ##
 ReadPkg( "cryst/gap/orbstab.gi" ); # Orbit, Stabilizer & Co.
 ReadPkg( "cryst/gap/equiv.gi" );   # conjugator between space groups
-
-#############################################################################
-##
-#R  load the space group catalogue
-##
-#ReadPkg( "cryst/grp/grp2D.gi" );   # the 2D space groups
-#ReadPkg( "cryst/grp/grp3D.gi" );   # the 3D space groups
-#ReadPkg( "cryst/grp/grps.gi" );    # access function
-#ReadPkg( "cryst/grp/grpE68.gi" );  # the groups E6 and E8
 
 #############################################################################
 ##
