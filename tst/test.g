@@ -1,5 +1,5 @@
 TestMaximals := function( dim )
-    local l, le, ce, so, i, G, n, m, k;
+    local l, le, ce, so, i, G, n, m, k, lst, x;
 
     # the numbers
     if dim = 2 then l := 17; fi;
@@ -12,7 +12,7 @@ TestMaximals := function( dim )
 
     # loop
     for i in [1..l] do
-        G := LibraryCrystGroup( dim, l );
+        G := SpaceGroupIT( dim, l );
 
         # lattice
         Print("max, start lattice equal of group ",[dim,i],"\n");
@@ -20,7 +20,9 @@ TestMaximals := function( dim )
 
         # class
         Print("max, start class equal of group ",[dim,i],"\n");
-        m := Length( Flat( MaximalSubgroupClassReps( G, ce ) ));
+        lst :=  Flat( MaximalSubgroupClassReps( G, ce ) );
+        for x in lst do CheckTranslationBasis(x); od;
+        m := Length( lst );
 
         # primes
         Print("max, start with primes of group ",[dim,i],"\n");
@@ -43,7 +45,7 @@ TestWyckoff := function( dim )
 
     # just loop
     for i in [1..l] do
-        G := LibraryCrystGroup( dim, l );
+        G := SpaceGroupIT( dim, l );
         Print("wyckoff, start group ",[dim,i],"\n");
         WyckoffPositions( G );
     od;
@@ -59,7 +61,7 @@ TestZassenhaus := function( dim )
 
     # just loop
     for i in [1..l] do
-        G := LibraryCrystGroup( dim, l );
+        G := SpaceGroupIT( dim, l );
         Print("zass, start group ",[dim,i],"\n");
         SpaceGroupsByPointGroup( PointGroup(G) );
     od;

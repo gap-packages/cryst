@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/sh
 
 # remove old archive
 rm cryst.zoo
@@ -20,16 +20,16 @@ echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/doc/preface.tex
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/doc/make_doc
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/init.g
 echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/read.g
-#echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/README
-foreach file (cryst/gap/*.g[di])
+echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo cryst/README
+for file in cryst/gap/*.g[di] ; do
   echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo $file
-end
-foreach file (cryst/grp/spacegrp.*)
+done
+for file in cryst/grp/spacegrp.* ; do
   echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo $file
-end
-foreach file (cryst/htm/*.htm)
+done
+for file in cryst/htm/*.htm ; do
   echo "\!TEXT\!\n/END" | zoo ach cryst/etc/cryst.zoo $file
-end
+done
 
 # check result
 cd cryst/etc
