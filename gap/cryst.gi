@@ -416,8 +416,15 @@ end );
 #M  Enumerator( S ) . . . . . . . . . . . . . . . . Enumerator for CrystGroup
 ##
 InstallMethod( Enumerator,
-   "for AffineCrystGroup", 
-   true, [ IsAffineCrystGroupOnLeftOrRight ], 0, EnumeratorSorted );
+    "for AffineCrystGroup", 
+    true, [ IsAffineCrystGroupOnLeftOrRight ], 0, 
+function( S )
+    if not IsFinite( S ) then
+        Error("S is infinite");
+    else
+        TryNextMethod();
+    fi;
+end );
 
 #############################################################################
 ##
