@@ -61,7 +61,8 @@ in the representation specified by `CrystGroupDefaultAction'.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Construction}
 
-\index{construction!of AffineCrystGroups}
+\atindex{construction!of an AffineCrystGroup}%
+{@construction!of an \noexpand`AffineCrystGroup'}
 
 \> AffineCrystGroupOnRight( <gens> ) F
 \> AffineCrystGroupOnRight( <genlist> ) F
@@ -132,7 +133,8 @@ and vice versa.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Point group}
 
-\index{point group!of AffineCrystGroup}
+\atindex{point group!of an AffineCrystGroup}%
+{@point group!of an \noexpand`AffineCrystGroup'}
 
 The point group <P> of an affine crystallographic group <S> is the
 quotient <S>/<T>, where <T> is the normal subgroup of all pure 
@@ -168,7 +170,8 @@ returns `true' if and only if <H> has been constructed as the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Translation lattice}
 
-\index{translation lattice!of AffineCrystGroup}
+\atindex{translation lattice!of an AffineCrystGroup}%
+{@translation lattice!of an \noexpand`AffineCrystGroup'}
 
 The vectors by which the pure translations in an affine
 crystallographic group translate form a discrete lattice, <L>,
@@ -233,7 +236,8 @@ checks if the space group <S> is symmorphic.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Special methods}
 
-\index{methods!for AffineCrystGroups}
+\atindex{methods!for an AffineCrystGroup}%
+{@methods!for an \noexpand`AffineCrystGroup'}
 
 In the representation by augmented matrices, affine crystallographic 
 groups are infinite matrix groups. Their infinity is relatively
@@ -257,23 +261,22 @@ infinite.
 Some methods installed for affine crystallographic groups have
 a special behavior.
 
-\atindex{\^{}!for AffineCrystGroup}{@\^{}!for AffineCrystGroup}
-\>`\^{}( <S>, <conj> )'{power}@{power!for AffineCrystGroup}
+\atindex{\^{}!for an AffineCrystGroup}%
+{@\^{}!for an \noexpand`AffineCrystGroup'}
+\>`\^{}( <S>, <conj> )'{power}@{power!for an \noexpand`AffineCrystGroup'}
 
 If <S> is an `AffineCrystGroupOnRight', the group <conj * S * conj^{-1}> 
 is returned. <conj> must be an affine matrix acting on the right.
 If <S> is an `AffineCrystGroupOnLeft', the group <conj^{-1} * S * conj> 
 is returned. <conj> must be an affine matrix acting on the left.
 
-\index{IsomorphismFpGroup!for a PointGroup}
-\>IsomorphismFpGroup( <P> ) A
+\>IsomorphismFpGroup( <P> )!{for a `PointGroup'} A
 
 returns an isomorphism from the `PointGroup' <P> to an isomorphic
 `FpGroup' <F>. If <P> is solvable, <F> is given in a 
 power-commutator presentation. 
 
-\index{IsomorphismFpGroup!for an AffineCrystGroup}
-\>IsomorphismFpGroup( <S> ) A
+\>IsomorphismFpGroup( <S> )!{for an `AffineCrystGroup'} A
 
 returns an isomorphism from the `AffineCrystGroup' <S> to an isomorphic
 `FpGroup' <F>. If <S> is solvable, <F> is given in a power-commutator 
@@ -283,15 +286,13 @@ of the point group <P> of <S> used in `IsomorphismFpGroup( <P> )'.
 If the package polycyclic is installed, {\Cryst} automatically loads
 it, and then provides special methods for `IsomorphismPcpGroup'.
 
-\index{IsomorphismPcpGroup!for a PointGroup}
-\>IsomorphismPcpGroup( <P> ) A
+\>IsomorphismPcpGroup( <P> )!{for a `PointGroup'} A
 
 with <P> a solvable `PointGroup', returns an isomorphism from <P> 
 to an isomorphic `PcpGroup' <pcp>. For details about `PcpGroups', 
 we refer to the documentation of the package polycyclic.  
 
-\index{IsomorphismPcpGroup!for an AffineCrystGroup}
-\>IsomorphismPcpGroup( <S> ) A
+\>IsomorphismPcpGroup( <S> )!{for an `AffineCrystGroup'} A
 
 with <S> a solvable `AffineCrystGroup' (i.e., one with a solvable
 `PointGroup'), returns an isomorphism from <S> to an isomorphic
@@ -302,8 +303,10 @@ presentation of the point group <P> of <S> used in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Maximal subgroups}
 
-\index{subgroups!maximal!for AffineCrystGroups}
-\index{maximal subgroups!for AffineCrystGroups}
+\atindex{subgroups!maximal!for an AffineCrystGroup}%
+{@subgroups!maximal!for an \noexpand`AffineCrystGroup'}
+\atindex{maximal subgroups!for an AffineCrystGroup}%
+{@maximal subgroups!for an \noexpand`AffineCrystGroups'}
 
 Since an `AffineCrystGroup' has infinitely many maximal subgroups in general,
 in the computation of maximal subgroups it must be further specified which
@@ -314,14 +317,12 @@ classequal subgroup has the same point group as the parent. In the
 classequal case a maximal subgroup always has prime-power index, whereas
 in the latticeequal case this is so only in dimensions up to 3.
 
-\>`MaximalSubgroupClassReps( <S>, <flags> )'%
-{MaximalSubgroupClassReps!for AffineCrystGroups} O
+\>MaximalSubgroupClassReps( <S>, <flags> )!{for an `AffineCrystGroup'} O
 
 returns a list of conjugacy class representatives of maximal subgroups
 of the `AffineCrystGroup' <S>.
 
-\>`ConjugacyClassesMaximalSubgroups( <S>, <flags> )'%
-{ConjugacyClassesMaximalSubgroups!for AffineCrystGroups} O
+\>ConjugacyClassesMaximalSubgroups( <S>, <flags> )!{for an `AffineCrystGroup'} O
 
 returns a list of conjugacy classes of maximal subgroups
 of the `AffineCrystGroup' <S>.
@@ -659,7 +660,8 @@ sufficient size appears.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Normalizers}
 
-\index{normalizer!of AffineCrystGroups}
+\atindex{normalizer!of an AffineCrystGroup}%
+{@normalizer!of an \noexpand`AffineCrystGroup'}
 
 At present, most of the functions in this section require that the 
 {\GAP} package {\CARAT} is installed (and compiled). Otherwise, they 
@@ -790,7 +792,7 @@ induced by <G> acting on the colors of the parent of <G>.
 
 returns the homomomorphism from <G> to its `ColorPermGroup'.
 
-\>`Subgroup( <C>, <elems> )'{Subgroup!for color groups} O
+\>Subgroup( <C>, <elems> )!{for color groups} O
 
 where <C> is a color group, returns the colored subgroup <U> of <C>
 generated by <elems>. The parent of <U> is set to the parent of <C>, 
@@ -832,7 +834,7 @@ If <C> is a colored `AffineCrystGroup' whose `ColorSubgroup' is
 lattice-equal (translationengleich) with <C>, the `PointGroup' of 
 <C> can consistently be colored. In that case,
 
-\>`PointGroup( C )'{PointGroup!for colored AffineCrystGroups} A
+\>PointGroup( C )!{for a colored `AffineCrystGroup'} A
 
 returns a colored point group. Otherwise, the `PointGroup' of <C> is
 an ordinary, uncolored group.
