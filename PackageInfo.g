@@ -7,11 +7,15 @@ SetPackageInfo( rec(
 
 PackageName := "Cryst",
 
+Subtitle := "Computing with crystallographic groups",
+
+
 Version := "4.1.1",
 
 Date := "18/6/2003",
 
-ArchiveURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.1",
+ArchiveURL := 
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.1",
 
 ArchiveFormats := ".zoo",
 
@@ -71,16 +75,18 @@ space group types of a given dimension are also provided. Where \
 necessary, <span class=\"pkgname\">Cryst</span> can also make use of \
 functionality provided by the package <span class=\"pkgname\">Carat</span>.",
 
-PackageWWWHome := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages.html",
+PackageWWWHome := 
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages.html",
 
 PackageDoc  := rec(
   BookName  := "Cryst",
   Archive   := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-doc-4.1.1.zoo",
+  ArchiveURLSubset := ["doc", "htm"],
   HTMLStart := "htm/chapters.htm",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Computing with crystallographic groups",
-  AutoLoad  := true
+  Autoload  := true
 ),
 
 Dependencies := rec(
