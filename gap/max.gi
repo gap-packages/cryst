@@ -269,7 +269,22 @@ OneCocyclesVector := function( G, mats, b )
     
     J := MatJacobianMatrix( G, mats );
     
-    b := Concatenation( b );
+    ##
+    ##  b needs to be inverted for the following reason (I don't know how to
+    ##  say this better without setting up a lot of notation.
+    ##  
+    ##  b was  computed by  CocycleInfo() by evaluating  the relators  of the
+    ##  group.  In solving the system X * J = b we need to find all tuples of
+    ##  elements  with the following  property: If  we modify  the generating
+    ##  sequence with  such a tuple by  multiplying from the  rigth, then the
+    ##  relators on the modified generators have to evaluate to the identity.
+    ##  For example,  if we have the  relation [g2,g1] =  m, then [g2*y,g1*x]
+    ##  should be  1.  Therefore, x  and y should  be chosen such  that after
+    ##  collection  we have [g2,g1]  m^-1 =  m m^-1  = 1.   Hence we  need to
+    ##  invert b.
+
+    b := -Concatenation( b );
+
     L := SolutionInhomEquations( J, b );
 
     return L;
@@ -595,7 +610,6 @@ MaximalSubgroupRepsKG := function( G, primes )
 
             # use complement routine
             comp := ComplementsSG( pres, repin, cocin );
-Error();
 
             # compute generators of G corresponding to complements
             for i in [1..Length( comp )] do
