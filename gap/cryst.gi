@@ -873,6 +873,15 @@ InstallMethod( CanComputeIsSubset, IsIdenticalObj,
 InstallMethod( CanComputeIsSubset, IsIdenticalObj, 
     [IsAffineCrystGroupOnLeft,IsAffineCrystGroupOnLeft], 0, ReturnTrue );
 
+#############################################################################
+##
+#M  HirschLength( <S> ) . . . . . . . . . . . . . . . . .Hirsch length of <S>
+##
+InstallMethod( HirschLength, 
+    true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
+function( S )
+    return Length( TranslationBasis( S ) );
+end );
 
 
 
