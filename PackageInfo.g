@@ -1,17 +1,17 @@
 #############################################################################
 ##  
-##  PkgInfo.g for Cryst
+##  PackageInfo.g for Cryst
 ##  
 
 SetPackageInfo( rec(
 
-PkgName := "Cryst",
+PackageName := "Cryst",
 
-Version := "4.1",
+Version := "4.1.1",
 
-Date := "08/10/2001",
+Date := "18/6/2003",
 
-ArchiveURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1",
+ArchiveURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.1",
 
 ArchiveFormats := ".zoo",
 
@@ -58,7 +58,7 @@ CommunicatedBy := "Herbert Pahlings (Aachen)",
 AcceptDate := "02/2000",
 
 README_URL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/README.cryst",
-PkgInfoURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/PkgInfo.g",
+PackageInfoURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/PackageInfo.g",
 
 AbstractHTML := 
 "This package, previously known as <span class=\"pkgname\">CrystGAP</span>, \
@@ -75,7 +75,7 @@ PackageWWWHome := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages
 
 PackageDoc  := rec(
   BookName  := "Cryst",
-  Archive   := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-doc-4.1.zoo",
+  Archive   := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-doc-4.1.1.zoo",
   HTMLStart := "htm/chapters.htm",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
@@ -87,7 +87,9 @@ Dependencies := rec(
   GAP := ">=4.2",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [ [ "Carat", ">=1.1" ],
-                              [ "polycyclic", ">=1.0" ] ],
+                              [ "polycyclic", ">=1.0" ],
+                              [ "XGAP", ">=4.18" ] 
+  ],
   ExternalConditions := []
 ),
 

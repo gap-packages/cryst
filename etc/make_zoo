@@ -1,7 +1,7 @@
 #!/bin/sh
 
-PKGZOO=cryst-4.1.zoo
-DOCZOO=cryst-doc-4.1.zoo
+PKGZOO=cryst-4.1.1.zoo
+DOCZOO=cryst-doc-4.1.1.zoo
 
 # remove old archives
 rm -f $PKGZOO
@@ -26,6 +26,7 @@ echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/manual.ps
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/introduction.tex
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/cryst.tex
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/doc/make_doc
+echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/PackageInfo.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/init.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/read.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/README
