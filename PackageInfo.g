@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.1",
+Version := "4.1.3",
 
-Date := "18/6/2003",
+Date := "21/4/2004",
 
 ArchiveURL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.1",
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.3",
 
 ArchiveFormats := ".zoo",
 
@@ -61,8 +61,10 @@ CommunicatedBy := "Herbert Pahlings (Aachen)",
 
 AcceptDate := "02/2000",
 
-README_URL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/README.cryst",
-PackageInfoURL := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/PackageInfo.g",
+README_URL := 
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/README.cryst",
+PackageInfoURL := 
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/PackageInfo.g",
 
 AbstractHTML := 
 "This package, previously known as <span class=\"pkgname\">CrystGAP</span>, \
@@ -76,11 +78,10 @@ necessary, <span class=\"pkgname\">Cryst</span> can also make use of \
 functionality provided by the package <span class=\"pkgname\">Carat</span>.",
 
 PackageWWWHome := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages.html",
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages.php",
 
 PackageDoc  := rec(
   BookName  := "Cryst",
-  Archive   := "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-doc-4.1.1.zoo",
   ArchiveURLSubset := ["doc", "htm"],
   HTMLStart := "htm/chapters.htm",
   PDFFile   := "doc/manual.pdf",

@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#A  init.g                  CrystGap library                     Bettina Eick
+#A  init.g                  Cryst library                        Bettina Eick
 #A                                                              Franz Gaehler
 #A                                                              Werner Nickel
 ##
@@ -11,7 +11,7 @@
 ##                            GAP 4 Version
 ##
 
-DeclareAutoPackage( "cryst", "4.1.1", ReturnTrue );
+DeclareAutoPackage( "cryst", "4.1.3", ReturnTrue );
 DeclarePackageAutoDocumentation( "cryst", "doc" );
 
 #############################################################################
