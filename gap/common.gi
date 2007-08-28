@@ -275,21 +275,27 @@ end;
 ##
 ReducedLatticeBasis := function ( trans )
 
-    local tmp, den, r, L;
+    local m, f, b, r, L;
 
-    if trans = [] then
+    if trans = [] or ForAll( trans, x -> IsZero( x ) ) then
         return [];
-    else
-        tmp := Flat( trans );
-        if ForAll( tmp, IsInt ) then
-            r   := NormalFormIntMat( trans, 2 );
-            L   := r.normal{[1..r.rank]};
-        else
-            den := Lcm( List( tmp, DenominatorRat ) );
-            r   := NormalFormIntMat( den * trans, 2 );
-            L   := r.normal{[1..r.rank]} / den;
-        fi;
     fi;
+
+    m := ShallowCopy( trans );
+    f := Flat( trans );
+
+    if not ForAll( f, IsRat ) then
+        b := Basis( Field( f ) );
+        m := List( m, x -> BlownUpVector( b, x ) );
+        f := Flat( m );
+    fi;
+
+    if not ForAll( f, IsInt ) then
+        m := m * Lcm( List( f, DenominatorRat ) );
+    fi;
+
+    r := NormalFormIntMat( m, 6 );
+    L := r.rowtrans{[1..r.rank]} * trans;
     return L;
 
 end;

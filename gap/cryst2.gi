@@ -459,7 +459,7 @@ CentralizerElement := function( G, u, TT )
 
     d := DimensionOfMatrixGroup( G ) - 1;
     I := IdentityMat( d );
-    U := TT*(u{[1..d]}{[1..d]} - I);
+    U := List( TT, t -> t * (u{[1..d]}{[1..d]} - I) );
     L := ReducedLatticeBasis( U );
    
     orb := [ MutableMatrix( u ) ];

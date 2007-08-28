@@ -139,8 +139,7 @@ end );
 ##
 TranslationBasisFun := function ( S )
 
-    local d, P, h, I, Sgens, Pgens, trans, g, m, i, j, F, r, 
-          mat, iso, gens, freegens;
+    local d, P, Sgens, Pgens, trans, g, m, F, Fgens, rel, new;
 
     if IsAffineCrystGroupOnLeft( S ) then
         Error( "use only for an AffineCrystGroupOnRight" );
@@ -148,8 +147,6 @@ TranslationBasisFun := function ( S )
 
     d := DimensionOfMatrixGroup( S ) - 1;
     P := PointGroup( S );
-    h := PointHomomorphism( S );
-    I := IdentityMat( d );
     Pgens := [];
     Sgens := [];
     trans := [];
@@ -157,7 +154,7 @@ TranslationBasisFun := function ( S )
     # first the obvious translations
     for g in GeneratorsOfGroup( S ) do
         m := g{[1..d]}{[1..d]};
-        if m = I then
+        if IsOne( m ) then
             Add( trans, g[d+1]{[1..d]} );
         else
             Add( Sgens, g );
@@ -165,22 +162,13 @@ TranslationBasisFun := function ( S )
         fi;
     od;
 
-    # the translations from multiple point group generators
-    if Length( Set( Pgens ) ) < Length( Pgens ) then
-        SortParallel( Pgens, Sgens );
-        i := 1;
-        while i <= Length( Pgens ) do
-            j := i+1;
-            while j <= Length( Pgens ) and Pgens[i] = Pgens[j] do
-                Add( trans, Sgens[i][d+1]{[1..d]} - Sgens[j][d+1]{[1..d]} );
-                j := j+1;
-            od;
-            i := j;
-        od;
-    fi;
-
     # then the hidden translations
-    Append( trans, CocVecs( S ) );
+    F := Image( IsomorphismFpGroupByGenerators( P, Pgens ) );
+    Fgens := GeneratorsOfGroup( FreeGroupOfFpGroup( F ) );
+    for rel in RelatorsOfFpGroup( F ) do
+        new := MappedWord( rel, Fgens, Sgens );
+        Add( trans, new[d+1]{[1..d]} );
+    od;
 
     # make translations invariant under point group
     trans := Set( Union( Orbits( P, trans ) ) );

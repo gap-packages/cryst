@@ -18,8 +18,15 @@ is called a space group. The quotient <G>/<T> is called the point group
 of <G>.
 
 In this package, affine crystallographic groups are represented as
-groups of augmented matrices of dimension $d+1$. This is possible
-in two ways. Augmented matrices of the form
+groups of augmented matrices of dimension $d+1$. Most functions assume
+a group of rational matrices, but some may also work with cyclotomic
+matrix groups. In particular, it is possible to compute the translation
+basis of an affine crystallographic group given in a cyclotomic
+representation, and to pass to a rational representation by conjugating 
+with that basis. Further functionality for cyclotomic crystallographic 
+groups is currently not guaranteed.
+
+Augmented matrices can take one of two forms. Matrices of the form
 \begintt
                      [ M 0 ]
                      [ t 1 ]
