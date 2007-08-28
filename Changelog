@@ -66,3 +66,10 @@ Version 4.1.3:
 
   - Mutability problem fixed
 
+Version 4.1.4
+
+  - Two instances of multiplying an empty list with a matrix fixed
+
+Version 4.1.5
+
+  - Incomplete translation basis fixed

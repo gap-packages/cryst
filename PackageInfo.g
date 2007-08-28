@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.3",
+Version := "4.1.5",
 
-Date := "21/4/2004",
+Date := "28/8/2007",
 
 ArchiveURL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.3",
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.5",
 
 ArchiveFormats := ".zoo",
 
@@ -91,7 +91,7 @@ PackageDoc  := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.2",
+  GAP := ">=4.4",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [ [ "Carat", ">=1.1" ],
                               [ "polycyclic", ">=1.0" ],

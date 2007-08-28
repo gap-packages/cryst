@@ -49,6 +49,8 @@ e8gen:=
 E6 := GroupByGenerators( e6gen, IdentityMat( 6 ) );
 E8 := GroupByGenerators( e8gen, IdentityMat( 8 ) );
 E8b := GroupWithGenerators(GeneratorsOfGroup(ImfMatrixGroup(8,3)));
+#Size(Image(SparseActionHomomorphism(E8b,IdentityMat(8,GF(3)),OnRight)));
+
 
 SymmorphicSpaceGroup := function( P )
     local gens, n, aff, g, h, i, v, t;
