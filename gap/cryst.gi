@@ -163,12 +163,14 @@ TranslationBasisFun := function ( S )
     od;
 
     # then the hidden translations
-    F := Image( IsomorphismFpGroupByGenerators( P, Pgens ) );
-    Fgens := GeneratorsOfGroup( FreeGroupOfFpGroup( F ) );
-    for rel in RelatorsOfFpGroup( F ) do
-        new := MappedWord( rel, Fgens, Sgens );
-        Add( trans, new[d+1]{[1..d]} );
-    od;
+    if not IsTrivial( P ) then
+        F := Image( IsomorphismFpGroupByGenerators( P, Pgens ) );
+        Fgens := GeneratorsOfGroup( FreeGroupOfFpGroup( F ) );
+        for rel in RelatorsOfFpGroup( F ) do
+            new := MappedWord( rel, Fgens, Sgens );
+            Add( trans, new[d+1]{[1..d]} );
+        od;
+    fi;
 
     # make translations invariant under point group
     trans := Set( Union( Orbits( P, trans ) ) );
