@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKGZOO=cryst-4.1.5.zoo
+PKGZOO=cryst-4.1.6.zoo
 
 # remove old archive
 rm -f $PKGZOO

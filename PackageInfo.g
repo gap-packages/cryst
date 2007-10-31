@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.5",
+Version := "4.1.6",
 
-Date := "28/8/2007",
+Date := "31/9/2007",
 
 ArchiveURL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.5",
+  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.6",
 
 ArchiveFormats := ".zoo",
 
