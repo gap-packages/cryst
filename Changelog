@@ -73,3 +73,9 @@ Version 4.1.4
 Version 4.1.5
 
   - Incomplete translation basis fixed
+
+Version 4.1.6
+
+  - TranslationBasis for trivial point group fixed
+  - Bug in ImagesRepresentative for IsomorphismFpGroup of an
+    AffineCrystGroupOnLeft fixed

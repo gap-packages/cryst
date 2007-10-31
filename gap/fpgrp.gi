@@ -168,18 +168,18 @@ function( iso, elm )
 
     if Length( T ) > 0 then
         if IsAffineCrystGroupOnRight( S ) then
-            v := elm[d+1]{[1..d]} - elm2[d+1]{[1..d]};
+            v := SolutionMat( T, elm[d+1]{[1..d]} - elm2[d+1]{[1..d]} );
+            for i in [1..Length(v)] do
+                word := word * genF[len+i]^v[i];
+            od;
         else
-            v := elm{[1..d]}[d+1] - elm2{[1..d]}[d+1];
+            v := SolutionMat( T, elm{[1..d]}[d+1] - elm2{[1..d]}[d+1] );
+            for i in [1..Length(v)] do
+                word := genF[len+i]^v[i] * word;
+            od;
         fi;
-        for i in [1..Length(v)] do
-            word := word * genF[len+i]^v[i];
-        od;
     fi;
     return word;
 
 end );
-
-
-
 

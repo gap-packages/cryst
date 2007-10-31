@@ -4,7 +4,7 @@
 #A                                                              Franz Gaehler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1990-1997,  Lehrstuhl D fuer Mathematik,  RWTH Aachen,  Germany
+#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##               Cryst - the crystallographic groups package
 ##  
