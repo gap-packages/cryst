@@ -26,10 +26,10 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "beick@tu-bs.de",
-    WWWHome := "http://www.tu-bs.de/~beick/",
+    WWWHome := "http://www-public.tu-bs.de:8080/~beick/",
     #PostalAddress := "",           
     Place := "Braunschweig",
-    Institution := "Institut für Geometrie, Universität Braunschweig"
+    Institution := "Institut Computational Mathematics, TU Braunschweig"
   ),
   rec(
     LastName := "Gähler",
@@ -103,6 +103,7 @@ Dependencies := rec(
 AvailabilityTest := ReturnTrue,
 
 Autoload := true,
+BannerString := "Loading Cryst 4.4.1 ... \n",
 
 #TestFile := "tst/testall.g",
 
