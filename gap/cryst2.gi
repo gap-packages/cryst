@@ -49,45 +49,28 @@ end );
 InstallMethod( IndexOp, "AffineCrystGroupOnRight", IsIdenticalObj, 
     [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
 function( G, H )
-
-    local TG, TH, IP, M;
-
     if not IsSubgroup( G, H ) then
         Error( "H must be a subgroup of G" );
     fi;
-
-    TG := TranslationBasis( G );
-    TH := TranslationBasis( H );
-    if Length( TG ) > Length( TH ) then
-        return infinity;
-    fi;
-
-    IP := Index( PointGroup( G ), PointGroup( H ) );
-    if IsFinite( G ) then
-        return IP;
-    else
-        M := List( TH, x -> SolutionMat( TG, x ) );
-        return IP * DeterminantMat( M ); 
-    fi;
-
+    return IndexNC( G, H );
 end );
 
 InstallMethod( IndexOp, "AffineCrystGroupOnLeft", IsIdenticalObj, 
     [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
 function( G, H )
-
-    local TG, TH, IP, M;
-
     if not IsSubgroup( G, H ) then
         Error( "H must be a subgroup of G" );
     fi;
+    return IndexNC( G, H );
+end );
 
+InstallMethod( IndexNC, "AffineCrystGroupOnRight", IsIdenticalObj, 
+    [ IsAffineCrystGroupOnRight, IsAffineCrystGroupOnRight ], 0,
+function( G, H )
+    local TG, TH, IP, M;
     TG := TranslationBasis( G );
     TH := TranslationBasis( H );
-    if Length( TG ) > Length( TH ) then
-        return infinity;
-    fi;
-
+    if Length( TG ) > Length( TH ) then return infinity; fi;
     IP := Index( PointGroup( G ), PointGroup( H ) );
     if IsFinite( G ) then
         return IP;
@@ -95,7 +78,22 @@ function( G, H )
         M := List( TH, x -> SolutionMat( TG, x ) );
         return IP * DeterminantMat( M ); 
     fi;
+end );
 
+InstallMethod( IndexNC, "AffineCrystGroupOnLeft", IsIdenticalObj, 
+    [ IsAffineCrystGroupOnLeft, IsAffineCrystGroupOnLeft ], 0,
+function( G, H )
+    local TG, TH, IP, M;
+    TG := TranslationBasis( G );
+    TH := TranslationBasis( H );
+    if Length( TG ) > Length( TH ) then return infinity; fi;
+    IP := Index( PointGroup( G ), PointGroup( H ) );
+    if IsFinite( G ) then
+        return IP;
+    else
+        M := List( TH, x -> SolutionMat( TG, x ) );
+        return IP * DeterminantMat( M ); 
+    fi;
 end );
 
 
