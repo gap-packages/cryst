@@ -92,7 +92,7 @@ PackageDoc  := rec(
 
 Dependencies := rec(
   GAP := ">=4.4",
-  NeededOtherPackages := [[ "polycyclic", ">=1.0" ]];
+  NeededOtherPackages := [[ "polycyclic", ">=1.0" ]],
   SuggestedOtherPackages := [ [ "Carat", ">=1.1" ],
                               [ "XGAP", ">=4.18" ]],
   ExternalConditions := []
