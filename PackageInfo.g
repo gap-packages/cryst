@@ -10,14 +10,16 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.6",
+Version := "4.1.9",
 
-Date := "31/9/2007",
+Date := "02/05/2012",
 
 ArchiveURL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/cryst-4.1.6",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.9",
 
-ArchiveFormats := ".zoo",
+ArchiveFormats := ".tar.gz",
+
+BinaryFiles := [ "doc/manual.pdf", "doc/manual.dvi" ],
 
 Persons := [
   rec(
@@ -26,7 +28,7 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "beick@tu-bs.de",
-    WWWHome := "http://www-public.tu-bs.de:8080/~beick/",
+    WWWHome := "http://www.icm.tu-bs.de/~beick/",
     #PostalAddress := "",           
     Place := "Braunschweig",
     Institution := "Institut Computational Mathematics, TU Braunschweig"
@@ -36,11 +38,11 @@ Persons := [
     FirstNames := "Franz",
     IsAuthor := true,
     IsMaintainer := true,
-    Email := "gaehler@itap.physik.uni-stuttgart.de",
-    WWWHome := "http://www.itap.physik.uni-stuttgart.de/~gaehler/",
+    Email := "gaehler@math.uni-bielefeld.de",
+    WWWHome := "http://www.math.uni-bielefeld.de/~gaehler/",
     #PostalAddress := "",           
-    Place := "Stuttgart",
-    Institution := "ITAP, Universität Stuttgart"
+    Place := "Bielefeld",
+    Institution := "Mathematik, Universität Bielefeld"
   ),
   rec(
     LastName := "Nickel",
@@ -62,9 +64,9 @@ CommunicatedBy := "Herbert Pahlings (Aachen)",
 AcceptDate := "02/2000",
 
 README_URL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/README.cryst",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/README.cryst",
 PackageInfoURL := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/Cryst/PackageInfo.g",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/PackageInfo.g",
 
 AbstractHTML := 
 "This package, previously known as <span class=\"pkgname\">CrystGAP</span>, \
@@ -78,7 +80,7 @@ necessary, <span class=\"pkgname\">Cryst</span> can also make use of \
 functionality provided by the package <span class=\"pkgname\">Carat</span>.",
 
 PackageWWWHome := 
-  "http://www.itap.physik.uni-stuttgart.de/~gaehler/gap/packages.php",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/packages.php",
 
 PackageDoc  := rec(
   BookName  := "Cryst",
@@ -91,17 +93,18 @@ PackageDoc  := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.4",
-  NeededOtherPackages := [[ "polycyclic", ">=1.0" ]],
-  SuggestedOtherPackages := [ [ "Carat", ">=1.1" ],
-                              [ "XGAP", ">=4.18" ]],
+  GAP := ">=4.5",
+  NeededOtherPackages := [ [ "polycyclic", ">=2.9" ] ],
+  SuggestedOtherPackages := [ [ "CrystCat", ">=1.1.4" ],
+                              [ "Carat", ">=2.1.1" ],
+                              [ "XGAP", ">=4.22" ] 
+  ],
   ExternalConditions := []
 ),
 
 AvailabilityTest := ReturnTrue,
 
-Autoload := true,
-BannerString := "Loading Cryst 4.4.1 ... \n",
+#BannerString := "",
 
 #TestFile := "tst/testall.g",
 

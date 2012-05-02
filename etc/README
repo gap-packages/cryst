@@ -1,0 +1,14 @@
+For a new release, the following needs to be done:
+
+- edit date and version in:
+
+  Changelog
+  PackageInfo.g
+  etc/VERSION
+  etc/make_zoo
+  etc/make_tar
+  etc/changelog.html
+  doc/manual.tex
+
+- run install script
+

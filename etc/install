@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# before running this script, edit date and version in
+# Changelog, PackageInfo.g, etc/VERSION, etc/make_zoo
+# etc/changelog.html, doc/manual.tex
+
+./make_tar
+
+cp VERSION          ~/WWW/gap45/Cryst
+cp changelog.html   ~/WWW/gap45/Cryst
+mv *.tar.gz         ~/WWW/gap45/Cryst
+cp ../PackageInfo.g ~/WWW/gap45/Cryst
+cp ../README        ~/WWW/gap45/Cryst/README.cryst
+
+cd ~/WWW/gap45; ./get_html; chmod -R a+r *
+
