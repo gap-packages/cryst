@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
+#Y  Copyright 1997-2012  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  Methods for affine crystallographic groups
 ##
@@ -25,6 +25,9 @@ InstallGlobalFunction( IsAffineMatrixOnRight, function( mat )
         return false;
     fi;
     d := Length( mat );
+    if not DimensionsMat( mat ) = [d,d] then
+        return false;
+    fi; 
     v := 0 * [1..d]; v[d] := 1;
     return mat{[1..d]}[d] = v;
 end );
@@ -39,6 +42,9 @@ InstallGlobalFunction( IsAffineMatrixOnLeft, function( mat )
         return false;
     fi;
     d := Length( mat );
+    if not DimensionsMat( mat ) = [d,d] then
+        return false;
+    fi; 
     v := 0 * [1..d]; v[d] := 1;
     return mat[d] = v;
 end );
@@ -488,6 +494,9 @@ function( m, S )
 
     local d, P, mm, t;
 
+    if not DimensionsMat( m ) = DimensionsMat( One(S) ) then
+        return false;
+    fi; 
     d  := DimensionOfMatrixGroup( S ) - 1;
     P  := PointGroup( S );
     mm := m{[1..d]}{[1..d]};
@@ -497,8 +506,14 @@ function( m, S )
 
     mm := PreImagesRepresentative( PointHomomorphism( S ), mm );
     if IsAffineCrystGroupOnRight( S ) then
+        if not IsAffineMatrixOnRight( m ) then
+            return false;
+        fi;
         t  := m[d+1]{[1..d]} - mm[d+1]{[1..d]};
     else
+        if not IsAffineMatrixOnLeft( m ) then
+            return false;
+        fi;
         t  := m{[1..d]}[d+1] - mm{[1..d]}[d+1];
     fi;
     return 0*t = VectorModL( t, TranslationBasis( S ) );

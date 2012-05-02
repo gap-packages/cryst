@@ -1,9 +1,12 @@
 #!/bin/sh
 
-PKGZOO=cryst-4.1.6.zoo
+PKGZOO=cryst-4.1.9.zoo
 
 # remove old archive
 rm -f $PKGZOO
+
+# rebuild documentation
+(cd ../doc; ./make_doc; chmod a+r *; cd ../htm; chmod a+r *)
 
 # goto <gaproot>/pkg
 cd ../..
@@ -29,6 +32,7 @@ echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/PackageInfo.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/init.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/read.g
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/README
+echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/GPL
 echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO cryst/Changelog
 for file in cryst/gap/*.g[di] ; do
   echo "!TEXT!" | zoo ach cryst/etc/$PKGZOO $file
@@ -42,4 +46,5 @@ done
 
 # check the results
 cd cryst/etc
+chmod a+r $PKGZOO
 zoo -list $PKGZOO

@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
+#Y  Copyright 1997-2012  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  Routines for the determination of Wyckoff positions
 ##
@@ -454,7 +454,9 @@ WyPos := function( S, stabs, lift )
         for w in lst do
             dim := Length( w.basis ) + 1; 
             w.translation := w.translation * T;
-            w.basis       := w.basis * T;
+            if not IsEmpty( w.basis ) then
+                w.basis       := w.basis * T;
+            fi;
             w.spaceGroup  := S;
             w.class       := i;
             ReduceAffineSubspaceLattice( w );
@@ -713,6 +715,4 @@ function( L )
     fi;
     return WyckoffGraphFun( L, rec() );
 end );
-
-
 

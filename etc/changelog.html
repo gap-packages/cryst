@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<title>Changelog of the Package Cryst</title>
+
+<link type="text/css" rel="stylesheet" href="/~gaehler/mystyle.css" />
+
+</head>
+
+<body>
+
+<h1>Changelog of the Package Cryst</h1>
+
+<h3>Version 4.1.9</h3>
+
+<ul>
+
+<li>Minor Update</li>
+
+</ul>
+
+<h3>Version 4.1.8</h3>
+
+<ul>
+
+<li>Bugfix in AffineNormalizer</li>
+
+</ul>
+
+<h3>Version 4.1.7</h3>
+
+<ul>
+
+<li>Adapted to GAP 4.5</li>
+
+</ul>
+
+<h3>Version 4.1.6</h3>
+
+<ul>
+
+<li>TranslationBasis for trivial point group fixed.</li>
+<li>Bug in ImagesRepresentative for IsomorphismFpGroup of an
+    AffineCrystGroupOnLeft fixed.</li>
+<li>Multiplication with empty matrix in WyckoffPositions fixed.</li>
+<li>Membership test in AffineCrystGroups improved.</li>
+
+</ul>
+
+<h3>Version 4.1.5</h3>
+
+<ul>
+
+<li>Incomplete translation basis fixed.</li>
+
+</ul>
+
+<h3>Version 4.1.4</h3>
+
+<ul>
+
+<li>Two instances of multiplying an empty list with a matrix fixed</li>
+
+</ul>
+
+<h3>Version 4.1.3</h3>
+
+<ul>
+
+<li>Mutability problem fixed</li>
+
+</ul>
+
+<h3>Version 4.1.2</h3>
+
+<ul>
+
+<li>File manual.toc added</li>
+
+</ul>
+
+<h3>Version 4.1.1</h3>
+
+<ul>
+
+<li>Online help should now work for all functions.</li>
+
+<li>Fixed several manual examples changed output or wrong input.</li>
+
+<li>Avoided some multiplications of an empty list with a matrix.</li>
+
+<li>Support for new package loading mechanism in GAP 4.4</li>
+
+</ul>
+
+<h3>Version 4.1</h3>
+
+<ul>
+
+<li>Name change from CrystGAP (or CrystGap) to just Cryst. This avoids
+    confusion, as even CrystGAP was always loaded as "cryst".</li>
+
+<li>A second algorithm for the computation of Wyckoff positions 
+    (due to Ad Thiers) has been implemented. It avoids the computation
+    of a subgroup lattice, and is faster in small dimensions.
+    It is used by default for dimensions <= 4. The two available
+    algorithms can be called directly using the functions<br />
+    <br />
+    <tt>WyPosAT( S );&nbsp;</tt> # algorithm due to Ad Thiers <br />
+    <tt>WyPosSGL( S );</tt>      # algorithm using the subgroup lattice <br />
+    <br />
+    These functions are still undocumented.</li>
+
+<li>A bug in WyckoffGraph was fixed. The labels of the lines in the 
+    graph were not what was intended, and the manual was even 
+    selfcontradictory in this respect.
+    This required code for intersections of affine subspace lattices, 
+    and a better subset test for affine subspace lattices. 
+    These are still undocumented.</li>
+
+<li>The function ConjugatorSpaceGroups is now documented.</li>
+
+<li>Cryst now tries to load the package polycyclic, and then installs
+    methods for IsomorphismPcpGroup for PointGroups and AffineCrystGroups.</li>
+
+<li>A method for ImagesRepresentative for an IsomorphismFpGroup of an 
+    AffineCrystGroup has been added, so that the resulting isomorphism
+    can now really be used.</li>
+
+<li>Switch to the new attribute MappingGeneratorsImages. Compatibility 
+    with GAP 4.2 and GAP 4.1 is maintained.</li>
+
+<li>A bug in Normalizer for two AffineCrystGroupsOnLeft was fixed;
+    it returned an AffineCrystGroupOnRight.</li>
+
+<li>The number of generators returned by Normalizer for two 
+    AffineCrystGroups was reduced.</li>
+
+<li>A bug in ConjugacyClassesMaximalSubgroups for space groups was fixed; 
+    their size was set to a wrong value in certain cases. </li>
+
+<li>A mutability bug in AffineNormalizer was fixed.</li>
+
+</ul>
+
+<h3>Version 4.0</h3>
+
+<ul>
+<li>Initial Release for GAP 4</li>
+</ul>
+
+</body>
+
+</html>
+
+

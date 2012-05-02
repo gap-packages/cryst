@@ -79,3 +79,19 @@ Version 4.1.6
   - TranslationBasis for trivial point group fixed
   - Bug in ImagesRepresentative for IsomorphismFpGroup of an
     AffineCrystGroupOnLeft fixed
+  - Multiplication with empty matrix in WyckoffPositions fixed
+  - Membership test in AffineCrystGroups improved
+
+Version 4.1.7
+
+  - Adapted to GAP 4.5
+
+Version 4.1.8
+
+  - Bugfix in AffineNormalizer
+
+Version 4.1.9
+
+  - Minor Update
+
+

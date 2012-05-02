@@ -4,7 +4,7 @@
 #A                                                              Franz G"ahler
 #A                                                              Werner Nickel
 ##
-#Y  Copyright 1997-1999  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
+#Y  Copyright 1997-2012  by  Bettina Eick,  Franz G"ahler  and  Werner Nickel
 ##
 ##  More methods for affine crystallographic groups
 ##
@@ -785,7 +785,7 @@ function( S )
         invT := T^-1;
         gens := List( GeneratorsOfGroup( N ), x -> T * x * invT );
         Pgens := List( Pgens, x -> T * x * invT );
-        Sgens := List( Sgens, x -> S!.conj * x * S!.invconj );
+        Sgens := List( Sgens, x -> S!.lconj * x * S!.rconj );
     else
         gens := GeneratorsOfGroup( N );
     fi;

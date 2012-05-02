@@ -1,0 +1,23 @@
+#!/bin/sh
+
+PKGTAR=cryst-4.1.9.tar
+
+# remove old archive
+rm -f $PKGTAR*
+
+# rebuild documentation
+(cd ../doc; ./make_doc; chmod a+r *; cd ../htm; chmod a+r *)
+
+# goto <gaproot>/pkg
+cd ../..
+
+# make the package archive
+tar cvf cryst/etc/$PKGTAR cryst/doc/manual.* cryst/doc/*.tex \
+  cryst/doc/make_doc cryst/*.g cryst/README cryst/Changelog \
+  cryst/GPL cryst/gap/*.g[di] cryst/htm/*.htm \
+  cryst/grp/spacegrp.*
+
+# compress the result
+cd cryst/etc
+chmod a+r $PKGTAR
+gzip $PKGTAR
