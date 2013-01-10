@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.10",
+Version := "4.1.11",
 
-Date := "29/05/2012",
+Date := "10/01/2013",
 
 ArchiveURL := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.10",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.11",
 
 ArchiveFormats := ".tar.gz",
 

@@ -256,7 +256,7 @@ InstallOtherMethod( \^,
     IsCollsElms, [ IsAffineCrystGroupOnRight, IsMatrix ], 0,
 function ( S, conj )
 
-    local d, c, ci, C, Ci, gens, i, R, W, r, w;
+    local d, c, C, Ci, gens, i, R, W, r, w;
 
     d := DimensionOfMatrixGroup( S ) - 1;
     if not IsAffineMatrixOnRight( conj ) then
@@ -267,7 +267,6 @@ function ( S, conj )
     C  := conj;
     Ci := conj^-1;
     c  := C {[1..d]}{[1..d]};
-    ci := Ci{[1..d]}{[1..d]};
 
     # conjugate the generators of S
     gens := ShallowCopy( GeneratorsOfGroup( S ) );
@@ -303,7 +302,7 @@ InstallOtherMethod( \^,
     IsCollsElms, [ IsAffineCrystGroupOnLeft, IsMatrix ], 0,
 function ( S, conj )
 
-    local d, c, ci, C, Ci, gens, i, R, W, r, w;
+    local d, c, C, Ci, gens, i, R, W, r, w;
 
     d := DimensionOfMatrixGroup( S ) - 1;
     if not IsAffineMatrixOnLeft( conj ) then
@@ -313,8 +312,7 @@ function ( S, conj )
     # get the conjugators;
     C  := conj;
     Ci := conj^-1;
-    c  := C {[1..d]}{[1..d]};
-    ci := Ci{[1..d]}{[1..d]};
+    c  := TransposedMat( C {[1..d]}{[1..d]} );
 
     # conjugate the generators of S
     gens := ShallowCopy( GeneratorsOfGroup( S ) );
@@ -894,7 +892,3 @@ InstallMethod( HirschLength,
 function( S )
     return Length( TranslationBasis( S ) );
 end );
-
-
-
-
