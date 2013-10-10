@@ -103,3 +103,7 @@ Version 4.1.11
   - Fixed a bug in the conjugation of left-acting AffineCrystGroups
   - Changed outdated RequirePackage in manual
 
+Version 4.1.12
+
+  - Fixed a bug in RepresentativeAction for AffineCrystGroups
+

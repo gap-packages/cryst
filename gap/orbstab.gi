@@ -143,7 +143,6 @@ function( G, H, gens, oprs, opr )
 
 end );
 
-
 #############################################################################
 ##
 #M  RepresentativeAction( G, d, e, opr ) . . . . . .  for an AffineCrystGroup
@@ -154,13 +153,26 @@ InstallOtherMethod( RepresentativeActionOp,
           IsAffineCrystGroupOnRight, IsFunction ], 0,
 function( G, d, e, opr )
 
-    local Td, Te, PG, f, r, n, Pd, Pe, r2, R, gensP, gens1, gens2, 
-          dim, TG, tr, t1, t2, sol, NgenP, Ngen, orb, rep, gen, i, 
-          img, nn, gen1, gen2, M;
+    local Td, Te, PG, f, r, n, Pd, Pe, r2, R, dim, gP, M, i, TG, tr1, tr2,
+          tt, res, gN, orb, rep, x, g, dd, redtrans;
 
     if opr <> OnPoints then
         TryNextMethod();
     fi;
+
+    redtrans := function( TG, tr1, tr2, t2, P, U )
+      local dim, gen, t1, sol;
+      dim := DimensionOfMatrixGroup( P );
+      gen := List( GeneratorsOfGroup( P ), 
+                   x -> PreImagesRepresentative( PointHomomorphism( U ), x ) );
+      t1  := Concatenation( List( gen, x -> x[dim+1]{[1..dim]} ) ) - t2;
+      sol := IntSolutionMat( tr1, -t1 );
+      if sol = fail then
+          return VectorModL( t2, tr2 );
+      else
+          return AugmentedMatrix( One( P ), sol{[1..Length(TG)]} * TG );
+      fi;
+    end;
 
     # have the translation basis the same length?
     Td := TranslationBasis( d );
@@ -191,65 +203,49 @@ function( G, d, e, opr )
         return fail;
     fi;
     r := r*r2;
-
-    # is there a conjugating translation?
     R := PreImagesRepresentative( PointHomomorphism( G ), r );
-    gensP := List( GeneratorsOfGroup( Pd ), x -> x^r ); 
-    gens1 := List( GeneratorsOfGroup( Pd ), x ->
-                   PreImagesRepresentative( PointHomomorphism( d ), x ) );
-    gens1 := List( gens1, x -> x^R ); 
-    gens2 := List( gensP, x -> 
-                   PreImagesRepresentative( PointHomomorphism( e ), x ) );
 
     dim := DimensionOfMatrixGroup( PG );
-    TG  := TranslationBasis( G );
-
-    M := NullMat( Length(gensP) * Length(Te), dim * Length(gensP) );
-    if Te <> [] then
-        for i in [1..Length(gensP)] do
+    gP := GeneratorsOfGroup( Pe );
+    M  := NullMat( Length(gP) * Length(Te), dim * Length(gP) );
+    if not IsEmpty( Te ) then
+        for i in [1..Length(gP)] do
             M{[1..Length(Te)]+(i-1)*Length(Te)}{[1..dim]+(i-1)*dim} := Te;
         od;
     fi;
 
-    tr  := List( TG, t -> Concatenation( List( gensP, g -> t*( One(Pd)-g) )));
-    tr  := Concatenation( tr, M );
-    t1  := Concatenation( List( gens1, g -> g[dim+1]{[1..dim]} ) ); 
-    t2  := Concatenation( List( gens2, g -> g[dim+1]{[1..dim]} ) ); 
+    TG  := TranslationBasis( G );
+    tr1 := List( TG, t -> Concatenation( List( gP, x -> t * ( One(Pe)-x ) ) ) );
+    tr1 := Concatenation( tr1, M );
+    tr2 := ReducedLatticeBasis( tr1 );
+    tt  := List( gP, x -> PreImagesRepresentative( PointHomomorphism(e), x ));
+    tt  := Concatenation( List( tt, x -> x[dim+1]{[1..dim]} ) );
 
-    sol := IntSolutionMat( tr, t2-t1 );
-    if sol <> fail then
-        return R * AugmentedMatrix( One( PG ), sol{[1..Length(TG)]} * TG );
+    # is there a conjugating translation?
+    res := redtrans( TG, tr1, tr2, tt, Pe, d^R );
+    if IsMatrix( res ) then
+        return R * res;
     fi;
 
     # now we have to try the normalizer
-    n := Normalizer( n, Pe );
-    NgenP := Filtered( GeneratorsOfGroup( n ), x -> not x in Pe );
-    Ngen  := List( NgenP, x -> PreImagesRepresentative( 
-                                        PointHomomorphism( G ), x ) );
+    gN := Filtered( GeneratorsOfGroup( Normalizer(n, Pe) ), x -> not x in Pe );
+    gN := List( gN, x -> PreImagesRepresentative( PointHomomorphism(G), x ) );
 
-    orb := [ GeneratorsOfGroup( Pe) ];
-    rep := [ One( e ) ];
-    for gen in orb do
-        for i in [1..Length(NgenP)] do
-            img := List( gen, x -> x^NgenP[i] );
-            if not img in orb then
-                nn   := rep[Position(orb,gen)]*Ngen[i];
-                Add( orb, img );
-                Add( rep, nn  );
-                gen1 := List( gens1, x -> x^nn );
-                gen2 := List( img, x -> PreImagesRepresentative( 
-                                        PointHomomorphism( e ), x ) );
-                t1 := Concatenation( List( gen1, x -> x[dim+1]{[1..dim]} ) );
-                t2 := Concatenation( List( gen2, x -> x[dim+1]{[1..dim]} ) );
-                sol  := IntSolutionMat( tr, t2-t1 );
-                if sol <> fail then
-                    return R * nn * 
-                      AugmentedMatrix( One( PG ), sol{[1..Length(TG)]}*TG );
-                fi;
+    orb := [ res ];
+    rep := [ R ];
+    for x in rep do
+        for g in gN do
+            dd := d ^ (x * g);
+            res := redtrans( TG, tr1, tr2, tt, Pe, dd );
+            if IsMatrix( res ) then
+                return x * g * res;
+            fi;
+            if not res in orb then
+                Add( orb, res );
+                Add( rep, x * g );
             fi;
         od;
     od;
-
     return fail;
 
 end );

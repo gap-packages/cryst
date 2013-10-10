@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.11",
+Version := "4.1.12",
 
-Date := "10/01/2013",
+Date := "10/10/2013",
 
 ArchiveURL := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.11",
+  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.12",
 
 ArchiveFormats := ".tar.gz",
 
@@ -34,7 +34,7 @@ Persons := [
     Institution := "Institut Computational Mathematics, TU Braunschweig"
   ),
   rec(
-    LastName := "G‰hler",
+    LastName := "G√§hler",
     FirstNames := "Franz",
     IsAuthor := true,
     IsMaintainer := true,
@@ -42,7 +42,7 @@ Persons := [
     WWWHome := "http://www.math.uni-bielefeld.de/~gaehler/",
     #PostalAddress := "",           
     Place := "Bielefeld",
-    Institution := "Mathematik, Universit‰t Bielefeld"
+    Institution := "Mathematik, Universit√§t Bielefeld"
   ),
   rec(
     LastName := "Nickel",
