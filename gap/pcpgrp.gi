@@ -151,14 +151,15 @@ InstallMethod( ImagesRepresentative, FamSourceEqFamElm,
      IsMultiplicativeElementWithInverse ], 0,
 function( iso, elm )
 
-    local d, S, T, elmP, isoP, exp, genS, elm2, v;
+    local d, S, T, P, elmP, isoP, exp, genS, elm2, v;
 
     d := Length( elm ) - 1;
     S := Source( iso );
     T := TranslationBasis( S );
 
+    P    := PointGroup( S );
     elmP := elm{[1..d]}{[1..d]};
-    isoP := IsomorphismPcpGroup( PointGroup( S ) );
+    isoP := NiceMonomorphism( P ) * IsomorphismPcpGroup( NiceObject( P ) );
     exp  := Exponents( ImagesRepresentative( isoP, elmP ) );
 
     genS := MappingGeneratorsImages( iso )[1];

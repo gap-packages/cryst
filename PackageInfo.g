@@ -10,12 +10,12 @@ PackageName := "Cryst",
 Subtitle := "Computing with crystallographic groups",
 
 
-Version := "4.1.12",
+Version := "4.1.13",
 
-Date := "10/10/2013",
+Date := "22/12/2017",
 
 ArchiveURL := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.12",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-4.1.13",
 
 ArchiveFormats := ".tar.gz",
 
@@ -39,7 +39,7 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "gaehler@math.uni-bielefeld.de",
-    WWWHome := "http://www.math.uni-bielefeld.de/~gaehler/",
+    WWWHome := "https://www.math.uni-bielefeld.de/~gaehler/",
     #PostalAddress := "",           
     Place := "Bielefeld",
     Institution := "Mathematik, Universität Bielefeld"
@@ -64,9 +64,9 @@ CommunicatedBy := "Herbert Pahlings (Aachen)",
 AcceptDate := "02/2000",
 
 README_URL := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/README.cryst",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/README.cryst",
 PackageInfoURL := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/PackageInfo.g",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/PackageInfo.g",
 
 AbstractHTML := 
 "This package, previously known as <span class=\"pkgname\">CrystGAP</span>, \
@@ -80,7 +80,7 @@ necessary, <span class=\"pkgname\">Cryst</span> can also make use of \
 functionality provided by the package <span class=\"pkgname\">Carat</span>.",
 
 PackageWWWHome := 
-  "http://www.math.uni-bielefeld.de/~gaehler/gap45/packages.php",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap45/packages.php",
 
 PackageDoc  := rec(
   BookName  := "Cryst",

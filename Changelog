@@ -107,3 +107,6 @@ Version 4.1.12
 
   - Fixed a bug in RepresentativeAction for AffineCrystGroups
 
+Version 4.1.13
+
+  - Fixed a bug in ImagesRepresentative for IsFromAffineCrystGroupToPcpGroup
