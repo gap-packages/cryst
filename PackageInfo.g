@@ -106,7 +106,7 @@ AvailabilityTest := ReturnTrue,
 
 #BannerString := "",
 
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.g",
 
 Keywords := [ "crystallographic groups", 
               "affine crystallographic groups",
