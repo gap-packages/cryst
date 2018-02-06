@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo 'gap> START_TEST( "Cryst: manual.tst" );'
+
+echo 'gap> SetAssertionLevel(1);'
+
+awk '/\\beginexample/ {printf "\n";getline; \
+   while (! /\\endexample/) { print; getline } }' cryst.tex
+
+echo 'gap> STOP_TEST( "manual.tst", 10000 );'
