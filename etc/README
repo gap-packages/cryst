@@ -5,7 +5,6 @@ For a new release, the following needs to be done:
   Changelog
   PackageInfo.g
   etc/VERSION
-  etc/make_zoo
   etc/make_tar
   etc/changelog.html
   doc/manual.tex

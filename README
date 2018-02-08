@@ -30,20 +30,22 @@ Cryst has been developed by
 Bettina Eick,
 Institut Computational Mathematics,
 Fachbereich Mathematik und Informatik,
-Technische Universit\"at Braunschweig,
+Technische Universität Braunschweig,
 Pockelsstr. 14, D-38106 Braunschweig, Germany
 e-mail: beick@tu-bs.de
 
-Franz G\"ahler,
-Fakult\"at f\"ur Mathematik, Universit\"at Bielefeld,
+Franz Gähler,
+Fakultät für Mathematik, Universität Bielefeld,
 Postfach 10 01 31, D-33501 Bielefeld, Germany 
 e-mail: gaehler@math.uni-bielefeld.de
 
 Werner Nickel,
 Fachbereich Mathematik, AG2,
-Technische Universit\"at Darmstadt,
+Technische Universität Darmstadt,
 Schlossgartenstrasse 7, D-64289 Darmstadt, Germany
 e-mail: nickel@mathematik.tu-darmstadt.de
 
 Please send bug reports, suggestions and other comments to any of these
-e-mail addresses.
+e-mail addresses, or enter an issue on the GitHub page of the package:
+
+    https://github.com/gap-packages/cryst
