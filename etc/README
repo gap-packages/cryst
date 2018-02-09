@@ -9,5 +9,8 @@ For a new release, the following needs to be done:
   etc/changelog.html
   doc/manual.tex
 
+- validate the PackageInfo record:
+  List( PackageInfo("cryst"), ValidatePackageInfo );
+
 - run install script
 

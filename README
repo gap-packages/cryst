@@ -45,7 +45,7 @@ Technische Universität Darmstadt,
 Schlossgartenstrasse 7, D-64289 Darmstadt, Germany
 e-mail: nickel@mathematik.tu-darmstadt.de
 
-Please send bug reports, suggestions and other comments to any of these
-e-mail addresses, or enter an issue on the GitHub page of the package:
+For bug reports, suggestions and other comments please use the issue
+tracker on the GitHub page of the package:
 
-    https://github.com/gap-packages/cryst
+    https://github.com/gap-packages/cryst/issues
