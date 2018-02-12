@@ -29,23 +29,23 @@ It is loaded with the GAP command
 
 Cryst has been developed by
 
-Bettina Eick,
-Institut Computational Mathematics,
-Fachbereich Mathematik und Informatik,
-Technische Universität Braunschweig,
-Pockelsstr. 14, D-38106 Braunschweig, Germany
-e-mail: beick@tu-bs.de
+    Bettina Eick,
+    Institut Computational Mathematics,
+    Fachbereich Mathematik und Informatik,
+    Technische Universität Braunschweig,
+    Pockelsstr. 14, D-38106 Braunschweig, Germany
+    e-mail: beick@tu-bs.de
 
-Franz Gähler,
-Fakultät für Mathematik, Universität Bielefeld,
-Postfach 10 01 31, D-33501 Bielefeld, Germany 
-e-mail: gaehler@math.uni-bielefeld.de
+    Franz Gähler,
+    Fakultät für Mathematik, Universität Bielefeld,
+    Postfach 10 01 31, D-33501 Bielefeld, Germany 
+    e-mail: gaehler@math.uni-bielefeld.de
 
-Werner Nickel,
-Fachbereich Mathematik, AG2,
-Technische Universität Darmstadt,
-Schlossgartenstrasse 7, D-64289 Darmstadt, Germany
-e-mail: nickel@mathematik.tu-darmstadt.de
+    Werner Nickel,
+    Fachbereich Mathematik, AG2,
+    Technische Universität Darmstadt,
+    Schlossgartenstrasse 7, D-64289 Darmstadt, Germany
+    e-mail: nickel@mathematik.tu-darmstadt.de
 
 For bug reports, suggestions and other comments please use the issue
 tracker on the GitHub page of the package:
