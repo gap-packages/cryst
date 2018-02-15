@@ -119,9 +119,12 @@ gap> c := ConjugatorSpaceGroupsStdSamePG( S, S2 );;
 gap> S^c=S2;
 true
 
-gap> c := ConjugatorSpaceGroupsStdSamePG( S2, S );;
-gap> S2^c=S;
-true
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>   c := ConjugatorSpaceGroupsStdSamePG( S2, S );;
+>   if not S2^c=S then
+>     Error( "Cryst: conjugator test failed" );
+>   fi;
+> fi;
 
 gap> C1 := [ [ 4, -3, 0 ], [ -3, -1, 0 ], [ 1/5, 1/7, 1 ] ];
 [ [ 4, -3, 0 ], [ -3, -1, 0 ], [ 1/5, 1/7, 1 ] ]
@@ -137,9 +140,7 @@ gap> S2 := S^C2; IsSpaceGroup(S2);
 <matrix group with 4 generators>
 true
 
-gap> C  := ConjugatorSpaceGroups( S1, S2 );
-[ [ -4/13, -2/13, 0 ], [ -1/13, -20/13, 0 ], [ -3343/4095, -6221/455, 1 ] ]
-
+gap> C  := ConjugatorSpaceGroups( S1, S2 );;
 gap> S1^C = S2;
 true
 

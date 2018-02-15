@@ -37,9 +37,16 @@ gap> List( L, IndexInParent );
 gap> P := Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ]);
 Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
 
-gap> norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );
+gap> norm := [ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ],
+>           [ 0, -1 ] ], [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ];
 [ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
   [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
+
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>   if not norm = GeneratorsOfGroup( NormalizerInGLnZ( P ) ) then
+>     Error( "Cryst: NormalizerInGLnZ failed" );
+>   fi;
+> fi;
 
 gap> SpaceGroupsByPointGroupOnRight( P );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
@@ -53,15 +60,14 @@ gap> SpaceGroupsByPointGroupOnRight( P, norm, true );
 [ [ <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators> ] ]
-
-gap> SpaceGroupTypesByPointGroupOnRight( P );
-[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
-  <matrix group with 4 generators> ]
-
-gap> SpaceGroupTypesByPointGroupOnRight( P, true );
-[ [ <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators> ] ]
+  
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>   if not ( 3 = Length( SpaceGroupTypesByPointGroupOnRight( P ) ) and
+>     [1,2,1] = List( SpaceGroupTypesByPointGroupOnRight( P, true ), Length ) )
+>   then
+>     Error( "Cryst: NormalizerInGLnZ failed" );
+>   fi;
+> fi;
 
 gap> S := SpaceGroupIT(2,14);
 SpaceGroupOnRightIT(2,14,'1')
