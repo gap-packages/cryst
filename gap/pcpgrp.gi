@@ -149,31 +149,56 @@ end );
 InstallMethod( ImagesRepresentative, FamSourceEqFamElm,
     [IsGroupGeneralMappingByImages and IsFromAffineCrystGroupToPcpGroup,
      IsMultiplicativeElementWithInverse ], 0,
-function( iso, elm )
+function(iso, elm)
+    local d, S, T, P, m, l, w, N, F, gensF, gensN, matsP, e, f, g, exp,
+          new, rem, v, s, H, h, p;
 
-    local d, S, T, P, elmP, isoP, exp, genS, elm2, v;
+    # set up dim and space group
+    d := Length(elm)-1;
+    S := Source(iso);
+    T := TranslationBasis(S);
 
-    d := Length( elm ) - 1;
-    S := Source( iso );
-    T := TranslationBasis( S );
+    # set up point group
+    P := PointGroup(S);
+    m := NiceMonomorphism(P);    # P -> N
+    N := Image(m);
+    l := NiceToCryst(P);         # N -> S
+    w := IsomorphismPcpGroup(N); # N -> Pcp
 
-    P    := PointGroup( S );
-    elmP := elm{[1..d]}{[1..d]};
-    isoP := NiceMonomorphism( P ) * IsomorphismPcpGroup( NiceObject( P ) );
-    exp  := Exponents( ImagesRepresentative( isoP, elmP ) );
-
-    genS := MappingGeneratorsImages( iso )[1];
-    elm2 := MappedVector( exp, genS{[1..Length(exp)]} );
+    # get preimages
+    F := Image(w);
+    gensF := Cgs(F);
+    gensN := List(gensF, x -> PreImagesRepresentative(w, x));
+    matsP := List(gensN, x -> ImagesRepresentative(l, x));
+    
+    # point group part
+    e := elm{[1..d]}{[1..d]};
+    f := Image(m, e);
+    g := Image(w, f);
+    exp := Exponents(g);
+    
+    # divide off
+    new := MappedVector( exp, matsP );
+    rem := new^-1 * elm;
     if Length( T ) > 0 then
         if IsAffineCrystGroupOnRight( S ) then
-            v := elm[d+1]{[1..d]} - elm2[d+1]{[1..d]};
+            v := rem[d+1]{[1..d]};
         else
-            v := elm{[1..d]}[d+1] - elm2{[1..d]}[d+1];
+            v := rem{[1..d]}[d+1];
         fi;
-        exp := Concatenation( exp, SolutionMat( T, v ) );
+        s := SolutionMat(T, v);
+        exp := Concatenation( exp, s );
     fi;
-    return PcpElementByExponents( Collector( One( Range( iso ) ) ), exp );
 
+    # translate
+    H := Image(iso);
+    h := Cgs(H);
+
+    # do some check
+    p := List(h, x -> PreImagesRepresentative(iso,x));
+    if MappedVector(exp, p) <> elm then Error("hier"); fi;
+
+    return MappedVector(exp, h);
 end );
 
 #############################################################################

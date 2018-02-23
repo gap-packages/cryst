@@ -144,4 +144,13 @@ gap> C  := ConjugatorSpaceGroups( S1, S2 );;
 gap> S1^C = S2;
 true
 
+gap> G := SpaceGroupIT(3, 214);;
+gap> iso := IsomorphismPcpGroup(G);;
+gap> H := Image(iso);;
+gap> h := Cgs(H)[1];;
+gap> g := PreImage(iso, h);
+[ [ 1, 0, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, -1, 0, 0 ], [ -7/4, 5/4, 3/4, 1 ] ]
+gap> h = Image(iso, g);
+true
+
 gap> STOP_TEST( "cryst.tst", 10000 );
