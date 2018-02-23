@@ -61,6 +61,9 @@ InstallMethod( KernelOfMultiplicativeGeneralMapping,
         m[d+1]{[1..d]} := t;
         Add( gens, m );
     od;
+    if IsAffineCrystGroupOnLeft( S ) then
+        gens := List( gens, TransposedMat );
+    fi;
     return SubgroupNC( S, gens );
 
 end );
