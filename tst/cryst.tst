@@ -194,15 +194,8 @@ gap> List( C, x -> Length( AsList(x) ) );
 gap> L := AsList( C[5] );
 [ <matrix group with 7 generators>, <matrix group with 7 generators>, 
   <matrix group with 7 generators> ]
-gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );
-[ [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, 0, 0, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 0, 1, 0 ], [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 1 ] ] ]
-gap> List( C, x -> Normalizer( G, Representative(x) ) );
-[ <matrix group with 6 generators>, <matrix group with 6 generators>, 
-  <matrix group with 7 generators>, <matrix group with 6 generators>, 
-  <matrix group with 6 generators>, <matrix group with 6 generators>, 
-  <matrix group with 6 generators> ]
+gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );;
+gap> List( C, x -> Normalizer( G, Representative(x) ) );;
 
 gap> G := SpaceGroupOnLeftIT( 3, 222 );;
 gap> C := ConjugacyClassesMaximalSubgroups( G, rec(primes:=[2,3,5] ) );;
@@ -213,14 +206,7 @@ gap> List( C, x -> Length( AsList(x) ) );
 gap> L := AsList( C[5] );
 [ <matrix group with 7 generators>, <matrix group with 7 generators>, 
   <matrix group with 7 generators> ]
-gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );
-[ [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 0, 1, 0 ], [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 0, 1, -2 ], [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 1 ] ] ]
-gap> List( C, x -> Normalizer( G, Representative(x) ) );
-[ <matrix group with 6 generators>, <matrix group with 6 generators>, 
-  <matrix group with 7 generators>, <matrix group with 6 generators>, 
-  <matrix group with 6 generators>, <matrix group with 6 generators>, 
-  <matrix group with 6 generators> ]
+gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );;
+gap> List( C, x -> Normalizer( G, Representative(x) ) );;
 
 gap> STOP_TEST( "cryst.tst", 10000 );
