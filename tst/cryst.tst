@@ -152,9 +152,7 @@ gap> g := PreImage(iso, h);
 [ [ 1, 0, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, -1, 0, 0 ], [ -7/4, 5/4, 3/4, 1 ] ]
 gap> h = Image(iso, g);
 true
-gap> IsomorphismPcpGroup( PointGroup( G ) );
-CompositionMapping( [ (1,6,2,5), (1,3,5)(2,4,6), (1,2)(5,6), (3,4)(5,6) ] -> 
-[ g1, g2, g3, g4 ], <action isomorphism> )
+gap> IsomorphismPcpGroup( PointGroup( G ) );;
 
 gap> gen := GeneratorsOfGroup( SpaceGroupIT(3,149) ){[1..3]};;
 gap> Gr := AffineCrystGroup( gen );
