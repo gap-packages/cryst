@@ -304,6 +304,7 @@ function( S, rep )
 
     mm  := CanonicalRightCosetElement( P, m );
     res := PreImagesRepresentative( PointHomomorphism( S ), mm*m^-1 ) * rep;
+    res := MutableCopyMat( res );
     res[d+1]{[1..d]} := VectorModL( res[d+1]{[1..d]}, T );
     return res;
 
@@ -322,6 +323,7 @@ function( S, rep )
 
     mm  := CanonicalRightCosetElement( P, m );
     res := PreImagesRepresentative( PointHomomorphism( S ), mm*m^-1 ) * rep;
+    res := MutableCopyMat( res );
     res{[1..d]}[d+1] := VectorModL( res{[1..d]}[d+1], T );
     return res;
 
@@ -518,7 +520,9 @@ CentralizerAffineCrystGroup := function ( G, obj )
             L{[1..e]}{[1..d]+(i-1)*d} := T*(gen[i]-I);
         od;
         P := Centralizer( P, M );
-        P := Stabilizer( P, TranslationBasis( obj ), OnRight );
+        if not IsEmpty( TranslationBasis( obj ) ) then
+            P := Stabilizer( P, TranslationBasis( obj ), OnRight );
+        fi;
         U := Filtered( GeneratorsOfGroup(obj), x -> x{[1..d]}{[1..d]} <> I );
     else
         if not IsAffineMatrixOnRight( obj ) then
