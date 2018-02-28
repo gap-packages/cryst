@@ -152,6 +152,137 @@ gap> g := PreImage(iso, h);
 [ [ 1, 0, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, -1, 0, 0 ], [ -7/4, 5/4, 3/4, 1 ] ]
 gap> h = Image(iso, g);
 true
+gap> IsomorphismPcpGroup( PointGroup( G ) );
+CompositionMapping( [ (1,6,2,5), (1,3,5)(2,4,6), (1,2)(5,6), (3,4)(5,6) ] -> 
+[ g1, g2, g3, g4 ], <action isomorphism> )
+
+gap> gen := GeneratorsOfGroup( SpaceGroupIT(3,149) ){[1..3]};;
+gap> Gr := AffineCrystGroup( gen );
+<matrix group with 3 generators>
+gap> Gr = AsAffineCrystGroup( Group( gen ) );
+true
+gap> TranslationBasis( Gr );
+[ [ 1, 0, 0 ], [ 0, 1, 0 ] ]
+gap> InternalBasis( Gr );
+[ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ]
+gap> CheckTranslationBasis( Gr );
+gap> StandardAffineCrystGroup( Gr );
+<matrix group with 3 generators>
+gap> TransParts( Gr );
+[ [ 0, 0, 0 ], [ 0, 0, 0 ] ]
+gap> PointHomomorphism( Gr );
+[ [ [ 0, 1, 0, 0 ], [ -1, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
+  [ [ 0, -1, 0, 0 ], [ -1, 0, 0, 0 ], [ 0, 0, -1, 0 ], [ 0, 0, 0, 1 ] ], 
+  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, 0, 0, 1 ] ] ] -> 
+[ [ [ 0, 1, 0 ], [ -1, -1, 0 ], [ 0, 0, 1 ] ], 
+  [ [ 0, -1, 0 ], [ -1, 0, 0 ], [ 0, 0, -1 ] ], 
+  [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ]
+
+gap> Gl := AffineCrystGroupOnLeft( List( gen, TransposedMat ) );
+<matrix group with 3 generators>
+gap> Gl = AsAffineCrystGroupOnLeft( Group( List( gen, TransposedMat ) ) );
+true
+gap> TranslationBasis( Gl );
+[ [ 1, 0, 0 ], [ 0, 1, 0 ] ]
+gap> InternalBasis( Gl );
+[ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ]
+gap> CheckTranslationBasis( Gl );
+gap> StandardAffineCrystGroup( Gl );
+<matrix group with 3 generators>
+gap> TransParts( Gl );
+[ [ 0, 0, 0 ], [ 0, 0, 0 ] ]
+gap> PointHomomorphism( Gl );
+[ [ [ 0, -1, 0, 0 ], [ 1, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
+  [ [ 0, -1, 0, 0 ], [ -1, 0, 0, 0 ], [ 0, 0, -1, 0 ], [ 0, 0, 0, 1 ] ], 
+  [ [ 1, 0, 0, 1 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ] ] -> 
+[ [ [ 0, -1, 0 ], [ 1, -1, 0 ], [ 0, 0, 1 ] ], 
+  [ [ 0, -1, 0 ], [ -1, 0, 0 ], [ 0, 0, -1 ] ], 
+  [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] ]
+
+gap> SpaceGroupIT(3,213) < SpaceGroupIT(3,217);
+false
+
+gap> G := SpaceGroupIT(3,183);;
+gap> W := WyckoffPositions(G);;
+gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 0, 0, 0, 1 ] ];;
+gap> IsSpaceGroup( G^C );
+true
+
+gap> G := TransposedMatrixGroup( G );
+<matrix group with 6 generators>
+gap> W := WyckoffPositions(G);;
+gap> IsSpaceGroup( G^TransposedMat(C) );
+true
+
+gap> G := SpaceGroupIT( 3, 208 );
+SpaceGroupOnRightIT(3,208,'1')
+gap> M := MaximalSubgroupClassReps( G, rec( primes := [2,3] ) );
+[ <matrix group with 7 generators>, <matrix group with 6 generators>, 
+  <matrix group with 7 generators>, <matrix group with 7 generators>, 
+  <matrix group with 5 generators>, <matrix group with 7 generators>, 
+  <matrix group with 6 generators>, <matrix group with 7 generators> ]
+gap> List( M, x -> Index( G, x ) );
+[ 2, 2, 2, 4, 4, 4, 3, 27 ]
+gap> List( Cartesian(M,M), x -> Index( G, Intersection2(x[1],x[2]) ) );
+[ 2, 4, 4, 8, 8, 8, 6, 54, 4, 2, 4, 8, 8, 8, 6, 54, 4, 4, 2, 8, 8, 8, 6, 
+  54, 8, 8, 8, 4, 16, 16, 12, 108, 8, 8, 8, 16, 4, 16, 12, 108, 8, 8, 8, 
+  16, 16, 4, 12, 108, 6, 6, 6, 12, 12, 12, 3, 81, 54, 54, 54, 108, 108, 
+  108, 81, 27 ]
+gap> gen := GeneratorsOfGroup( M[1] );;
+gap> Centralizer( M[1], gen[1] );
+<matrix group with 3 generators>
+gap> Centralizer( M[1], Subgroup( M[1], gen{[3]} ) );
+<matrix group with 3 generators>
+gap> C := RightCosets( G, M[3] );
+[ RightCoset(<group with 7 generators>,[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ],
+    [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ]), 
+  RightCoset(<group with 7 generators>,[ [ 0, 1, 0, 0 ], [ 1, 0, 0, 0 ],
+    [ 0, 0, -1, 0 ], [ 1/2, 1/2, 1/2, 1 ] ]) ]
+gap> CanonicalRightCosetElement( M[3], Representative(C[2]) );
+[ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 1, 1 ] ]
+gap>  List( M, TranslationNormalizer );
+[ <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators> ]
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>   List( M, AffineNormalizer );;
+> fi;
+
+gap> G := SpaceGroupOnLeftIT( 3, 208 );
+SpaceGroupOnLeftIT(3,208,'1')
+gap> M := MaximalSubgroupClassReps( G, rec( primes := [2,3] ) );
+[ <matrix group with 7 generators>, <matrix group with 6 generators>, 
+  <matrix group with 7 generators>, <matrix group with 7 generators>, 
+  <matrix group with 5 generators>, <matrix group with 7 generators>, 
+  <matrix group with 6 generators>, <matrix group with 7 generators> ]
+gap> List( M, x -> Index( G, x ) );
+[ 2, 2, 2, 4, 4, 4, 3, 27 ]
+gap> List( Cartesian(M,M), x -> Index( G, Intersection2(x[1],x[2]) ) );
+[ 2, 4, 4, 8, 8, 8, 6, 54, 4, 2, 4, 8, 8, 8, 6, 54, 4, 4, 2, 8, 8, 8, 6, 
+  54, 8, 8, 8, 4, 16, 16, 12, 108, 8, 8, 8, 16, 4, 16, 12, 108, 8, 8, 8, 
+  16, 16, 4, 12, 108, 6, 6, 6, 12, 12, 12, 3, 81, 54, 54, 54, 108, 108, 
+  108, 81, 27 ]
+gap> gen := GeneratorsOfGroup( M[1] );;
+gap> Centralizer( M[1], gen[1] );
+<matrix group with 3 generators>
+gap> Centralizer( M[1], Subgroup( M[1], gen{[3]} ) );
+<matrix group with 3 generators>
+gap> C := RightCosets( G, M[3] );
+[ RightCoset(<group with 7 generators>,[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ],
+    [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ]), 
+  RightCoset(<group with 7 generators>,[ [ 0, 1, 0, 1/2 ], [ 1, 0, 0,
+    1/2 ], [ 0, 0, -1, 1/2 ], [ 0, 0, 0, 1 ] ]) ]
+gap> CanonicalRightCosetElement( M[3], Representative(C[2]) );
+[ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 1 ], [ 0, 0, 0, 1 ] ]
+gap>  List( M, TranslationNormalizer );
+[ <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators>, 
+  <matrix group with 3 generators>, <matrix group with 3 generators> ]
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>   List( M, AffineNormalizer );;
+> fi;
 
 gap> G := SpaceGroupOnRightIT( 3, 214 );;
 gap> K := Kernel( PointHomomorphism( G ) );
