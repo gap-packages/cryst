@@ -1,3 +1,10 @@
+Version 4.1.16
+
+  - Bug in ImagesRepresentative for isomorphism to PcpGroup fixed.
+  - Bug in kernel of PointHomomorphism for left-acting group fixed.
+  - Bugs in Centralizer and CanonicalRightCosetElement fixed.
+  - Test files with better code coverage.
+
 Version 4.1.15
 
   - PackageInfo record corrected
