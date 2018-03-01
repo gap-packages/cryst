@@ -246,6 +246,9 @@ gap>  List( M, TranslationNormalizer );
 gap> if IsPackageMarkedForLoading( "carat", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
+gap> List( M, x -> Orbit( G, x, OnPoints ) );;
+gap> List( M, x -> OrbitStabilizer( G, x, OnPoints ) );;
+gap> List( M, x -> IsomorphismPcpGroup( PointGroup(x) ) );;
 
 gap> G := SpaceGroupOnLeftIT( 3, 208 );
 SpaceGroupOnLeftIT(3,208,'1')
@@ -281,6 +284,9 @@ gap>  List( M, TranslationNormalizer );
 gap> if IsPackageMarkedForLoading( "carat", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
+gap> List( M, x -> Orbit( G, x, OnPoints ) );;
+gap> List( M, x -> OrbitStabilizer( G, x, OnPoints ) );;
+gap> List( M, x -> IsomorphismPcpGroup( PointGroup(x) ) );;
 
 gap> G := SpaceGroupOnRightIT( 3, 214 );;
 gap> K := Kernel( PointHomomorphism( G ) );
