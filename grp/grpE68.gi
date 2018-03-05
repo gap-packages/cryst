@@ -73,7 +73,7 @@ SymmorphicSpaceGroup := function( P )
 
     # add translations
     for i in [1..n] do
-        t := MutableIdentityMat(n+1);
+        t := IdentityMat(n+1);
         t[n+1][i] := 1;
         Add( aff, t );
     od;
