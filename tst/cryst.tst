@@ -221,11 +221,9 @@ gap> M := MaximalSubgroupClassReps( G, rec( primes := [2,3] ) );
   <matrix group with 6 generators>, <matrix group with 7 generators> ]
 gap> List( M, x -> Index( G, x ) );
 [ 2, 2, 2, 4, 4, 4, 3, 27 ]
-gap> List( Cartesian(M,M), x -> Index( G, Intersection2(x[1],x[2]) ) );
-[ 2, 4, 4, 8, 8, 8, 6, 54, 4, 2, 4, 8, 8, 8, 6, 54, 4, 4, 2, 8, 8, 8, 6, 
-  54, 8, 8, 8, 4, 16, 16, 12, 108, 8, 8, 8, 16, 4, 16, 12, 108, 8, 8, 8, 
-  16, 16, 4, 12, 108, 6, 6, 6, 12, 12, 12, 3, 81, 54, 54, 54, 108, 108, 
-  108, 81, 27 ]
+gap> List( Cartesian(M{[2,3,5]},M{[4,7,8]}),
+> x -> Index( G, Intersection2(x[1],x[2]) ) );
+[ 8, 6, 54, 8, 6, 54, 16, 12, 108 ]
 gap> gen := GeneratorsOfGroup( M[1] );;
 gap> Centralizer( M[1], gen[1] );
 <matrix group with 3 generators>
@@ -246,8 +244,8 @@ gap>  List( M, TranslationNormalizer );
 gap> if IsPackageMarkedForLoading( "carat", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
-gap> List( M, x -> Orbit( G, x, OnPoints ) );;
-gap> List( M, x -> OrbitStabilizer( G, x, OnPoints ) );;
+gap> List( M{[2,5,7]}, x -> Orbit( G, x, OnPoints ) );;
+gap> List( M{[3,6]}, x -> OrbitStabilizer( G, x, OnPoints ) );;
 gap> List( M, x -> IsomorphismPcpGroup( PointGroup(x) ) );;
 
 gap> G := SpaceGroupOnLeftIT( 3, 208 );
@@ -259,11 +257,9 @@ gap> M := MaximalSubgroupClassReps( G, rec( primes := [2,3] ) );
   <matrix group with 6 generators>, <matrix group with 7 generators> ]
 gap> List( M, x -> Index( G, x ) );
 [ 2, 2, 2, 4, 4, 4, 3, 27 ]
-gap> List( Cartesian(M,M), x -> Index( G, Intersection2(x[1],x[2]) ) );
-[ 2, 4, 4, 8, 8, 8, 6, 54, 4, 2, 4, 8, 8, 8, 6, 54, 4, 4, 2, 8, 8, 8, 6, 
-  54, 8, 8, 8, 4, 16, 16, 12, 108, 8, 8, 8, 16, 4, 16, 12, 108, 8, 8, 8, 
-  16, 16, 4, 12, 108, 6, 6, 6, 12, 12, 12, 3, 81, 54, 54, 54, 108, 108, 
-  108, 81, 27 ]
+gap> List( Cartesian(M{[4,6,7]},M{[2,5,8]}),
+> x -> Index( G, Intersection2(x[1],x[2]) ) );
+[ 8, 16, 108, 8, 16, 108, 6, 12, 81 ]
 gap> gen := GeneratorsOfGroup( M[1] );;
 gap> Centralizer( M[1], gen[1] );
 <matrix group with 3 generators>
@@ -284,8 +280,8 @@ gap>  List( M, TranslationNormalizer );
 gap> if IsPackageMarkedForLoading( "carat", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
-gap> List( M, x -> Orbit( G, x, OnPoints ) );;
-gap> List( M, x -> OrbitStabilizer( G, x, OnPoints ) );;
+gap> List( M{[3,7]}, x -> Orbit( G, x, OnPoints ) );;
+gap> List( M{[5,6]}, x -> OrbitStabilizer( G, x, OnPoints ) );;
 gap> List( M, x -> IsomorphismPcpGroup( PointGroup(x) ) );;
 
 gap> G := SpaceGroupOnRightIT( 3, 214 );;
@@ -324,8 +320,8 @@ gap> G := SpaceGroupOnRightIT( 3, 222 );;
 gap> C := ConjugacyClassesMaximalSubgroups( G, rec(primes:=[2,3,5] ) );;
 gap> List( C, Size );
 [ 1, 1, 1, 4, 3, 27, 125 ]
-gap> List( C, x -> Length( AsList(x) ) );
-[ 1, 1, 1, 4, 3, 27, 125 ]
+gap> List( C{[1..6]}, x -> Length( AsList(x) ) );
+[ 1, 1, 1, 4, 3, 27 ]
 gap> L := AsList( C[5] );
 [ <matrix group with 7 generators>, <matrix group with 7 generators>, 
   <matrix group with 7 generators> ]
@@ -336,8 +332,8 @@ gap> G := SpaceGroupOnLeftIT( 3, 222 );;
 gap> C := ConjugacyClassesMaximalSubgroups( G, rec(primes:=[2,3,5] ) );;
 gap> List( C, Size );
 [ 1, 1, 1, 4, 3, 27, 125 ]
-gap> List( C, x -> Length( AsList(x) ) );
-[ 1, 1, 1, 4, 3, 27, 125 ]
+gap> List( C{[1..6]}, x -> Length( AsList(x) ) );
+[ 1, 1, 1, 4, 3, 27 ]
 gap> L := AsList( C[5] );
 [ <matrix group with 7 generators>, <matrix group with 7 generators>, 
   <matrix group with 7 generators> ]
