@@ -17,7 +17,7 @@
 ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
 
     local P, d, M, I, g, i, gen1, t1, gen2, t2, sol, Ngen, 
-          orb, img, gen, rep, nn;
+          orb, img, S, rep, nn, n1;
 
     P := PointGroup( S1 );
     d := DimensionOfMatrixGroup( P ); 
@@ -46,25 +46,25 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
     fi;
 
     # if we arrive here, we need the normalizer
-#    Print("#I need normalizer\n");
     Ngen := GeneratorsOfGroup( NormalizerPointGroupInGLnZ( P ) );
-    Ngen := Filtered( Ngen, x -> not x in P );
+    Ngen := List( Filtered( Ngen, x -> not x in P ), y -> AugmentedMatrix( y, 0*[1..d] ) );;
 
-    orb := [ GeneratorsOfGroup( P) ];
-    rep := [ One( P ) ];
-    for gen in orb do
+    orb := [ S1 ];
+    rep := [ One( S1 ) ];
+    for S in orb do
         for g in Ngen do
-            img := List( gen, x -> x^g );
+            img := S^g;
             if not img in orb then
-                nn   := rep[Position(orb,gen)]*g;
+                nn   := rep[Position(orb,S)]*g;
                 Add( orb, img );
                 Add( rep, nn  );
-                gen2 := List( img, x -> PreImagesRepresentative( 
-                                        PointHomomorphism( S2 ), x ) );
-                t2 := Concatenation( List( gen2, x -> x[d+1]{[1..d]}*nn^-1));
+                gen1 := List( GeneratorsOfGroup( P ),
+                  x -> PreImagesRepresentative( PointHomomorphism( img ), x ) );
+                n1 := nn{[1..d]}{[1..d]};
+                t1 := Concatenation( List( gen1, x -> x[d+1]{[1..d]}));
                 sol  := SolveInhomEquationsModZ( M, t1-t2, true )[1];
                 if sol <> [] then
-                    return AugmentedMatrix( nn, sol[1]*nn );
+                    return AugmentedMatrix( n1, sol[1] );
                 fi;
             fi;
         od;
@@ -87,7 +87,7 @@ function( S1, S2 )
 
     # go to standard representation
 
-    # S1^C1 = S1std
+    # S1 = S1std^C1
     if IsStandardSpaceGroup( S1 ) then
         S1std := S1;
         C1    := IdentityMat( d+1 );
@@ -96,7 +96,7 @@ function( S1, S2 )
         C1    := AugmentedMatrix( InternalBasis( S1 ), 0*[1..d] );
     fi;
 
-    # S2^C2 = S2std
+    # S2 = S2std^C2
     if IsStandardSpaceGroup( S2 ) then
         S2std := S2;
         C2    := IdentityMat( d+1 );
@@ -108,7 +108,6 @@ function( S1, S2 )
     P1std := PointGroup( S1std );
     P2std := PointGroup( S2std );
 
-    d := DimensionOfMatrixGroup( P1std );    
     if P1std = P2std then
         C3 := IdentityMat( d+1 );
         S3 := S2std;

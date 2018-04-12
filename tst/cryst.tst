@@ -144,6 +144,30 @@ gap> C  := ConjugatorSpaceGroups( S1, S2 );;
 gap> S1^C = S2;
 true
 
+gap> S1 := AffineCrystGroupOnRight(
+> [ [ [ -1, 0, 2, 0 ], [ -2, 1, 2, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 1/2, 1 ] ], 
+>   [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, -1, 0 ], [ 0, 1/2, 0, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, 0, 0, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 1, 0, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 1, 1 ] ] ] ); 
+<matrix group with 5 generators>
+gap> 
+gap> S2 := AffineCrystGroupOnRight(
+> [ [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, -1, 0 ], [ 0, 0, 0, 1 ] ], 
+>   [ [ 1, 0, -2, 0 ], [ 2, -1, -2, 0 ], [ 0, 0, -1, 0 ], [ 0, 1/2, 0, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, -1, 0, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, 0, -1, 1 ] ], 
+>   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ -1, 1, 1, 1 ] ] ] );
+<matrix group with 5 generators>
+
+gap> if IsPackageMarkedForLoading( "carat", "" ) then
+>     c1 := ConjugatorSpaceGroups(S1,S2);;
+>     c2 := ConjugatorSpaceGroups(S2,S1);;
+>     if not ( S1^c1 = S2 and S2^c2 = S1 ) then
+>         Error( "Cryst: conjugator test 2 failed" );
+>     fi;
+> fi;
+
 gap> G := SpaceGroupIT(3, 214);;
 gap> iso := IsomorphismPcpGroup(G);;
 gap> H := Image(iso);;
