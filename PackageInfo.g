@@ -9,10 +9,10 @@ PackageName := "Cryst",
 
 Subtitle := "Computing with crystallographic groups",
 
-Version := "4.1.16",
+Version := "4.1.17",
 
 # Format: dd/mm/yyyy
-Date := "01/03/2018",
+Date := "13/04/2018",
 
 ArchiveURL := Concatenation( 
   "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-", ~.Version ),
