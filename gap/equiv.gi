@@ -47,8 +47,8 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
 
     # if we arrive here, we need the normalizer
     Ngen := GeneratorsOfGroup( NormalizerPointGroupInGLnZ( P ) );
-    Ngen := List( Filtered( Ngen, x -> not x in P ), y -> AugmentedMatrix( y, 0*[1..d] ) );;
-
+    Ngen := List( Filtered( Ngen, x -> not x in P ),
+                  y -> AugmentedMatrix( y, 0*[1..d] ) );
     orb := [ S1 ];
     rep := [ One( S1 ) ];
     for S in orb do
@@ -81,9 +81,26 @@ InstallMethod( ConjugatorSpaceGroups, IsIdenticalObj,
       IsAffineCrystGroupOnRight and IsSpaceGroup ], 0,
 function( S1, S2 )
 
-    local d, C1, C2, C3, C4, c, S1std, S2std, P1std, P2std, S3;
+    local d, P1, P2, ls1, ls2, C1, C2, C3, C4, c,
+          S1std, S2std, P1std, P2std, S3;
 
     d := DimensionOfMatrixGroup( S1 ) - 1;    
+
+    # some short cuts
+    P1 := PointGroup( S1 );
+    P2 := PointGroup( S2 );
+    if Size( P1 ) <> Size( P2 ) then
+        return fail;
+    fi;
+    ls1 := AsSortedList( List( ConjugacyClasses( P1 ),
+             x -> [ Size(x), TraceMat( Representative(x) ),
+                    DeterminantMat( Representative(x) ) ] ) );
+    ls2 := AsSortedList( List( ConjugacyClasses( P2 ),
+             x -> [ Size(x), TraceMat( Representative(x) ),
+                    DeterminantMat( Representative(x) ) ] ) );
+    if ls1 <> ls2 then
+        return fail;
+    fi;
 
     # go to standard representation
 
