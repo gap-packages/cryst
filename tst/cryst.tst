@@ -172,8 +172,7 @@ gap> G := SpaceGroupIT(3, 214);;
 gap> iso := IsomorphismPcpGroup(G);;
 gap> H := Image(iso);;
 gap> h := Cgs(H)[1];;
-gap> g := PreImage(iso, h);
-[ [ 1, 0, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, -1, 0, 0 ], [ -7/4, 5/4, 3/4, 1 ] ]
+gap> g := PreImage(iso, h);;
 gap> h = Image(iso, g);
 true
 gap> IsomorphismPcpGroup( PointGroup( G ) );;
@@ -311,34 +310,12 @@ gap> List( M, x -> IsomorphismPcpGroup( PointGroup(x) ) );;
 gap> G := SpaceGroupOnRightIT( 3, 214 );;
 gap> K := Kernel( PointHomomorphism( G ) );
 <matrix group with 3 generators>
-gap> NaturalHomomorphismByNormalSubgroup( G, K );
-CompositionMapping( [ g1, g2, g3, g4, g5, g6, g7 ] -> 
-[ g1, g2, g3, g4, id, id, id ], 
-[ [ [ 1, 0, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, -1, 0, 0 ], [ -7/4, 5/4, 3/4, 1 ] ]
-    , [ [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1, 0, 0, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, -1, 0 ], [ -1/2, -1/2, 1, 1 ] ]
-    , 
-  [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1/2, 0, -1/2, 1 ] ],
-  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1/2, 1/2, 1/2, 1 ] ], 
-  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 1, 0, 1 ] ], 
-  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 1, 1 ] ] ] -> 
-[ g1, g2, g3, g4, g5, g6, g7 ] )
+gap> NaturalHomomorphismByNormalSubgroup( G, K );;
 
 gap> G := SpaceGroupOnLeftIT( 3, 222 );;
 gap> K := Kernel( PointHomomorphism( G ) );
 <matrix group with 3 generators>
-gap> NaturalHomomorphismByNormalSubgroup( G, K );
-CompositionMapping( [ g1, g2, g3, g4, g5, g6, g7, g8 ] -> 
-[ g1, g2, g3, g4, g5, id, id, id ], 
-[ [ [ -1, 0, 0, 0 ], [ 0, 1, 0, 1/2 ], [ 0, 0, 1, 1/2 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 0, 1, 0 ], [ 0, 1, 0, 0 ], [ -1, 0, 0, 1/2 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 0, 0, 1, 0 ], [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ -1, 0, 0, 1/2 ], [ 0, 1, 0, 0 ], [ 0, 0, -1, 1/2 ], [ 0, 0, 0, 1 ] ], 
-  [ [ -1, 0, 0, 1/2 ], [ 0, -1, 0, 1/2 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 1, 0, 0, 1 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 1 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ], 
-  [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 1 ], [ 0, 0, 0, 1 ] ] ] -> 
-[ g1, g2, g3, g4, g5, g6, g7, g8 ] )
+gap> NaturalHomomorphismByNormalSubgroup( G, K );;
 
 gap> G := SpaceGroupOnRightIT( 3, 222 );;
 gap> C := ConjugacyClassesMaximalSubgroups( G, rec(primes:=[2,3,5] ) );;
