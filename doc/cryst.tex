@@ -836,7 +836,7 @@ gap> List( last, x -> ColorOfElement( U, Representative(x) ) );
 \Section{Colored AffineCrystGroups}
 
 If <C> is a colored `AffineCrystGroup' whose `ColorSubgroup' is 
-lattice-equal (translationengleich) with <C>, the `PointGroup' of 
+lattice-equal (translationengleich) with <C>, then the `PointGroup' of 
 <C> can consistently be colored. In that case,
 
 \>PointGroup( C )!{for a colored `AffineCrystGroup'} A
@@ -868,9 +868,12 @@ For instance, a list of inequivalent index-2 `ColorSubgroups' of
 gap> sub := MaximalSubgroupClassReps( S, rec( primes := [2] ) );
 [ <matrix group with 4 generators>, <matrix group with 3 generators>, 
   <matrix group with 4 generators> ]
+gap> List( sub, Size );
+[ infinity, infinity, infinity ]
 gap> sub := Filtered( sub, s -> IndexInParent( s ) = 2 );
-[ <matrix group with 4 generators>, <matrix group with 3 generators>, 
-  <matrix group with 4 generators> ]
+[ <matrix group of size infinity with 4 generators>, 
+  <matrix group of size infinity with 3 generators>, 
+  <matrix group of size infinity with 4 generators> ]
 gap> sub := AffineInequivalentSubgroups( S, sub );
 [ <matrix group of size infinity with 4 generators>, 
   <matrix group of size infinity with 3 generators> ]
