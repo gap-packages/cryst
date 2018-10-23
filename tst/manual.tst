@@ -190,9 +190,8 @@ gap> sub := Filtered( sub, s -> IndexInParent( s ) = 2 );
   <matrix group of size infinity with 3 generators>, 
   <matrix group of size infinity with 4 generators> ]
 
-gap> sub := AffineInequivalentSubgroups( S, sub );
-[ <matrix group of size infinity with 4 generators>, 
-  <matrix group of size infinity with 3 generators> ]
+gap> Length( AffineInequivalentSubgroups( S, sub ) );
+2
 
 gap> SpaceGroupSettingsIT( 3, 146 );
 "hr"
