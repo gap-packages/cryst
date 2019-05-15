@@ -20,12 +20,14 @@
 #P  IsAffineCrystGroupOnRight( <S> )  . . . . AffineCrystGroup acting OnRight
 ##
 DeclareProperty( "IsAffineCrystGroupOnRight", IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsCyclotomicMatrixGroup, IsAffineCrystGroupOnRight );
 
 #############################################################################
 ##
 #P  IsAffineCrystGroupOnLeft( <S> ) . . . . .  AffineCrystGroup acting OnLeft
 ##
 DeclareProperty( "IsAffineCrystGroupOnLeft", IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsCyclotomicMatrixGroup, IsAffineCrystGroupOnLeft );
 
 #############################################################################
 ##
@@ -33,6 +35,10 @@ DeclareProperty( "IsAffineCrystGroupOnLeft", IsCyclotomicMatrixGroup );
 #P  . . . . . . . . . . . . . . . . . . . . . . . .  either OnLeft or OnRight
 ##
 DeclareProperty( "IsAffineCrystGroupOnLeftOrRight",IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsCyclotomicMatrixGroup, IsAffineCrystGroupOnLeftOrRight );
+
+InstallTrueMethod( IsAffineCrystGroupOnLeftOrRight, IsAffineCrystGroupOnRight );
+InstallTrueMethod( IsAffineCrystGroupOnLeftOrRight, IsAffineCrystGroupOnLeft );
 
 #############################################################################
 ##
@@ -118,12 +124,14 @@ DeclareGlobalFunction( "IsAffineMatrixOnLeft" );
 #P  IsSpaceGroup( <S> )  . . . . . . . . . . . . . . . .  is S a space group?
 ##
 DeclareProperty( "IsSpaceGroup", IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsGroup, IsSpaceGroup );
 
 #############################################################################
 ##
 #P  IsStandardAffineCrystGroup( <S> ) . . . AffineCrystGroup in standard form
 ##
 DeclareProperty( "IsStandardAffineCrystGroup", IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsGroup, IsStandardAffineCrystGroup );
 
 #############################################################################
 ##
@@ -137,12 +145,14 @@ DeclareSynonym( "IsStandardSpaceGroup",
 #P  IsSymmorphicSpaceGroup( <S> ) . . . . . . . . . . . . . .is S symmorphic? 
 ##
 DeclareProperty( "IsSymmorphicSpaceGroup", IsCyclotomicMatrixGroup);
+InstallTrueMethod( IsGroup, IsSymmorphicSpaceGroup );
 
 #############################################################################
 ##
 #P  IsPointGroup( <P> ) . . . . . . . . . . PointGroup of an AffineCrystGroup
 ##
 DeclareProperty( "IsPointGroup", IsCyclotomicMatrixGroup );
+InstallTrueMethod( IsGroup, IsPointGroup );
 
 #############################################################################
 ##
