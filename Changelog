@@ -1,3 +1,7 @@
+Version 4.1.19
+
+  - Compatibility fixes for GAP 4.11.
+
 Version 4.1.18
 
   - Fixed trivial changes in output of a manual example and several test examples.
