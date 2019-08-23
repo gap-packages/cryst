@@ -1,3 +1,7 @@
+Version 4.1.20
+
+  - Catch trivial case before calling IsDiagonalMat
+
 Version 4.1.19
 
   - Compatibility fixes for GAP 4.11.

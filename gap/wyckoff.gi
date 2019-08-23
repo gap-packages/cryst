@@ -321,10 +321,10 @@ SolveInhomEquationsModZ := function( M, b, onRight )
         Q := IdentityMat( Length(M[1]) );
     fi;
 
-    while not IsDiagonalMat(M) do
+    while Length(M) > 0 and not IsDiagonalMat(M) do
         M := TransposedMat(M);
         M := RowEchelonFormT(M,Q);
-        if not IsDiagonalMat(M) then
+        if Length(M) > 0 and not IsDiagonalMat(M) then
             M := TransposedMat(M);
             M := RowEchelonFormVector(M,b);
         fi;

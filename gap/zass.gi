@@ -148,7 +148,7 @@ SolveHomEquationsModZ := function( M )
     # first diagonalize M
     M := TransposedMat(M);
     M := RowEchelonForm( M );
-    while not IsDiagonalMat(M) do
+    while Length(M) > 0 and not IsDiagonalMat(M) do
         M := TransposedMat(M);
         M := RowEchelonFormT(M,Q);
         if not IsDiagonalMat(M) then

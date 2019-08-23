@@ -648,7 +648,7 @@ function( S )
     Q := IdentityMat( Length(M) );
     M := TransposedMat(M);
     M := RowEchelonForm( M );
-    while not IsDiagonalMat(M) do
+    while Length(M) > 0 and not IsDiagonalMat(M) do
         M := TransposedMat(M);
         M := RowEchelonFormT(M,Q);
         if not IsDiagonalMat(M) then
@@ -741,7 +741,7 @@ AffineLift := function( pnt, d )
     
     M := TransposedMat(M);
     M := RowEchelonFormVector( M,b );
-    while not IsDiagonalMat(M) do
+    while Length(M) > 0 and not IsDiagonalMat(M) do
         M := TransposedMat(M);
         M := RowEchelonFormT(M,Q);
         if not IsDiagonalMat(M) then
