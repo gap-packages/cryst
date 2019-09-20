@@ -660,7 +660,7 @@ end;
 MaximalSubgroupRepsSG := function( G, p )
 
     local iso, F, Fgens, Frels, Ffree, Ggens, T, n, d, t, gens, A, kernel, 
-          i, imgs, max, M, g, exp, h, j, pcgs, first, weights;
+          i, imgs, max, M, g, exp, h, j, Agens, pcgs, spcgs, first, weights;
 
     if not IsSolvableGroup( G ) then
         Error("G must be solvable \n");
@@ -687,13 +687,19 @@ MaximalSubgroupRepsSG := function( G, p )
     A := PcGroupFpGroup( F );
 
     # compute maximal subgroups of S
-    pcgs := SpecialPcgs(A);
-    first := LGFirst( pcgs );
-    weights := LGWeights( pcgs );
+    Agens := GeneratorsOfGroup( A );
+    if IsEmpty( Agens ) then
+        pcgs := Pcgs(A);
+    else
+        pcps := PcgsByBcSequence( FamilyObj(Agens[1]), Agens );
+    fi;
+    spcgs := SpecialPcgs(A);
+    first := LGFirst( spcgs );
+    weights := LGWeights( spcgs );
     max := [];
     for i in [1..Length(first)-1] do
         if weights[first[i]][2] = 1 and weights[first[i]][3] = p then
-            Append(max,ShallowCopy(MaximalSubgroupClassesRepsLayer(pcgs,i)));
+            Append(max,ShallowCopy(MaximalSubgroupClassesRepsLayer(spcgs,i)));
         fi;
     od;
 
@@ -713,7 +719,7 @@ MaximalSubgroupRepsSG := function( G, p )
         M := max[i];
         gens := [];
         for g in GeneratorsOfGroup( M ) do
-            exp := ExponentsOfPcElement( Pcgs(A), g );
+            exp := ExponentsOfPcElement( pcgs, g );
             h := Product( List( [1..Length(exp)], x -> imgs[x]^exp[x] ) );
             Add( gens, h );
         od;
