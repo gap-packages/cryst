@@ -1,3 +1,7 @@
+Version 4.1.21
+
+  - Make silent assumption on pcgs in MaximalSubgroupRepsSG explicit.
+
 Version 4.1.20
 
   - Catch trivial case before calling IsDiagonalMat
