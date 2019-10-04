@@ -691,7 +691,7 @@ MaximalSubgroupRepsSG := function( G, p )
     if IsEmpty( Agens ) then
         pcgs := Pcgs(A);
     else
-        pcps := PcgsByBcSequence( FamilyObj(Agens[1]), Agens );
+        pcgs := PcgsByPcSequence( FamilyObj(Agens[1]), Agens );
     fi;
     spcgs := SpecialPcgs(A);
     first := LGFirst( spcgs );
