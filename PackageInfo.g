@@ -9,10 +9,8 @@ PackageName := "Cryst",
 
 Subtitle := "Computing with crystallographic groups",
 
-Version := "4.1.20",
-
-# Format: dd/mm/yyyy
-Date := "29/08/2019", # dd/mm/yyyy format
+Version := "4.1.21",
+Date := "11/10/2019", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 ArchiveURL := Concatenation( 
@@ -29,10 +27,15 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "beick@tu-bs.de",
-    WWWHome := "http://www.icm.tu-bs.de/~beick/",
-    #PostalAddress := "",           
+    WWWHome       := "http://www.iaa.tu-bs.de/beick",
+    PostalAddress := Concatenation(
+               "Institut Analysis und Algebra\n",
+               "TU Braunschweig\n",
+               "Universitätsplatz 2\n",
+               "D-38106 Braunschweig\n",
+               "Germany" ),
     Place := "Braunschweig",
-    Institution := "Institut Computational Mathematics, TU Braunschweig"
+    Institution := "TU Braunschweig"
   ),
   rec(
     LastName := "Gähler",
