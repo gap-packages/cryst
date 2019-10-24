@@ -103,7 +103,7 @@ function( r )
         if not IsStandardAffineCrystGroup( r.spaceGroup ) then
             v := v * T;
         fi;
-        v := VectorModL( r.translation, T );
+        v := VectorModL( v, T );
     else
         v := VectorModL( r.translation, T );
     fi;

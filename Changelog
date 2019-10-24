@@ -1,6 +1,9 @@
 Version 4.1.21
 
   - Make silent assumption on pcgs in MaximalSubgroupRepsSG explicit.
+  - Fixed bug in WyckoffPositions. Some Wyckoff positions were listed
+    more than once, due to improper normalization of the representative
+    affine subspace.
 
 Version 4.1.20
 
