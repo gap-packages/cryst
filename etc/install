@@ -6,11 +6,11 @@
 
 ./make_tar
 
-cp VERSION          ~/WWW/gap45/Cryst
-cp changelog.html   ~/WWW/gap45/Cryst
-mv *.tar.gz         ~/WWW/gap45/Cryst
-cp ../PackageInfo.g ~/WWW/gap45/Cryst
-cp ../README        ~/WWW/gap45/Cryst/README.cryst
+cp VERSION                 ~/WWW/gap/Cryst
+cp changelog.html          ~/WWW/gap/Cryst
+mv *.tar.gz                ~/WWW/gap/Cryst
+cp ../PackageInfo.g        ~/WWW/gap/Cryst
+grep -v svg ../README.md > ~/WWW/gap/Cryst/README.cryst
 
-cd ~/WWW/gap45; ./get_html; chmod -R a+r *
+cd ~/WWW/gap; ./get_html; chmod -R a+r *
 

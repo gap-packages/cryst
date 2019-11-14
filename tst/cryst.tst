@@ -119,7 +119,7 @@ gap> c := ConjugatorSpaceGroupsStdSamePG( S, S2 );;
 gap> S^c=S2;
 true
 
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >   c := ConjugatorSpaceGroupsStdSamePG( S2, S );;
 >   if not S2^c=S then
 >     Error( "Cryst: conjugator test failed" );
@@ -160,7 +160,7 @@ gap> S2 := AffineCrystGroupOnRight(
 >   [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ -1, 1, 1, 1 ] ] ] );
 <matrix group with 5 generators>
 
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >     c1 := ConjugatorSpaceGroups(S1,S2);;
 >     c2 := ConjugatorSpaceGroups(S2,S1);;
 >     if not ( S1^c1 = S2 and S2^c2 = S1 ) then
@@ -264,7 +264,7 @@ gap>  List( M, TranslationNormalizer );
   <matrix group with 3 generators>, <matrix group with 3 generators>, 
   <matrix group with 3 generators>, <matrix group with 3 generators>, 
   <matrix group with 3 generators>, <matrix group with 3 generators> ]
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
 gap> List( M{[2,5,7]}, x -> Orbit( G, x, OnPoints ) );;
@@ -300,7 +300,7 @@ gap>  List( M, TranslationNormalizer );
   <matrix group with 3 generators>, <matrix group with 3 generators>, 
   <matrix group with 3 generators>, <matrix group with 3 generators>, 
   <matrix group with 3 generators>, <matrix group with 3 generators> ]
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >   List( M, AffineNormalizer );;
 > fi;
 gap> List( M{[3,7]}, x -> Orbit( G, x, OnPoints ) );;

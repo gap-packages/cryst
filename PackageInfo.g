@@ -9,8 +9,8 @@ PackageName := "Cryst",
 
 Subtitle := "Computing with crystallographic groups",
 
-Version := "4.1.21",
-Date := "24/10/2019", # dd/mm/yyyy format
+Version := "4.1.22",
+Date := "14/11/2019", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 ArchiveURL := Concatenation( 
@@ -79,9 +79,9 @@ crystallographic groups, in particular space groups. Affine \
 crystallographic groups are fully supported both in representations \
 acting from the right or from the left, the latter one being preferred \
 by crystallographers. Functions to determine representatives of all \
-space group types of a given dimension are also provided. Where \
-necessary, <span class=\"pkgname\">Cryst</span> can also make use of \
-functionality provided by the package <span class=\"pkgname\">Carat</span>.",
+space group types of a given dimension are also provided. Where necessary, \
+<span class=\"pkgname\">Cryst</span> can also make use of functionality \
+provided by the package <span class=\"pkgname\">CaratInterface</span>.",
 
 PackageWWWHome := 
   "https://www.math.uni-bielefeld.de/~gaehler/gap45/packages.php",
@@ -104,10 +104,10 @@ PackageDoc  := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.5",
+  GAP := ">=4.9",
   NeededOtherPackages := [ [ "polycyclic", ">=2.9" ] ],
   SuggestedOtherPackages := [ [ "CrystCat", ">=1.1.4" ],
-                              [ "Carat", ">=2.1.1" ],
+                              [ "CaratInterface", ">=2.3.1" ],
                               [ "XGAP", ">=4.22" ] 
   ],
   ExternalConditions := []
