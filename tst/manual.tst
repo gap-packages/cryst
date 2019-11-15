@@ -42,7 +42,7 @@ gap> norm := [ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ],
 [ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
   [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
 
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >   if not norm = GeneratorsOfGroup( NormalizerInGLnZ( P ) ) then
 >     Error( "Cryst: NormalizerInGLnZ failed" );
 >   fi;
@@ -61,7 +61,7 @@ gap> SpaceGroupsByPointGroupOnRight( P, norm, true );
   [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators> ] ]
   
-gap> if IsPackageMarkedForLoading( "carat", "" ) then
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >   if not ( 3 = Length( SpaceGroupTypesByPointGroupOnRight( P ) ) and
 >     [1,2,1] = List( SpaceGroupTypesByPointGroupOnRight( P, true ), Length ) )
 >   then

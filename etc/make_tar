@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKGTAR=cryst-4.1.21.tar
+PKGTAR=cryst-4.1.22.tar
 
 # remove old archive
 rm -f $PKGTAR*
@@ -10,7 +10,8 @@ rm -f $PKGTAR*
 
 # make the package archive
 mkdir -p cryst/doc cryst/gap cryst/grp cryst/htm cryst/tst
-cp -p ../*.g ../README ../Changelog ../COPYING cryst/
+grep -v svg ../README.md > cryst/README
+cp -p ../*.g ../Changelog ../COPYING cryst/
 cp -p ../doc/manual.bbl ../doc/manual.six ../doc/manual.lab ../doc/manual.toc \
   ../doc/manual.mst ../doc/manual.pdf ../doc/*.tex ../doc/make_doc cryst/doc/
 cp -p ../gap/*.g[di] cryst/gap/
