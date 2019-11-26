@@ -589,10 +589,10 @@ PointGroupHomomorphism := function( S )
     nice  := NiceMonomorphism( P ); 
     N     := NiceObject( P );
     perms := List( Pgens, x -> ImagesRepresentative( nice, x ) );
-    lift  := GroupHomomorphismByImagesNC( N, S, perms, Sgens );
+    lift  := GroupGeneralMappingByImagesNC( N, S, perms, Sgens : noassert );
     SetNiceToCryst( P, lift );
 
-    H := GroupHomomorphismByImagesNC( S, P, gen, im );
+    H := GroupHomomorphismByImagesNC( S, P, gen, im : noassert );
     SetIsPointHomomorphism( H, true );
 
     return [ P, H ];

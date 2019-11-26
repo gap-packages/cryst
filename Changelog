@@ -1,3 +1,7 @@
+Version 4.1.23
+
+  - Make Cryst work at assertion level 2.
+
 Version 4.1.22
 
   - Adjustments due to name change from Carat to CaratInterface.

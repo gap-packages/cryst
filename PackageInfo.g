@@ -14,7 +14,7 @@ Date := "14/11/2019", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 ArchiveURL := Concatenation( 
-  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/cryst-", ~.Version ),
+  "https://www.math.uni-bielefeld.de/~gaehler/gap/Cryst/cryst-", ~.Version ),
 
 ArchiveFormats := ".tar.gz",
 
@@ -68,9 +68,9 @@ CommunicatedBy := "Herbert Pahlings (Aachen)",
 AcceptDate := "02/2000",
 
 README_URL := 
-  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/README.cryst",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap/Cryst/README.cryst",
 PackageInfoURL := 
-  "https://www.math.uni-bielefeld.de/~gaehler/gap45/Cryst/PackageInfo.g",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap/Cryst/PackageInfo.g",
 
 AbstractHTML := 
 "This package, previously known as <span class=\"pkgname\">CrystGAP</span>, \
@@ -84,7 +84,7 @@ space group types of a given dimension are also provided. Where necessary, \
 provided by the package <span class=\"pkgname\">CaratInterface</span>.",
 
 PackageWWWHome := 
-  "https://www.math.uni-bielefeld.de/~gaehler/gap45/packages.php",
+  "https://www.math.uni-bielefeld.de/~gaehler/gap/packages.php",
 
 SourceRepository := rec(
   Type := "git",
