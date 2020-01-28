@@ -13,7 +13,7 @@
 ##
 #M  SpaceGroupList2d . . . . . . . . . . . . . . .data for 2d IT space groups
 ##
-InstallValue(SpaceGroupList2d,
+BindGlobal("SpaceGroupList2d",
 [rec(
 1:=rec(generators:=[],basis:=[[1,0],[0,1]],
 normgens:=[[[1,0],[0,1]],[[-1,0],[0,-1]],[[0,1],[1,0]],
@@ -119,7 +119,7 @@ normgens:=[[[0,1],[-1,-1]],[[-1,0],[0,-1]],
 ##
 #M  SpaceGroupList3d . . . . . . . . . . . . . . .data for 3d IT space groups
 ##
-InstallValue(SpaceGroupList3d,
+BindGlobal("SpaceGroupList3d",
 [rec(
 1:=rec(generators:=[],basis:=[[1,0,0],[0,1,0],[0,
 0,1]],
