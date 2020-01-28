@@ -11,18 +11,6 @@
 
 #############################################################################
 ##
-#F  SpaceGroupList2d . . . . . . . . . . . . . . .data for 2d IT space groups
-##
-DeclareGlobalVariable( "SpaceGroupList2d" );
-
-#############################################################################
-##
-#F  SpaceGroupList3d . . . . . . . . . . . . . . .data for 3d IT space groups
-##
-DeclareGlobalVariable( "SpaceGroupList3d" );
-
-#############################################################################
-##
 #F  SpaceGroupSettingsIT . . . . . . . .available settings of IT space groups
 ##
 DeclareGlobalFunction( "SpaceGroupSettingsIT" );
