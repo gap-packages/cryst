@@ -252,11 +252,7 @@ gap> Centralizer( M[1], gen[1] );
 <matrix group with 3 generators>
 gap> Centralizer( M[1], Subgroup( M[1], gen{[3]} ) );
 <matrix group with 3 generators>
-gap> C := RightCosets( G, M[3] );
-[ RightCoset(<group with 7 generators>,[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ],
-    [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ]), 
-  RightCoset(<group with 7 generators>,[ [ 0, 1, 0, 0 ], [ 1, 0, 0, 0 ],
-    [ 0, 0, -1, 0 ], [ 1/2, 1/2, 1/2, 1 ] ]) ]
+gap> C := RightCosets( G, M[3] );;
 gap> CanonicalRightCosetElement( M[3], Representative(C[2]) );
 [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 1, 1 ] ]
 gap>  List( M, TranslationNormalizer );
@@ -288,11 +284,7 @@ gap> Centralizer( M[1], gen[1] );
 <matrix group with 3 generators>
 gap> Centralizer( M[1], Subgroup( M[1], gen{[3]} ) );
 <matrix group with 3 generators>
-gap> C := RightCosets( G, M[3] );
-[ RightCoset(<group with 7 generators>,[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ],
-    [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ]), 
-  RightCoset(<group with 7 generators>,[ [ 0, 1, 0, 1/2 ], [ 1, 0, 0,
-    1/2 ], [ 0, 0, -1, 1/2 ], [ 0, 0, 0, 1 ] ]) ]
+gap> C := RightCosets( G, M[3] );;
 gap> CanonicalRightCosetElement( M[3], Representative(C[2]) );
 [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 1 ], [ 0, 0, 0, 1 ] ]
 gap>  List( M, TranslationNormalizer );
