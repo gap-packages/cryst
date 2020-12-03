@@ -1,16 +1,15 @@
 LoadPackage( "cryst" );
 
-alltests := DirectoriesPackageLibrary( "cryst", "tst" );;
-crystcat := List(["crystcat.tst"], f -> Filename(alltests,f));;
+alltests := DirectoriesPackageLibrary( "cryst", "tst" );
 
+# crystcat tests will only be run if crystcat is present 
+exclude  := ["crystcat.tst"];
 if LoadPackage( "crystcat" ) = true then
-  TestDirectory( crystcat,
-    rec( exitGAP     := false,
-         testOptions := rec( compareFunction := "uptowhitespace") ) );
+  exclude := [];
 fi;
 
 TestDirectory( alltests,
-  rec( exclude     := ["crystcat.tst"],
+  rec( exclude     := exclude,
        exitGAP     := true,
        testOptions := rec( compareFunction := "uptowhitespace") ) );
 
