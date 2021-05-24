@@ -53,7 +53,11 @@ end;
 ##
 #F  RowEchelonForm  . . . . . . . . . . row echelon form of an integer matrix
 ##
-RowEchelonForm := function( M )
+InstallMethod( RowEchelonForm,
+        "for matrices",
+        [ IsMatrix ],
+        
+  function( M )
     
     local a, i, j, k, m, n, r, Cleared;
     
@@ -86,7 +90,7 @@ RowEchelonForm := function( M )
         fi;
     od;
     return M{[1..i-1]};
-end;
+end );
 
 #############################################################################
 ##
