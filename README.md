@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gap-packages/cryst.svg)](https://travis-ci.org/gap-packages/cryst)
+[![Build Status](https://github.com/gap-packages/cryst/workflows/CI/badge.svg?branch=master)](https://github.com/gap-packages/cryst/actions?query=workflow%3ACI+branch%3Amaster)
 [![Code Coverage](https://codecov.io/github/gap-packages/cryst/coverage.svg)](https://codecov.io/gh/gap-packages/cryst)
 
 The GAP 4 package Cryst, previously known as CrystGap, is the 
