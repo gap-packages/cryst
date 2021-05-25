@@ -15,6 +15,7 @@
 ##
 #R  read the declaration files
 ##
+ReadPackage( "cryst", "gap/common.gd" );   # declarations for integral matrices
 ReadPackage( "cryst", "gap/cryst.gd" );    # declarations for AffineCrystGroups
 ReadPackage( "cryst", "gap/hom.gd" );      # declarations for homomorphism
 ReadPackage( "cryst", "gap/wyckoff.gd" );  # declarations for Wyckoff position
