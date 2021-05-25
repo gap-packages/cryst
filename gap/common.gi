@@ -218,7 +218,7 @@ IntSolutionMat := function( M, b )
 
     local Q, den, sol, i, x;
 
-    if M = [] then
+    if Concatenation(M) = [] then
         return fail;
     fi;
 
