@@ -1,3 +1,10 @@
+Version 4.1.24
+
+  - Catch another trivial case in IntSolutionMat.
+  - Turn RowEchelonForm into an attribute, to make it read-only.
+  - Switch to GitHub Actions CI.
+  - Test CrystCat functionality only when CrystCat is available.
+
 Version 4.1.23
 
   - Make Cryst work at assertion level 2.
