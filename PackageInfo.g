@@ -100,7 +100,6 @@ PackageDoc  := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Computing with crystallographic groups",
-  Autoload  := true
 ),
 
 Dependencies := rec(
