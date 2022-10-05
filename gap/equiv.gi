@@ -33,11 +33,11 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
     od;
 
     gen1 := List( GeneratorsOfGroup( P ), 
-            x -> PreImagesRepresentative( PointHomomorphism( S1 ), x ) );
+            x -> PreImagesRepresentativeNC( PointHomomorphism( S1 ), x ) );
     t1   := Concatenation( List( gen1, x -> x[d+1]{[1..d]} ) );
 
     gen2 := List( GeneratorsOfGroup( P ), 
-             x -> PreImagesRepresentative( PointHomomorphism( S2 ), x ) );
+             x -> PreImagesRepresentativeNC( PointHomomorphism( S2 ), x ) );
     t2   := Concatenation( List( gen2, x -> x[d+1]{[1..d]} ) );
 
     sol  := SolveInhomEquationsModZ( M, t1-t2, true )[1];
@@ -59,7 +59,7 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
                 Add( orb, img );
                 Add( rep, nn  );
                 gen1 := List( GeneratorsOfGroup( P ),
-                  x -> PreImagesRepresentative( PointHomomorphism( img ), x ) );
+                  x -> PreImagesRepresentativeNC( PointHomomorphism( img ), x ) );
                 n1 := nn{[1..d]}{[1..d]};
                 t1 := Concatenation( List( gen1, x -> x[d+1]{[1..d]}));
                 sol  := SolveInhomEquationsModZ( M, t1-t2, true )[1];

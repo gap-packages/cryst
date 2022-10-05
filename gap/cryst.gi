@@ -502,7 +502,7 @@ function( m, S )
         return false;
     fi;
 
-    mm := PreImagesRepresentative( PointHomomorphism( S ), mm );
+    mm := PreImagesRepresentativeNC( PointHomomorphism( S ), mm );
     if IsAffineCrystGroupOnRight( S ) then
         if not IsAffineMatrixOnRight( m ) then
             return false;

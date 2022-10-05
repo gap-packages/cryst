@@ -22,9 +22,9 @@ end );
 
 #############################################################################
 ##
-#M  PreImagesRepresentative( <hom>, <elm> ) . . . . . . for PointHomomorphism
+#M  PreImagesRepresentativeNC( <hom>, <elm> ) . . . . . for PointHomomorphism
 ##
-InstallMethod( PreImagesRepresentative, FamRangeEqFamElm,
+InstallMethod( PreImagesRepresentativeNC, FamRangeEqFamElm,
         [ IsGroupGeneralMappingByImages and IsPointHomomorphism,
           IsMultiplicativeElementWithInverse ], 0,
     function( hom, elm )
