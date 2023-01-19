@@ -287,8 +287,14 @@ end );
 ##                    {0, 1/a, ..., (a-1)/a} + b/a.
 ##  Note that 0 < b <  1, so 0 < b/a and (a-1)/a + b/a < 1.
 ##
+# According to the logic in SolutionMatMod1 function of fr package, 
+# this function should be enhanced as follows to deal with case of no solution:
 SolveOneInhomEquationModZ := function( a, b )
-    return [0..a-1] / a + b/a;
+    if a = 0 and FractionModOne(b) <> 0 then 
+      return []; # no solution
+    else
+      return [0..a-1] / a + b/a;
+    fi;
 end;
 
 #############################################################################
