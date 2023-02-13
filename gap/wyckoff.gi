@@ -313,13 +313,11 @@ SolveInhomEquationsModZ := function( M, b, onRight )
     local   Q,  j,  L,  space,  i,  v;
     
     b := ShallowCopy(b);
-    if onRight = true then
-        Q := IdentityMat( Length(M) );
+    if onRight then
         M := TransposedMat(M);
-        M := RowEchelonFormVector( M,b );
-    else
-        Q := IdentityMat( Length(M[1]) );
     fi;
+    Q := IdentityMat( Length(M[1]) );
+    M := RowEchelonFormVector( M,b );
 
     while Length(M) > 0 and not IsDiagonalMat(M) do
         M := TransposedMat(M);
