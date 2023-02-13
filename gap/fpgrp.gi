@@ -30,7 +30,7 @@ function ( P )
         F    := Image( IsomorphismFpGroupByGenerators( N, gens ) );
     fi;
 
-    gensP := List( gens, x -> PreImagesRepresentative( mono, x ) );
+    gensP := List( gens, x -> PreImagesRepresentativeNC( mono, x ) );
     gensS := List( gens, x -> ImagesRepresentative( NiceToCryst( P ), x ) );
     gensF := GeneratorsOfGroup( F );
 

@@ -26,8 +26,8 @@ function ( P )
     repr := IsomorphismPcpGroup( N );
     F    := Image( repr );
     gens := Igs( F );
-    prei := List( gens, x -> PreImagesRepresentative( repr, x ) );
-    prei := List( prei, x -> PreImagesRepresentative( mono, x ) );
+    prei := List( gens, x -> PreImagesRepresentativeNC( repr, x ) );
+    prei := List( prei, x -> PreImagesRepresentativeNC( mono, x ) );
 
     iso := GroupHomomorphismByImagesNC( P, F, prei, gens );
     SetMappingGeneratorsImages( iso, [ prei, gens ] );
@@ -56,7 +56,7 @@ function( S )
     # determine preimages
     F := Image( iso );
     gensF := Cgs(F);
-    gensN := List( gensF, x -> PreImagesRepresentative( iso, x ) );
+    gensN := List( gensF, x -> PreImagesRepresentativeNC( iso, x ) );
     matsP := List( gensN, x -> ImagesRepresentative( NiceToCryst( P ), x ) );
 
     # set up some variables
@@ -168,7 +168,7 @@ function(iso, elm)
     # get preimages
     F := Image(w);
     gensF := Cgs(F);
-    gensN := List(gensF, x -> PreImagesRepresentative(w, x));
+    gensN := List(gensF, x -> PreImagesRepresentativeNC(w, x));
     matsP := List(gensN, x -> ImagesRepresentative(l, x));
     
     # point group part
@@ -195,7 +195,7 @@ function(iso, elm)
     h := Cgs(H);
 
     # do some check
-    p := List(h, x -> PreImagesRepresentative(iso,x));
+    p := List(h, x -> PreImagesRepresentativeNC(iso,x));
     if MappedVector(exp, p) <> elm then Error("hier"); fi;
 
     return MappedVector(exp, h);

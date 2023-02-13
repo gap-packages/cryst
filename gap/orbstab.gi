@@ -164,7 +164,7 @@ function( G, d, e, opr )
       local dim, gen, t1, sol;
       dim := DimensionOfMatrixGroup( P );
       gen := List( GeneratorsOfGroup( P ), 
-                   x -> PreImagesRepresentative( PointHomomorphism( U ), x ) );
+                 x -> PreImagesRepresentativeNC( PointHomomorphism( U ), x ) );
       t1  := Concatenation( List( gen, x -> x[dim+1]{[1..dim]} ) ) - t2;
       sol := IntSolutionMat( tr1, -t1 );
       if sol = fail then
@@ -203,7 +203,7 @@ function( G, d, e, opr )
         return fail;
     fi;
     r := r*r2;
-    R := PreImagesRepresentative( PointHomomorphism( G ), r );
+    R := PreImagesRepresentativeNC( PointHomomorphism( G ), r );
 
     dim := DimensionOfMatrixGroup( PG );
     gP := GeneratorsOfGroup( Pe );
@@ -218,7 +218,7 @@ function( G, d, e, opr )
     tr1 := List( TG, t -> Concatenation( List( gP, x -> t * ( One(Pe)-x ) ) ) );
     tr1 := Concatenation( tr1, M );
     tr2 := ReducedLatticeBasis( tr1 );
-    tt  := List( gP, x -> PreImagesRepresentative( PointHomomorphism(e), x ));
+    tt  := List( gP, x -> PreImagesRepresentativeNC( PointHomomorphism(e), x ));
     tt  := Concatenation( List( tt, x -> x[dim+1]{[1..dim]} ) );
 
     # is there a conjugating translation?
@@ -229,7 +229,7 @@ function( G, d, e, opr )
 
     # now we have to try the normalizer
     gN := Filtered( GeneratorsOfGroup( Normalizer(n, Pe) ), x -> not x in Pe );
-    gN := List( gN, x -> PreImagesRepresentative( PointHomomorphism(G), x ) );
+    gN := List( gN, x -> PreImagesRepresentativeNC( PointHomomorphism(G), x ) );
 
     orb := [ res ];
     rep := [ R ];
@@ -289,7 +289,7 @@ ConjugatingTranslation := function( G, gen, T )
         if not g in PointGroup( G ) then
             return fail;
         fi;
-        m := PreImagesRepresentative( PointHomomorphism( G ), g );
+        m := PreImagesRepresentativeNC( PointHomomorphism( G ), g );
         Append( b, -gen[i][d+1]{[1..d]} +  m[d+1]{[1..d]} );
         M{[1..lt]}{[1..d]+(i-1)*d} := T * (I - g);
         if lg > 0 then
@@ -335,7 +335,7 @@ function( G, H )
     d := DimensionOfMatrixGroup( P );
     I := IdentityMat( d );
     gens := List( GeneratorsOfGroup( P ), 
-                  x -> PreImagesRepresentative( PointHomomorphism( G ), x ) );
+                  x -> PreImagesRepresentativeNC( PointHomomorphism( G ), x ) );
 
     # stabilizer of translation conjugacy class of H
     TG  := TranslationBasis( G );

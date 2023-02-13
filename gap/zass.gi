@@ -240,7 +240,7 @@ CollectEquivExtensions := function( ll, nn, norm, grp )
             h :=GroupHomomorphismByImagesNC( sg, grp, sgens, gens );
             y :=[];
             for i in [1..Length(gens)] do
-               m := PreImagesRepresentative( h, n*gens[i]*n^-1 );
+               m := PreImagesRepresentativeNC( h, n*gens[i]*n^-1 );
                Append( y, m[d+1]{[1..d]}*n );
             od;
             y := StandardTranslation( y, nn );

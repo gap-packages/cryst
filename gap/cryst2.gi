@@ -303,7 +303,7 @@ function( S, rep )
     T := ReducedLatticeBasis( TranslationBasis( S )*m );
 
     mm  := CanonicalRightCosetElement( P, m );
-    res := PreImagesRepresentative( PointHomomorphism( S ), mm*m^-1 ) * rep;
+    res := PreImagesRepresentativeNC( PointHomomorphism( S ), mm*m^-1 ) * rep;
     res := MutableCopyMat( res );
     res[d+1]{[1..d]} := VectorModL( res[d+1]{[1..d]}, T );
     return res;
@@ -322,7 +322,7 @@ function( S, rep )
     T := ReducedLatticeBasis( TranslationBasis( S )*m );
 
     mm  := CanonicalRightCosetElement( P, m );
-    res := PreImagesRepresentative( PointHomomorphism( S ), mm*m^-1 ) * rep;
+    res := PreImagesRepresentativeNC( PointHomomorphism( S ), mm*m^-1 ) * rep;
     res := MutableCopyMat( res );
     res{[1..d]}[d+1] := VectorModL( res{[1..d]}[d+1], T );
     return res;
@@ -352,9 +352,9 @@ function( G1, G2 )
     L  := UnionModule( T1, T2 );
 
     gen  := GeneratorsOfGroup( P );
-    gen1 := List( gen, x -> PreImagesRepresentative( 
+    gen1 := List( gen, x -> PreImagesRepresentativeNC( 
                                    PointHomomorphism( G1 ), x) );
-    gen2 := List( gen, x -> PreImagesRepresentative( 
+    gen2 := List( gen, x -> PreImagesRepresentativeNC( 
                                    PointHomomorphism( G2 ), x)^-1 );
 
     orb := [ MutableMatrix( One( G1 ) ) ];
@@ -384,10 +384,10 @@ function( G1, G2 )
     # determine the lift of stb
     new := [];
     for g in GeneratorsOfGroup( stb ) do
-        g1 := PreImagesRepresentative( PointHomomorphism( G1 ), g );
+        g1 := PreImagesRepresentativeNC( PointHomomorphism( G1 ), g );
         g1 := AffMatMutableTrans( g1 );
         if Length(T1) > 0 then
-            g2 := PreImagesRepresentative( PointHomomorphism( G2 ), g );
+            g2 := PreImagesRepresentativeNC( PointHomomorphism( G2 ), g );
             t1 := g1[d+1]{[1..d]};
             t2 := g2[d+1]{[1..d]};
             s  := IntSolutionMat( Concatenation( T1, -T2 ), t2-t1 ); 
@@ -538,7 +538,7 @@ CentralizerAffineCrystGroup := function ( G, obj )
     fi; 
 
     gen := List( GeneratorsOfGroup( P ), 
-                 x -> PreImagesRepresentative( PointHomomorphism( G ), x ) );
+                 x -> PreImagesRepresentativeNC( PointHomomorphism( G ), x ) );
 
     # if G is finite
     if e = 0 then
@@ -782,7 +782,7 @@ function( S )
     T := TranslationBasis( S );
     N := NormalizerPointGroupInGLnZ( P ); 
     Pgens := GeneratorsOfGroup( P );
-    Sgens := List( Pgens, x -> PreImagesRepresentative( H, x ) );
+    Sgens := List( Pgens, x -> PreImagesRepresentativeNC( H, x ) );
 
     # we work in a standard representation
     if not IsStandardAffineCrystGroup( S ) then
@@ -805,7 +805,7 @@ function( S )
         if m = mm then
             res := [ data[1], List( data[2]*g, FractionModOne ) ];
         else
-           m := AffMatMutableTrans( PreImagesRepresentative( hom, mm ) );
+           m := AffMatMutableTrans( PreImagesRepresentativeNC( hom, mm ) );
            m[d+1]{[1..d]} := List( m[d+1]{[1..d]}, FractionModOne );
            res := [ m, List( data[2]*g, FractionModOne ) ];
         fi;

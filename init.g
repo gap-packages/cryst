@@ -11,6 +11,11 @@
 ##                            GAP 4 Version
 ##
 
+##  introducing globally the NC version of PreImagesRepresentative 
+if not IsBound( PreImagesRepresentativeNC ) then 
+    BindGlobal( "PreImagesRepresentativeNC", PreImagesRepresentative ); 
+fi; 
+
 #############################################################################
 ##
 #R  read the declaration files
