@@ -2,6 +2,8 @@ Version 4.1.26
 
   - Bugfix in SolveInhomEquationsModZ
 
+  - Bugfix in comparison of affine cryst groups.
+
 Version 4.1.25
 
   - Improved documentation conversion and formatting

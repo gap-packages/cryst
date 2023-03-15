@@ -427,14 +427,15 @@ end );
 InstallMethod( TransParts, true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
 
-    local T, P, d, gens;
+    local T, P, H, d, gens;
 
     T := TranslationBasis( S );
     P := PointGroup( S );
+    H := PointHomomorphism( S );
     d := DimensionOfMatrixGroup( P );
 
-    gens := GeneratorsSmallest( NiceObject( P ) );
-    gens := List( gens, x -> ImagesRepresentative( NiceToCryst( P ), x ) );
+    gens := GeneratorsSmallest( P );
+    gens := List( gens, x -> PreImagesRepresentative( H, x ) );
     if IsAffineCrystGroupOnRight( S ) then
         gens := List( gens, x -> VectorModL( x[d+1]{[1..d]}, T ) );
     else
