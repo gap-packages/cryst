@@ -20,6 +20,8 @@ ConjugatorSpaceGroupsStdSamePG := function( S1, S2 )
           orb, img, S, rep, nn, n1;
 
     P := PointGroup( S1 );
+    # catch trivial case
+    if IsTrivial( P ) then return One( S1 ); fi;
     d := DimensionOfMatrixGroup( P ); 
 
     # determine space in which translational parts of generators can

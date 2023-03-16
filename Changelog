@@ -1,8 +1,8 @@
 Version 4.1.26
 
   - Bugfix in SolveInhomEquationsModZ
-
   - Bugfix in comparison of affine cryst groups.
+  - Catch the case of a trivial point group in ConjugatorSpaceGroups.
 
 Version 4.1.25
 
