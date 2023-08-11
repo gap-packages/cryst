@@ -8,6 +8,7 @@
 ##
 ##  Methods for affine crystallographic groups
 ##
+## MODIFIED BY BERNARD FIELD (2023)
 
 #############################################################################
 ##
@@ -256,7 +257,7 @@ InstallOtherMethod( \^,
     IsCollsElms, [ IsAffineCrystGroupOnRight, IsMatrix ], 0,
 function ( S, conj )
 
-    local d, c, C, Ci, gens, i, R, W, r, w;
+    local d, c, C, Ci, gens, i, R, W, r, w, t;
 
     d := DimensionOfMatrixGroup( S ) - 1;
     if not IsAffineMatrixOnRight( conj ) then
@@ -267,6 +268,7 @@ function ( S, conj )
     C  := conj;
     Ci := conj^-1;
     c  := C {[1..d]}{[1..d]};
+    t  := C [d+1]{[1..d]}; # Translation
 
     # conjugate the generators of S
     gens := ShallowCopy( GeneratorsOfGroup( S ) );
@@ -284,10 +286,17 @@ function ( S, conj )
     if HasWyckoffPositions( S ) then
         W := [];
         for w in WyckoffPositions( S ) do
-            r := rec( basis       := w!.basis*c,
-                      translation := w!.translation*c,
+            if w!.basis = [] then
+              r := rec( basis       := w!.basis,
+                      translation := w!.translation*c + t,
                       class       := w!.class,
                       spaceGroup  := R );
+            else # MODIFIED
+              r := rec( basis       := w!.basis*c,
+                      translation := w!.translation*c + t,
+                      class       := w!.class,
+                      spaceGroup  := R );
+            fi;
             ReduceAffineSubspaceLattice( r );
             Add( W, WyckoffPositionObject( r ) );
         od;
@@ -302,7 +311,7 @@ InstallOtherMethod( \^,
     IsCollsElms, [ IsAffineCrystGroupOnLeft, IsMatrix ], 0,
 function ( S, conj )
 
-    local d, c, C, Ci, gens, i, R, W, r, w;
+    local d, c, C, Ci, gens, i, R, W, r, w, t;
 
     d := DimensionOfMatrixGroup( S ) - 1;
     if not IsAffineMatrixOnLeft( conj ) then
@@ -313,6 +322,7 @@ function ( S, conj )
     C  := conj;
     Ci := conj^-1;
     c  := TransposedMat( C {[1..d]}{[1..d]} );
+    t  := C {[1..d]}[d+1]; # Translation
 
     # conjugate the generators of S
     gens := ShallowCopy( GeneratorsOfGroup( S ) );
@@ -330,12 +340,19 @@ function ( S, conj )
     if HasWyckoffPositions( S ) then
         W := [];
         for w in WyckoffPositions( S ) do
-            r := rec( basis       := w!.basis*c,
-                      translation := w!.translation*c,
+          if w!.basis = [] then
+            r := rec( basis       := w!.basis,
+                      translation := w!.translation*c + t,
                       class       := w!.class,
                       spaceGroup  := R );
-            ReduceAffineSubspaceLattice( r );
-            Add( W, WyckoffPositionObject( r ) );
+          else
+            r := rec( basis       := w!.basis*c,
+                      translation := w!.translation*c + t,
+                      class       := w!.class,
+                      spaceGroup  := R );
+          fi;
+          ReduceAffineSubspaceLattice( r );
+          Add( W, WyckoffPositionObject( r ) );
         od;
         SetWyckoffPositions( R, W );
     fi;
