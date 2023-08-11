@@ -8,6 +8,7 @@
 ##
 ##  Routines for the determination of Wyckoff positions
 ##
+## THIS FILE HAS BEEN MODIFIED BY BERNARD FIELD (2023)
 
 #############################################################################
 ##
@@ -74,7 +75,8 @@ function( r )
     r.basis := ReducedLatticeBasis( r.basis );
     rk := Length( r.basis );
     d  := Length( r.translation );
-    T  := TranslationBasis( r.spaceGroup );
+    T  := InternalBasis( r.spaceGroup );
+    # Using InternalBasis allows handling subperiodic groups.
     Ti := T^-1;
 
     if rk = d then
@@ -519,7 +521,28 @@ end;
 ##
 WyPosStep := function( idx, G, M, b, lst )
 
-    local g, G2, M2, b2, F, c, added, stop, f, d, w, O;
+    local g, G2, M2, b2, F, c, added, stop, f, d, w, O, IsTranslationInBasis;
+    # Ideally one would put this function somewhere else, but locally will do
+    IsTranslationInBasis := function(f)
+      local STB, t, S;
+      # From our record f, checks whether the translation vector lies within 
+      # the group's translation basis. Returns Boolean.
+      S := f.spaceGroup;
+      # Trivial case: we have a space group
+      if IsSpaceGroup(S) then
+        return true;
+      fi;
+      # Otherwise, consider if the translation vector lies within the translation basis
+      t := f.translation;
+      STB := TranslationBasis(S);
+      # If the Wyckoff basis is non-empty, then maybe another point on the Wyckoff
+      # position lies in the crystal's translation basis.
+      if Length(f.basis) > 0 then
+        STB := Concatenation(STB, -f.basis);
+      fi;
+      # Using Rouche-Capelli theorem.
+      return RankMatrix(TransposedMat(STB)) = RankMatrix(TransposedMat(Concatenation(STB, [t])));
+    end;
 
     g := lst.z[idx];
     if not g in G then
@@ -536,11 +559,15 @@ WyPosStep := function( idx, G, M, b, lst )
         else
             F := [];
         fi;
+        # At this stage, F contains possible basis and translation information
+        # for the Wyckoff positions
         c := lst.c + 1;
         added := false;
         for f in F do
             d := Length( f.basis ) + 1; 
             stop := d=lst.dim+1;
+            # Multiplying by the translation basis of the group takes it back
+            # to the original setting from the standard setting
             f.translation := f.translation * lst.T;
             if not IsEmpty( f.basis ) then
                 f.basis   := f.basis * lst.T;
@@ -548,12 +575,16 @@ WyPosStep := function( idx, G, M, b, lst )
             f.spaceGroup  := lst.S;
             ReduceAffineSubspaceLattice( f );
             if not f in lst.sp[d] then
+              # Exclude f if f.translation lies
+              # outside the span of TranslationBasis(lst.S).
+              if IsTranslationInBasis(f) then
                 O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
                 w := ShallowCopy( f );
                 w.class := c;
                 UniteSet( lst.sp[d], O );
                 Add( lst.W[d], WyckoffPositionObject(w) );
                 added := true;
+              fi;
             fi;
         od;
         if added and not stop then
@@ -585,16 +616,22 @@ WyPosAT := function( S )
         S2 := TransposedMatrixGroup( S2 );
     fi;
     
-    lst := rec( dim := d, T := TranslationBasis(S), S := S, c := 1,
+    lst := rec( dim := d, T := InternalBasis(S), S := S, c := 1,
                 S2 := S2 );
+    # T used to be TranslationBasis, but it's used for changing from Standard
+    # form to original form, so needs to be a full matrix.
 
     zz := []; mat := []; vec := [];
     for g in Zuppos( NiceObject( P ) ) do
         if g <> () then
+            # Record a point group operation *in standard basis*
+            # Meaning you might have permuted the bases.
             m := NiceToCrystStdRep(P,g);
             if IsAffineCrystGroupOnRight( S ) then
                 m := TransposedMat(m);
             fi;
+            # The matrix M and vector b are used in a set of equations
+            # to solve for the Wyckoff positions
             M := m{[1..d]}{[1..d]}-IdentityMat(d);
             b := m{[1..d]}[d+1];
             M := RowEchelonFormVector(M,b);
@@ -608,13 +645,15 @@ WyPosAT := function( S )
     lst.z   := zz;
     lst.mat := mat;
     lst.vec := vec;
-
+    
+    # This record is used to build the general position.
     s := rec( translation := ListWithIdenticalEntries(d,0),
-              basis       := TranslationBasis(S),
+              basis       := InternalBasis(S),
               spaceGroup  := S );
     ReduceAffineSubspaceLattice(s);
     lst.sp := List( [1..d+1], x-> [] ); Add( lst.sp[d+1], s );
-
+    
+    # Here we make the general position
     w := ShallowCopy( s );
     w.class := 1;
     w := WyckoffPositionObject( w );
@@ -638,7 +677,7 @@ function( S )
 
     # check if we indeed have a space group
     if not IsSpaceGroup( S ) then
-        Error("S must be a space group");
+        Print("Warning: S is not a space group. Behaviour is experimental.\n");
     fi;
 
     # for small dimensions, the recursive method is faster
