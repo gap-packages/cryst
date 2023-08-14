@@ -117,6 +117,7 @@ end );
 ##
 InstallGlobalFunction( ImageAffineSubspaceLattice, function( s, g )
     local d, m, t, b, r;
+    if IsAffineMatrixOnLeft(g) then g := TransposedMat(g); fi;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};
@@ -136,6 +137,7 @@ end );
 ##
 InstallGlobalFunction( ImageAffineSubspaceLatticePointwise, function( s, g )
     local d, m, t, b, L, r;
+    if IsAffineMatrixOnLeft(g) then g := TransposedMat(g); fi;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};

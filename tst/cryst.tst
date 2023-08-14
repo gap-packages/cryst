@@ -192,6 +192,9 @@ gap> W := WyckoffPositions(G);;
 gap> IsSpaceGroup( G^TransposedMat(C) );
 true
 
+gap> Set(WyckoffPositions( G^TransposedMat(C) )) = Set(WyckoffPositions(SpaceGroupOnLeftIT(3,183)^TransposedMat(C)));
+true
+
 # Test with a Wyckoff positions that has empty basis.
 gap> G := SpaceGroupIT( 3, 12 );;
 gap> W := WyckoffPositions(G);;
