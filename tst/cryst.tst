@@ -177,14 +177,25 @@ false
 
 gap> G := SpaceGroupIT(3,183);;
 gap> W := WyckoffPositions(G);;
-gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 0, 0, 0, 1 ] ];;
+gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ];;
 gap> IsSpaceGroup( G^C );
+true
+
+# Test that caching of Wyckoff followed by conjugation works as expected
+# I use Set because the order of the Wyckoff Positions is semi-arbitrary.
+gap> Set(WyckoffPositions( G^C )) = Set(WyckoffPositions(SpaceGroupIT(3,183)^C));
 true
 
 gap> G := TransposedMatrixGroup( G );
 <matrix group with 6 generators>
 gap> W := WyckoffPositions(G);;
 gap> IsSpaceGroup( G^TransposedMat(C) );
+true
+
+# Test with a Wyckoff positions that has empty basis.
+gap> G := SpaceGroupIT( 3, 12 );;
+gap> W := WyckoffPositions(G);;
+gap> IsSpaceGroup( G^C );
 true
 
 gap> G := SpaceGroupIT( 3, 208 );

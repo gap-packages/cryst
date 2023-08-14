@@ -291,7 +291,7 @@ function ( S, conj )
                       translation := w!.translation*c + t,
                       class       := w!.class,
                       spaceGroup  := R );
-            else # MODIFIED
+            else
               r := rec( basis       := w!.basis*c,
                       translation := w!.translation*c + t,
                       class       := w!.class,
