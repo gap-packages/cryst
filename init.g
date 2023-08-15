@@ -29,3 +29,4 @@ ReadPackage( "cryst", "gap/max.gd" );      # declarations for maximal subgroups
 ReadPackage( "cryst", "gap/color.gd" );    # declarations for color groups
 ReadPackage( "cryst", "gap/equiv.gd" );    # isomorphism test for space groups
 ReadPackage( "cryst", "grp/spacegrp.gd" ); # the IT space group catalogue
+ReadPackage( "cryst", "grp/subgrp.gd" );   # the IT subperiodic group catalogue
