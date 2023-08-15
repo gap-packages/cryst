@@ -65,11 +65,8 @@ InstallGlobalFunction( SubPeriodicGroupDataIT, function( r )
      else
        Error( "layer group number must be in [1..80]" );
      fi;
-      else
-         Error( "space group number must be in [1..230]" );
-      fi;
    else
-      Error( "only types Frieze, Rod, or Layer are supported, but got ", type );
+      Error( "only types Frieze, Rod, or Layer are supported, but got ", r.type );
    fi;
 end );
 
@@ -139,7 +136,7 @@ end );
 ##
 InstallGlobalFunction( FriezeGroupIT, function( arg )
    Add(arg, "Frieze", 1);
-   return SubPeriodicGroupIT(arg);
+   return CallFuncList(SubPeriodicGroupIT, arg);
 end );
 
 #############################################################################
@@ -148,7 +145,7 @@ end );
 ##
 InstallGlobalFunction( RodGroupIT, function( arg )
    Add(arg, "Rod", 1);
-   return SubPeriodicGroupIT(arg);
+   return CallFuncList(SubPeriodicGroupIT, arg);
 end );
 
 #############################################################################
@@ -157,5 +154,5 @@ end );
 ##
 InstallGlobalFunction( LayerGroupIT, function( arg )
    Add(arg, "Layer", 1);
-   return SubPeriodicGroupIT("Layer", arg);
+   return CallFuncList(SubPeriodicGroupIT, arg);
 end );
