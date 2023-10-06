@@ -285,17 +285,11 @@ function ( S, conj )
     if HasWyckoffPositions( S ) then
         W := [];
         for w in WyckoffPositions( S ) do
-            if w!.basis = [] then
-              r := rec( basis       := w!.basis,
-                      translation := w!.translation*c + t,
-                      class       := w!.class,
-                      spaceGroup  := R );
-            else
-              r := rec( basis       := w!.basis*c,
-                      translation := w!.translation*c + t,
-                      class       := w!.class,
-                      spaceGroup  := R );
-            fi;
+            r := rec( basis       := w!.basis,
+                    translation := w!.translation*c + t,
+                    class       := w!.class,
+                    spaceGroup  := R );
+            if r.basis <> [] then r.basis := r.basis * c; fi;
             ReduceAffineSubspaceLattice( r );
             Add( W, WyckoffPositionObject( r ) );
         od;
@@ -339,17 +333,11 @@ function ( S, conj )
     if HasWyckoffPositions( S ) then
         W := [];
         for w in WyckoffPositions( S ) do
-          if w!.basis = [] then
-            r := rec( basis       := w!.basis,
-                      translation := w!.translation*c + t,
-                      class       := w!.class,
-                      spaceGroup  := R );
-          else
-            r := rec( basis       := w!.basis*c,
-                      translation := w!.translation*c + t,
-                      class       := w!.class,
-                      spaceGroup  := R );
-          fi;
+          r := rec( basis       := w!.basis,
+                    translation := w!.translation*c + t,
+                    class       := w!.class,
+                    spaceGroup  := R );
+          if r.basis <> [] then r.basis := r.basis * c; fi;
           ReduceAffineSubspaceLattice( r );
           Add( W, WyckoffPositionObject( r ) );
         od;
