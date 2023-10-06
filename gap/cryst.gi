@@ -8,7 +8,6 @@
 ##
 ##  Methods for affine crystallographic groups
 ##
-## MODIFIED BY BERNARD FIELD (2023)
 
 #############################################################################
 ##
