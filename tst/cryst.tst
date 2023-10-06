@@ -177,12 +177,17 @@ false
 
 gap> G := SpaceGroupIT(3,183);;
 gap> W := WyckoffPositions(G);;
+gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 0, 0, 0, 1 ] ];;
+gap> IsSpaceGroup( G^C );
+true
+
+# the next check verifies that problem BLAH BLAH BLAH is gone
 gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ];;
 gap> IsSpaceGroup( G^C );
 true
 
 # Test that caching of Wyckoff followed by conjugation works as expected
-# I use Set because the order of the Wyckoff Positions is semi-arbitrary.
+# Use Set because the order of the Wyckoff positions is semi-arbitrary.
 gap> Set(WyckoffPositions( G^C )) = Set(WyckoffPositions(SpaceGroupIT(3,183)^C));
 true
 
@@ -195,7 +200,7 @@ true
 gap> Set(WyckoffPositions( G^TransposedMat(C) )) = Set(WyckoffPositions(SpaceGroupOnLeftIT(3,183)^TransposedMat(C)));
 true
 
-# Test with a Wyckoff positions that has empty basis.
+# Test Wyckoff positions in a case that involves an empty basis (see <https://github.com/gap-packages/cryst/issues/42>).
 gap> G := SpaceGroupIT( 3, 12 );;
 gap> W := WyckoffPositions(G);;
 gap> IsSpaceGroup( G^C );
