@@ -181,7 +181,8 @@ gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 0, 0, 0, 1 ] ];;
 gap> IsSpaceGroup( G^C );
 true
 
-# the next check verifies that problem BLAH BLAH BLAH is gone
+# The next checks verify that including a translation component in conjugation
+# works correctly, as from <https://github.com/gap-packages/cryst/issues/44>.
 gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ];;
 gap> IsSpaceGroup( G^C );
 true
