@@ -11,3 +11,4 @@
 /doc/manual.toc
 /htm/
 **/*.swp
+**/.DS_Store
