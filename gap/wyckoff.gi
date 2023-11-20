@@ -117,7 +117,6 @@ end );
 ##
 InstallGlobalFunction( ImageAffineSubspaceLattice, function( s, g )
     local d, m, t, b, r;
-    if IsAffineMatrixOnLeft(g) then g := TransposedMat(g); fi;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};
@@ -137,7 +136,6 @@ end );
 ##
 InstallGlobalFunction( ImageAffineSubspaceLatticePointwise, function( s, g )
     local d, m, t, b, L, r;
-    if IsAffineMatrixOnLeft(g) then g := TransposedMat(g); fi;
     d := Length( s.translation );
     m := g{[1..d]}{[1..d]};
     t := g[d+1]{[1..d]};
@@ -174,6 +172,9 @@ function( w1, w2 )
     gens := Filtered( GeneratorsOfGroup( S ),
                       x -> x{[1..d]}{[1..d]} <> One( PointGroup( S ) ) );
     U := SubgroupNC( S, gens );
+    if IsAffineCrystGroupOnLeft( U ) then
+      U := TransposedMatrixGroup( U );
+    fi;
     rep := RepresentativeAction( U, r1, r2, ImageAffineSubspaceLattice );
     return rep <> fail;
 end );
@@ -202,6 +203,9 @@ function( w1, w2 )
     gens := Filtered( GeneratorsOfGroup( S ),
                       x -> x{[1..d]}{[1..d]} <> One( PointGroup( S ) ) );
     U := SubgroupNC( S, gens );
+    if IsAffineCrystGroupOnLeft( U ) then
+      U := TransposedMatrixGroup( U );
+    fi;
     o1 := Orbit( U, r1, ImageAffineSubspaceLattice );
     o2 := Orbit( U, r2, ImageAffineSubspaceLattice );
     o1 := Set( List( o1, x -> rec( t := x.translation, b := x.basis ) ) );
