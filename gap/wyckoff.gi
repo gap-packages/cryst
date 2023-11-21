@@ -8,7 +8,6 @@
 ##
 ##  Routines for the determination of Wyckoff positions
 ##
-## THIS FILE HAS BEEN MODIFIED BY BERNARD FIELD (2023)
 
 #############################################################################
 ##
@@ -680,11 +679,6 @@ end;
 InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight", 
     true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
-
-    # check if we indeed have a space group
-    if not IsSpaceGroup( S ) then
-        Print("Warning: S is not a space group. Behaviour is experimental.\n");
-    fi;
 
     # for small dimensions, the recursive method is faster
     if DimensionOfMatrixGroup( S ) < 6 then
