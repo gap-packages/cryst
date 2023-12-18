@@ -181,10 +181,30 @@ gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 0, 0, 0, 1 ] ];;
 gap> IsSpaceGroup( G^C );
 true
 
+# The next checks verify that including a translation component in conjugation
+# works correctly, as from <https://github.com/gap-packages/cryst/issues/44>.
+gap> C := [ [ 3, 1, 0, 0 ], [ -1, -2, 0, 0 ], [ 2, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ];;
+gap> IsSpaceGroup( G^C );
+true
+
+# Test that caching of Wyckoff followed by conjugation works as expected
+# Use Set because the order of the Wyckoff positions is semi-arbitrary.
+gap> Set(WyckoffPositions( G^C )) = Set(WyckoffPositions(SpaceGroupIT(3,183)^C));
+true
+
 gap> G := TransposedMatrixGroup( G );
 <matrix group with 6 generators>
 gap> W := WyckoffPositions(G);;
 gap> IsSpaceGroup( G^TransposedMat(C) );
+true
+
+gap> Set(WyckoffPositions( G^TransposedMat(C) )) = Set(WyckoffPositions(SpaceGroupOnLeftIT(3,183)^TransposedMat(C)));
+true
+
+# Test Wyckoff positions in a case that involves an empty basis (see <https://github.com/gap-packages/cryst/issues/42>).
+gap> G := SpaceGroupIT( 3, 12 );;
+gap> W := WyckoffPositions(G);;
+gap> IsSpaceGroup( G^C );
 true
 
 gap> G := SpaceGroupIT( 3, 208 );
