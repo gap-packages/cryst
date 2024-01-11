@@ -73,7 +73,7 @@ end );
 #F  NiceToCrystStdRep( P, perm )
 ##
 InstallGlobalFunction( NiceToCrystStdRep, function( P, perm )
-    local S, m, d, c;
+    local S, m;
     S := AffineCrystGroupOfPointGroup( P );
     m := ImagesRepresentative( NiceToCryst( P ), perm );
     if IsStandardAffineCrystGroup( S ) then
@@ -81,6 +81,29 @@ InstallGlobalFunction( NiceToCrystStdRep, function( P, perm )
     else
         return S!.lconj * m * S!.rconj;
     fi;
+end );
+
+#############################################################################
+##
+#F  NiceToCrystStdRepSymmetric( P, perm )
+##
+InstallGlobalFunction( NiceToCrystStdRepSymmetric, function( P, perm )
+    local S, m, d, mat, lconj, rconj;
+    # Uses SymmetricInternalBasis rather than InternalBasis
+    S := AffineCrystGroupOfPointGroup( P );
+    m := ImagesRepresentative( NiceToCryst( P ), perm );
+    d := DimensionOfMatrixGroup( S ) - 1;
+    # Get transformation into standard basis
+    mat := AugmentedMatrix(SymmetricInternalBasis(S), ListWithIdenticalEntries(d, 0));
+    if IsAffineCrystGroupOnRight( S ) then
+      lconj := mat;
+      rconj := mat^-1;
+    else
+      mat := TransposedMat(mat);
+      lconj := mat^-1;
+      rconj := mat;
+    fi;
+    return lconj * m * rconj;
 end );
 
 #############################################################################

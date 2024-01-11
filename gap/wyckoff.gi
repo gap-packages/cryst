@@ -64,6 +64,144 @@ InstallMethod( WyckoffBasis,
 
 #############################################################################
 ##
+#M  SymmetricInternalBasis . .internal basis that respects lattice symmetries
+##
+InstallMethod( SymmetricInternalBasis,
+    true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
+function( S )
+    local d, T, gens, g, vecs, eigenvals, ev, i, v, spare_eigenvecs, k, comp,
+          idx, e, j, order;
+    d := DimensionOfMatrixGroup(S) - 1;
+    T := TranslationBasis(S);
+    # If we have a space group, no need to find extra vectors
+    if Length(T) = d then
+      return T;
+    fi;
+    T := ShallowCopy(T);
+    # Get to consistent Action (okay, this might falter for point groups)
+    if not IsAffineCrystGroupOnRight(S) then
+      S := TransposedMatrixGroup(S);
+    fi;
+    # Grab the linear part of the non-trivial generators
+    gens := Filtered(List(GeneratorsOfGroup(S), x -> x{[1..d]}{[1..d]}),
+                     x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
+    # If we have no non-trivial operators, then the regular InternalBasis
+    # will do
+    if Length(gens) = 0 then
+      return InternalBasis( S );
+    fi;
+    # (If I later find that this algorithm is deficient, I might need to consider
+    # all representative operators, not just the generators.)
+    # We want to consider not just the generators, but sums of generator products.
+    # This solves for a different set of vectors, like the rotational plane.
+    # (If GAP allowed complex numbers, we could get all eigenvectors from gens,
+    # but it doesn't.)
+    for i in [1..Length(gens)] do
+      order := Order(gens[i]);
+      if order > 2 then
+        # Order > 2 allows complex eigenvalues, so need a supplemental matrix
+        # to get complementary eigenvectors.
+        # Sum of products of the matrix up to the Order. This is guaranteed to
+        # have real eigenvalues (but not necessarily the same sets of degeneracy).
+        Add(gens, Sum(List([0..order-1], x -> gens[i]^x)));
+      fi;
+    od;
+    spare_eigenvecs := rec();
+    # Go over each generator. Find the eigenvectors.
+    for g in gens do
+      vecs := Eigenvectors(Rationals, g);
+      # Get the eigenvalues for each eigenvector
+      eigenvals := [];
+      for v in vecs do
+        ev := v * g; # ev: v times eigenvalue
+        # Find the first non-zero value, if present, and divide
+        if ev = Zero(v) then
+          # If ev is zero vector, then eigenvalue is zero
+          Add(eigenvals, 0);
+        else
+          # Find the first non-zero value
+          i := PositionProperty(ev, x -> x <> 0);
+          Add(eigenvals, ev[i] / v[i]);
+        fi;
+      od;
+      # We'll sort the eigenvalues
+      StableSortParallel(eigenvals, vecs);
+      # Single out the eigenvectors with non-degenerate eigenvalues
+      # but keep the degenerate ones in case we exhaust the non-degenerate ones.
+      for e in eigenvals do
+        idx := Positions(eigenvals, e);
+        if Length(idx) > 1 then
+          # Pop degenerate eigenvectors
+          spare_eigenvecs.(Length(idx)) := vecs{idx};
+          for i in Reversed(idx) do
+            Remove(vecs, i);
+            Remove(eigenvals, i);
+          od;
+        fi;
+        # Otherwise, just keep the vector in vecs
+      od;
+      # The vectors remaining in vecs have unique eigenvalues.
+      for v in vecs do
+        # Check whether this new vector extends T
+        # If yes, Add to T.
+        if Rank(Concatenation(T, [v])) > Length(T) then
+          Add(T, v);
+          if Length(T) = d then
+            if Determinant(T) < 0 then
+              # Rearrange to be positive determinant.
+              T{[d-1,d]} := T{[d,d-1]};
+            fi;
+            return T;
+          fi;
+        fi;
+      od;
+    od;
+    # If we've made it here, we've exhausted the non-degenerate eigenvectors
+    # Now let's go through the spares in increasing order of degeneracy.
+    for i in Set(RecNames(spare_eigenvecs), Int) do
+      for v in spare_eigenvecs.(i) do
+        if Rank(Concatenation(T, [v])) > Length(T) then
+          Add(T, v);
+          if Length(T) = d then
+            if Determinant(T) < 0 then
+              # Rearrange to be positive determinant.
+              T{[d-1,d]} := T{[d,d-1]};
+            fi;
+            return T;
+          fi;
+        fi;
+      od;
+    od;
+    # Iterate over all vectors until Length(T) = d.
+    # If somehow we exhaust all vectors before then, resort to InternalBasis'
+    # algorithm for filling out the remaining vectors.
+    if Length(T) = 0 then
+      return IdentityMat(d);
+    else
+      comp := NullMat( d - Length(T), d );
+      i:=1; j:=1; k:=1;
+      while i <= Length( T ) do
+          while T[i][j] = 0 do
+              comp[k][j] := 1;
+              k := k+1; j:=j+1;
+          od;
+          i := i+1; j := j+1;
+      od;
+      while j <= d do
+          comp[k][j] := 1;
+          k := k+1; j:=j+1;
+      od;
+      Append(T, comp);
+    fi;
+    if Determinant(T) < 0 then
+      # Rearrange to be positive determinant.
+      T{[d-1,d]} := T{[d,d-1]};
+    fi;
+    return T;
+end );
+
+#############################################################################
+##
 #M  ReduceAffineSubspaceLattice . . . . reduce affine subspace modulo lattice
 ##
 InstallGlobalFunction( ReduceAffineSubspaceLattice, 
@@ -74,8 +212,8 @@ function( r )
     r.basis := ReducedLatticeBasis( r.basis );
     rk := Length( r.basis );
     d  := Length( r.translation );
-    T  := InternalBasis( r.spaceGroup );
-    # Using InternalBasis allows handling subperiodic groups.
+    T  := SymmetricInternalBasis( r.spaceGroup );
+    # Using SymmetricInternalBasis allows handling subperiodic groups.
     Ti := T^-1;
 
     if rk = d then
@@ -83,7 +221,8 @@ function( r )
     elif rk > 0 then
         M := r.basis;
         v := r.translation;
-        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        #if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        if T <> One(T) then
             M := M * Ti;
             v := v * Ti;
         fi;
@@ -101,12 +240,13 @@ function( r )
         Qi := Q^-1;
         P := Q{[1..d]}{[rk+1..d]} * Qi{[rk+1..d]};
         v := List( v * P, FractionModOne );
-        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        #if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        if T <> One(T) then
             v := v * T;
         fi;
-        v := VectorModL( v, T );
+        v := VectorModL( v, TranslationBasis(r.spaceGroup) );
     else
-        v := VectorModL( r.translation, T );
+        v := VectorModL( r.translation, TranslationBasis(r.spaceGroup) );
     fi;
     r.translation := v;
 
@@ -621,7 +761,7 @@ WyPosAT := function( S )
         S2 := TransposedMatrixGroup( S2 );
     fi;
     
-    lst := rec( dim := d, T := InternalBasis(S), S := S, c := 1,
+    lst := rec( dim := d, T := SymmetricInternalBasis(S), S := S, c := 1,
                 S2 := S2 );
     # T used to be TranslationBasis, but it's used for changing from Standard
     # form to original form, so needs to be a full matrix.
@@ -631,7 +771,12 @@ WyPosAT := function( S )
         if g <> () then
             # Record a point group operation *in standard basis*
             # Meaning you might have permuted the bases.
-            m := NiceToCrystStdRep(P,g);
+            if IsSpaceGroup( S ) then
+              m := NiceToCrystStdRep(P,g);
+            else
+              # If a sub-periodic group, need to do some slightly more expensive checks.
+              m := NiceToCrystStdRepSymmetric(P,g);
+            fi;
             if IsAffineCrystGroupOnRight( S ) then
                 m := TransposedMat(m);
             fi;
@@ -653,7 +798,7 @@ WyPosAT := function( S )
     
     # This record is used to build the general position.
     s := rec( translation := ListWithIdenticalEntries(d,0),
-              basis       := InternalBasis(S),
+              basis       := SymmetricInternalBasis(S),
               spaceGroup  := S );
     ReduceAffineSubspaceLattice(s);
     lst.sp := List( [1..d+1], x-> [] ); Add( lst.sp[d+1], s );
@@ -681,7 +826,8 @@ InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight",
 function( S )
 
     # for small dimensions, the recursive method is faster
-    if DimensionOfMatrixGroup( S ) < 6 then
+    # Also, WyPosSGL is not yet implemented for subperiodic groups
+    if DimensionOfMatrixGroup( S ) < 6 or not IsSpaceGroup( S ) then
         return WyPosAT( S );
     else
         return WyPosSGL( S );

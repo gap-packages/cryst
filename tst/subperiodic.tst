@@ -118,6 +118,10 @@ true
 gap> Set(WyckoffPositions( G^C )) = Set(WyckoffPositions( LayerGroupIT(54)^C ));
 true
 
+gap> G := RodGroupIT(17);;
+gap> Length(WyckoffPositions( G^C )) = Length(WyckoffPositions( RodGroupIT(17) ));
+true
+
 # Test that Wyckoff works on the left
 gap> G := SubPeriodicGroupOnLeftIT("Layer", 12);
 SubPeriodicGroupOnLeftIT(Layer,12,'1')
@@ -152,6 +156,13 @@ true
 gap> Set(WyckoffPositions( G^TransposedMat(C) )) = Set(WyckoffPositions(SubPeriodicGroupOnLeftIT("Layer",54)^TransposedMat(C)));
 true
 
+gap> G := SubPeriodicGroupOnLeftIT("Rod", 17);;
+gap> Length(WyckoffPositions( G )) = Length(WyckoffPositions( RodGroupIT(17) ));
+true
+
+gap> Length(WyckoffPositions( G^TransposedMat(C) )) = Length(WyckoffPositions( G ));
+true
+
 # Test that we get the right number of Wyckoff positions
 gap> List( [1..7], i -> Length( WyckoffPositions( FriezeGroupIT(i) ) ) );
 [ 1, 3, 3, 2, 1, 6, 3 ]
@@ -160,6 +171,9 @@ gap> List( [0..7], i -> Length( WyckoffPositions( RodGroupIT(10*i + 3) ) ) );
 [ 3, 8, 2, 3, 1, 2, 3, 12 ]
 
 gap> List( [1..8], i -> Length( WyckoffPositions( LayerGroupIT(10*i - 2) ) ) );
+[ 3, 6, 3, 11, 10, 5, 5, 10 ]
+
+gap> List( [1..8], i -> Length( WyckoffPositions( LayerGroupIT(10*i - 2)^C ) ) );
 [ 3, 6, 3, 11, 10, 5, 5, 10 ]
 
 # Check that changing CrystGroupDefaultAction works as expected
