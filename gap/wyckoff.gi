@@ -662,47 +662,51 @@ end;
 
 #############################################################################
 ##
+#F  IsTranslationInBasis( S ) . . . . tests if Wyckoff position is in lattice
+##
+IsTranslationInBasis := function(f)
+  local STB, t, S, rank, gens, xs;
+  # From our record f, checks whether the translation vector lies within 
+  # the group's translation basis. Returns Boolean.
+  S := f.spaceGroup;
+  # Trivial case: we have a space group
+  if IsSpaceGroup(S) then
+    return true;
+  fi;
+  # Otherwise, consider if the translation vector lies within the translation basis
+  t := f.translation;
+  STB := TranslationBasis(S);
+  # If the Wyckoff basis is non-empty, then maybe another point on the Wyckoff
+  # position lies in the crystal's translation basis.
+  if Length(f.basis) > 0 then
+    STB := Concatenation(STB, -f.basis);
+  fi;
+  # Trivial case: the basis of allowed points fills the whole space
+  rank := RankMatrix(TransposedMat(STB));
+  if rank = Length(t) then
+    return true;
+  fi;
+  # Now, we can't simply check if t is in the span of STB, because
+  # the origin may be non-zero. Instead, we must check if the vectors,
+  # when operated on, fit the span.
+  gens := GeneratorsOfGroup(S);
+  if IsAffineCrystGroupOnLeft(S) then
+    gens := List(gens, TransposedMat);
+  fi;
+  # xs are the difference between point t and point t after being operated on.
+  xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..Length(t)]});
+  # Using Rouche-Capelli theorem. If all of xs are in the span of STB, then
+  # the extra ranks will vanish. If any are not, then the rank will be bigger.
+  return rank = RankMatrix(TransposedMat(Concatenation(STB, xs)));
+end;
+
+#############################################################################
+##
 #F  WyPosStep . . . . . . . . . . . . . . . . . . .induction step for WyPosAT 
 ##
 WyPosStep := function( idx, G, M, b, lst )
 
-    local g, G2, M2, b2, F, c, added, stop, f, d, w, O, IsTranslationInBasis;
-    # Ideally one would put this function somewhere else, but locally will do
-    IsTranslationInBasis := function(f)
-      local STB, t, S, rank, gens, xs;
-      # From our record f, checks whether the translation vector lies within 
-      # the group's translation basis. Returns Boolean.
-      S := f.spaceGroup;
-      # Trivial case: we have a space group
-      if IsSpaceGroup(S) then
-        return true;
-      fi;
-      # Otherwise, consider if the translation vector lies within the translation basis
-      t := f.translation;
-      STB := TranslationBasis(S);
-      # If the Wyckoff basis is non-empty, then maybe another point on the Wyckoff
-      # position lies in the crystal's translation basis.
-      if Length(f.basis) > 0 then
-        STB := Concatenation(STB, -f.basis);
-      fi;
-      # Trivial case: the basis of allowed points fills the whole space
-      rank := RankMatrix(TransposedMat(STB));
-      if rank = Length(t) then
-        return true;
-      fi;
-      # Now, we can't simply check if t is in the span of STB, because
-      # the origin may be non-zero. Instead, we must check if the vectors,
-      # when operated on, fit the span.
-      gens := GeneratorsOfGroup(S);
-      if IsAffineCrystGroupOnLeft(S) then
-        gens := List(gens, TransposedMat);
-      fi;
-      # xs are the difference between point t and point t after being operated on.
-      xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..Length(t)]});
-      # Using Rouche-Capelli theorem. If all of xs are in the span of STB, then
-      # the extra ranks will vanish. If any are not, then the rank will be bigger.
-      return rank = RankMatrix(TransposedMat(Concatenation(STB, xs)));
-    end;
+    local g, G2, M2, b2, F, c, added, stop, f, d, w, O;
 
     g := lst.z[idx];
     if not g in G then
