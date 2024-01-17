@@ -669,7 +669,7 @@ WyPosStep := function( idx, G, M, b, lst )
     local g, G2, M2, b2, F, c, added, stop, f, d, w, O, IsTranslationInBasis;
     # Ideally one would put this function somewhere else, but locally will do
     IsTranslationInBasis := function(f)
-      local STB, t, S;
+      local STB, t, S, rank, gens, xs;
       # From our record f, checks whether the translation vector lies within 
       # the group's translation basis. Returns Boolean.
       S := f.spaceGroup;
@@ -685,8 +685,23 @@ WyPosStep := function( idx, G, M, b, lst )
       if Length(f.basis) > 0 then
         STB := Concatenation(STB, -f.basis);
       fi;
-      # Using Rouche-Capelli theorem.
-      return RankMatrix(TransposedMat(STB)) = RankMatrix(TransposedMat(Concatenation(STB, [t])));
+      # Trivial case: the basis of allowed points fills the whole space
+      rank := RankMatrix(TransposedMat(STB));
+      if rank = Length(t) then
+        return true;
+      fi;
+      # Now, we can't simply check if t is in the span of STB, because
+      # the origin may be non-zero. Instead, we must check if the vectors,
+      # when operated on, fit the span.
+      gens := GeneratorsOfGroup(S);
+      if IsAffineCrystGroupOnLeft(S) then
+        gens := List(gens, TransposedMat);
+      fi;
+      # xs are the difference between point t and point t after being operated on.
+      xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..Length(t)]});
+      # Using Rouche-Capelli theorem. If all of xs are in the span of STB, then
+      # the extra ranks will vanish. If any are not, then the rank will be bigger.
+      return rank = RankMatrix(TransposedMat(Concatenation(STB, xs)));
     end;
 
     g := lst.z[idx];
