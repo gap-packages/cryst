@@ -183,6 +183,47 @@ end;
 
 #############################################################################
 ##
+#F  SolveLinearDiophantineSystem . . solve a system of linear diophantine eqs
+##
+SolveLinearDiophantineSystem := function( A, b )
+  local d, Q, j, sols;
+  # https://www.math.uwaterloo.ca/%7Ewgilbert/Research/GilbertPathria.pdf
+  b := ShallowCopy( b );
+  d := Length(A[1]);
+  # Row reduce (A^T | I) to (R | Q).
+  Q := IdentityMat(d);
+  while Length(A) > 0 and not IsDiagonalMat(A) do
+    A := RowEchelonFormT( TransposedMat(A), Q );
+    # Solve R^T k = b by back-substitution
+    if Length(A) > 0 and not IsDiagonalMat(A) then
+      A := RowEchelonFormVector( TransposedMat(A), b );
+    fi;
+  od;
+  # We now solve the easier system of equations R^T k = b.
+  # where R is row-reduced diagonal A.
+  # Check that the system is consistent.
+  for j in [Length(A)+1 .. Length(b) ] do
+    if b[j] <> 0 then
+      return [ [  ], [  ] ];
+    fi;
+  od;
+  # Solutions to R k = b.
+  sols := List( [1 .. Length(A)], i -> b[i] / A[i][i] );
+  # Check that these are *integer* solutions
+  if not ForAll(sols, IsInt) then
+    return [ [  ], [  ] ];
+  fi;
+  # Pad out missing values
+  sols := Concatenation( sols, 0 * [ (Length(A)+1) .. Length(b) ] );
+  # Solutions to original A x = b are of form x = Q^T k.
+  sols := sols * Q;
+  # Return the specific solution, and a list of vectors which you can add
+  # integer multiples of to get the general solution.
+  return [ sols, Q{[(Length(A)+1) .. Length(Q)]} ];
+end;
+
+#############################################################################
+##
 #F  FractionModOne  . . . . . . . . . . . . . . . . . . a fraction modulo one
 ##
 FractionModOne := function( q )
