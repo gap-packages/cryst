@@ -278,7 +278,13 @@ end;
 #F  IntSolutionMat( M, b ) . . integer solution for inhom system of equations
 ##
 IntSolutionMat := function( M, b )
-  return IntSolutionsMat( M, b )[1];
+  local r;
+  r := IntSolutionsMat( M, b );
+  if r = fail then
+    return fail;
+  else
+    return IntSolutionsMat( M, b )[1];
+  fi;
 end;
 
 #############################################################################

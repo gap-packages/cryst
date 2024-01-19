@@ -665,7 +665,7 @@ end;
 #F  IsTranslationInBasis( S ) . . . . tests if Wyckoff position is in lattice
 ##
 IsTranslationInBasis := function(f)
-  local STB, t, S, rank, gens, xs;
+  local STB, t, d, S, gens, xs, translations, basis, t2, Q, R, sol, M, fvecs;
   # From our record f, checks whether the translation vector lies within 
   # the group's translation basis. Returns Boolean.
   S := f.spaceGroup;
@@ -675,15 +675,19 @@ IsTranslationInBasis := function(f)
   fi;
   # Otherwise, consider if the translation vector lies within the translation basis
   t := f.translation;
+  d := Length(t);
   STB := TranslationBasis(S);
   # If the Wyckoff basis is non-empty, then maybe another point on the Wyckoff
   # position lies in the crystal's translation basis.
   if Length(f.basis) > 0 then
     STB := Concatenation(STB, -f.basis);
   fi;
+  # Make all parts of STB integers, so can use RowEchelonForm safely.
+  # TODO
+  # Simplify (so Rank = Length)
+  STB := RowEchelonForm(STB);
   # Trivial case: the basis of allowed points fills the whole space
-  rank := RankMatrix(TransposedMat(STB));
-  if rank = Length(t) then
+  if Length(STB) = d then
     return true;
   fi;
   # Now, we can't simply check if t is in the span of STB, because
@@ -693,11 +697,81 @@ IsTranslationInBasis := function(f)
   if IsAffineCrystGroupOnLeft(S) then
     gens := List(gens, TransposedMat);
   fi;
+  # We'll also filter the pure translations out of gens, because those have
+  # been caught in TranslationBasis(S);
+  gens := Filtered(gens, g -> g{[1..d]}{[1..d]} <> IdentityMat(d));
+  # Let us check for a simpler case: the origin is at zero.
+  # This is guaranteed if there are no translation components in the generators,
+  # or the translation components are within the span of the translation basis.
+  translations := List(gens, g -> g[d+1]{[1..d]});
+  if RankMatrix(Concatenation(STB, translations)) = Length(STB) then
+    # There are no symmetry operators to take the origin outside the lattice
+    # Can use a cheaper check, as solutions don't need to account for an
+    # extra translation.
+    if RankMatrix(Concatenation(STB, [t])) = Length(STB) then
+      return true;
+    else
+      # Check if t modulo Z is usable
+      # Because earlier parts of the algorithm give the translation modulo
+      # fictitious lattice vectors, so we want to choose the correct modulo.
+      # Convert to standard basis
+      basis := SymmetricInternalBasis(S);
+      t := t * Inverse(basis);
+      STB := STB * Inverse(basis);
+      Q := IdentityMat(d);
+      R := RowEchelonFormT(TransposedMat(STB), Q);
+      # Q * TransposedMat(STB) = R (except R drops zero rows)
+      t2 := Q * t;
+      # Grab just the inconsistent part of the solution vector.
+      t2{[1..Length(R)]} := 0 * [1..Length(R)];
+      t2 := Inverse(Q) * t2; # Convert out of row echelon form
+      # Check that it is integers
+      if not ForAll(t2, IsInt) then
+        return false;
+      fi;
+      # If it is, correct the translation.
+      f.translation := f.translation - t2 * basis;
+      #ReduceAffineSubspaceLattice(f);
+      return true;
+    fi;
+  fi;
+
   # xs are the difference between point t and point t after being operated on.
-  xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..Length(t)]});
-  # Using Rouche-Capelli theorem. If all of xs are in the span of STB, then
-  # the extra ranks will vanish. If any are not, then the rank will be bigger.
-  return rank = RankMatrix(TransposedMat(Concatenation(STB, xs)));
+  xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..d]});
+  # If xs are all in the span of the translation basis, then the point being
+  # acted on is staying inside the lattice, so is valid.
+  if Length(STB) = RankMatrix(Concatenation(STB, xs)) then
+    return true;
+  fi;
+  # Otherwise, we need to test if this point shifted by an integer number of
+  # fictitious lattice vectors would give a point in the lattice.
+  # First, grab the fictitious lattice vectors.
+  fvecs := Filtered( SymmetricInternalBasis(S), v -> not v in TranslationBasis(S) );
+  # We now solve the system of all xs simultaneously.
+  Q := IdentityMat(d * Length(gens));
+  R := RowEchelonFormT(KroneckerProduct(IdentityMat(Length(gens)), TransposedMat(STB)), Q);
+  t2 := Q * Flat(xs); # Q is the transformation taking to REF.
+  # Grab just the inconsistent part
+  t2{[1..Length(R)]} := 0 * [1..Length(R)];
+  t2 := Inverse(Q) * t2; # Convert out of REF.
+  # We now have (g-I) * fvec * n = t2.
+  # We want to find n if it is integers.
+  # Stack up all the linear parts of the generators.
+  # (Remember that gens are RightAction, so normally act on row vectors.)
+  # (But I'm doing maths with column vectors at the moment.)
+  M := Concatenation(List(gens, g -> TransposedMat(g{[1..d]}{[1..d]}) - IdentityMat(d) ));
+  # Multiply by the vectors of interest.
+  M := M * TransposedMat(fvecs);
+  # Find an integer solution. (IntSolutionMat works on RightAction)
+  sol := IntSolutionMat(TransposedMat(M), t2);
+  if sol = fail then
+    return false;
+  else
+    # We have a solution. Correct the translation and go home.
+    f.translation := f.translation - sol * fvecs;
+    #ReduceAffineSubspaceLattice(f);
+    return true;
+  fi;
 end;
 
 #############################################################################
@@ -741,6 +815,9 @@ WyPosStep := function( idx, G, M, b, lst )
             if not f in lst.sp[d] then
               # Exclude f if f.translation lies
               # outside the span of TranslationBasis(lst.S).
+              # IsTranslationInBasis also accounts for f.translation possibly
+              # being off modulo 1 and corrects it, and accounts for
+              # non-centered origins.
               if IsTranslationInBasis(f) then
                 O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
                 w := ShallowCopy( f );
