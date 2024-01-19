@@ -814,13 +814,15 @@ WyPosStep := function( idx, G, M, b, lst )
             fi;
             f.spaceGroup  := lst.S;
             ReduceAffineSubspaceLattice( f );
-            if not f in lst.sp[d] then
+            if IsTranslationInBasis(f) then
               # Exclude f if f.translation lies
               # outside the span of TranslationBasis(lst.S).
               # IsTranslationInBasis also accounts for f.translation possibly
               # being off modulo 1 and corrects it, and accounts for
               # non-centered origins.
-              if IsTranslationInBasis(f) then
+              if not f in lst.sp[d] then
+                # We check for duplicates after we potentially correct
+                # the translation.
                 O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
                 w := ShallowCopy( f );
                 w.class := c;
