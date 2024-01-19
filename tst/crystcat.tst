@@ -34,8 +34,7 @@ gap> Size( cl[1] );
 gap> G := SpaceGroupBBNWZ( 4, 29, 7, 2, 1 );
 SpaceGroupOnRightBBNWZ( 4, 29, 7, 2, 1 )
 
-gap> H := MaximalSubgroupRepsTG( G )[4];
-<matrix group with 7 generators>
+gap> H := MaximalSubgroupRepsTG( G )[4];;
 
 gap> C := ColorGroup( G, H );
 <matrix group with 8 generators>

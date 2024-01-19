@@ -9,8 +9,8 @@ PackageName := "Cryst",
 
 Subtitle := "Computing with crystallographic groups",
 
-Version := "4.1.26",
-Date := "03/04/2023", # dd/mm/yyyy format
+Version := "4.1.27",
+Date := "18/12/2023", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 ArchiveURL := Concatenation( 
@@ -52,12 +52,8 @@ Persons := [
     LastName := "Nickel",
     FirstNames := "Werner",
     IsAuthor := true,
-    IsMaintainer := true,
+    IsMaintainer := false,
     Email := "nickel@mathematik.tu-darmstadt.de",
-    WWWHome := "http://www.mathematik.tu-darmstadt.de/~nickel/",
-    #PostalAddress := "",           
-    Place := "Darmstadt",
-    Institution := "Fachbereich 4, AG 2, TU Darmstadt"
   )
 ],
 

@@ -11,20 +11,6 @@
 
 #############################################################################
 ##
-#F  DepthVector( vec ) . . . . . . . . . . . . . . . . . . . . depth of vetor
-##
-#DepthVector := function( vec )
-#    local i;
-#    for i in [1..Length(vec)] do
-#        if not vec[i] = 0 * vec[i] then
-#            return i;
-#        fi;
-#    od;
-#    return Length(vec) + 1;
-#end;
-
-#############################################################################
-##
 #F  CoefficientsMod( base, v ) . . . . . . . coefficients of v in factorspace
 ##
 CoefficientsMod := function( base, v )
@@ -37,7 +23,6 @@ CoefficientsMod := function( base, v )
     if not IsBound( base.depth ) then
         head := [];
         for i in [1..Length( base.fullbase )] do
-            #head[i] := DepthVector( base.fullbase[i] );
             head[i] := PositionNonZero( base.fullbase[i] );
         od;
         base.depth := head;
@@ -47,7 +32,6 @@ CoefficientsMod := function( base, v )
     coeff := ShallowCopy( zero );
     w     := v;
     while w <> zero do
-        #j := DepthVector( w );
         j := PositionNonZero( w );
         h := Position( base.depth, j );
         coeff[h] := coeff[h] + w[j];

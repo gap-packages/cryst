@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKGTAR=cryst-4.1.26.tar
+PKGTAR=cryst-4.1.27.tar
 
 # remove old archive
 rm -f $PKGTAR*

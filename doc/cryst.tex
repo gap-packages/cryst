@@ -359,25 +359,20 @@ is bound and `true'.
 \beginexample
 gap> S := SpaceGroupIT(3,222);
 SpaceGroupOnRightIT(3,222,'2')
-gap> L := MaximalSubgroupClassReps( S, rec( primes := [3,5] ) );
-[ <matrix group with 7 generators>, <matrix group with 8 generators>, 
-  <matrix group with 8 generators> ]
+gap> L := MaximalSubgroupClassReps( S, rec( primes := [3,5] ) );;
 gap> List( L, IndexInParent );
 [ 3, 27, 125 ]
 gap> L := MaximalSubgroupClassReps( S,             
->                  rec( classequal := true, primes := [3,5] ) );
-[ <matrix group with 8 generators>, <matrix group with 8 generators> ]
+>                  rec( classequal := true, primes := [3,5] ) );;
 gap> List( L, IndexInParent );                                                 
 [ 27, 125 ]
 gap> L := MaximalSubgroupClassReps( S,
->                  rec( latticeequal := true, primes := [3,5] ) );
-[ <matrix group with 7 generators> ]
+>                  rec( latticeequal := true, primes := [3,5] ) );;
 gap> List( L, IndexInParent );                                       
 [ 3 ]
-gap> L := MaximalSubgroupClassReps( S, rec( latticeequal := true ) );
-[ <matrix group with 7 generators>, <matrix group with 7 generators>, 
-  <matrix group with 7 generators>, <matrix group with 7 generators>, 
-  <matrix group with 6 generators> ]
+gap> L := MaximalSubgroupClassReps( S, rec( latticeequal := true ) );;
+gap> Length(L);
+5
 gap> List( L, IndexInParent );                                       
 [ 2, 2, 2, 3, 4 ]
 \endexample
