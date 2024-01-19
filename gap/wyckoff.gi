@@ -682,8 +682,10 @@ IsTranslationInBasis := function(f)
   if Length(f.basis) > 0 then
     STB := Concatenation(STB, -f.basis);
   fi;
-  # Make all parts of STB integers, so can use RowEchelonForm safely.
-  # TODO
+  # Make all vectors in STB integers, so can use RowEchelonForm safely.
+  # We can do this safely because we don't care about the magnitude of these
+  # vectors, only their span.
+  STB := List( STB, v -> v * Lcm(List(v, DenominatorRat)) );
   # Simplify (so Rank = Length)
   STB := RowEchelonForm(STB);
   # Trivial case: the basis of allowed points fills the whole space
@@ -731,11 +733,10 @@ IsTranslationInBasis := function(f)
       fi;
       # If it is, correct the translation.
       f.translation := f.translation - t2 * basis;
-      #ReduceAffineSubspaceLattice(f);
+      ReduceAffineSubspaceLattice(f);
       return true;
     fi;
   fi;
-
   # xs are the difference between point t and point t after being operated on.
   xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..d]});
   # If xs are all in the span of the translation basis, then the point being
@@ -753,7 +754,6 @@ IsTranslationInBasis := function(f)
   t2 := Q * Flat(xs); # Q is the transformation taking to REF.
   # Grab just the inconsistent part
   t2{[1..Length(R)]} := 0 * [1..Length(R)];
-  t2 := Inverse(Q) * t2; # Convert out of REF.
   # We now have (g-I) * fvec * n = t2.
   # We want to find n if it is integers.
   # Stack up all the linear parts of the generators.
@@ -761,15 +761,17 @@ IsTranslationInBasis := function(f)
   # (But I'm doing maths with column vectors at the moment.)
   M := Concatenation(List(gens, g -> TransposedMat(g{[1..d]}{[1..d]}) - IdentityMat(d) ));
   # Multiply by the vectors of interest.
-  M := M * TransposedMat(fvecs);
-  # Find an integer solution. (IntSolutionMat works on RightAction)
-  sol := IntSolutionMat(TransposedMat(M), t2);
+  # Move to the same REF
+  M := Q * M * TransposedMat(fvecs);
+  # Find an integer solution, for just the inconsistent part.
+  # (IntSolutionMat works on RightAction)
+  sol := IntSolutionMat(TransposedMat(M{[Length(R)+1..Length(M)]}), t2{[Length(R)+1..Length(t2)]});
   if sol = fail then
     return false;
   else
     # We have a solution. Correct the translation and go home.
     f.translation := f.translation - sol * fvecs;
-    #ReduceAffineSubspaceLattice(f);
+    ReduceAffineSubspaceLattice(f);
     return true;
   fi;
 end;
