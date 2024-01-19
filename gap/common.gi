@@ -212,9 +212,9 @@ end;
 
 #############################################################################
 ##
-#F  IntSolutionsMat( M, b ) . .integer solutions for inhom system of equations
+#F  IntSolutionMat( M, b ) . . integer solution for inhom system of equations
 ##
-IntSolutionsMat := function( M, b )
+IntSolutionMat := function( M, b )
 
     local Q, den, sol, i, x;
 
@@ -269,22 +269,8 @@ IntSolutionsMat := function( M, b )
         fi;
     od;
 
-    return [ sol*Q{[1..Length(sol)]}, Q{[Length(sol)+1..Length(Q)]} ];
+    return sol*Q{[1..Length(sol)]};
 
-end;
-
-#############################################################################
-##
-#F  IntSolutionMat( M, b ) . . integer solution for inhom system of equations
-##
-IntSolutionMat := function( M, b )
-  local r;
-  r := IntSolutionsMat( M, b );
-  if r = fail then
-    return fail;
-  else
-    return IntSolutionsMat( M, b )[1];
-  fi;
 end;
 
 #############################################################################
