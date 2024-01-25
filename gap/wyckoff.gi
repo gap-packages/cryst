@@ -148,8 +148,8 @@ function( S )
           Add(T, v);
           if Length(T) = d then
             if Determinant(T) < 0 then
-              # Rearrange to be positive determinant.
-              T{[d-1,d]} := T{[d,d-1]};
+              # Change sign to be positive determinant.
+              T[d] := -T[d];
             fi;
             return T;
           fi;
@@ -164,8 +164,8 @@ function( S )
           Add(T, v);
           if Length(T) = d then
             if Determinant(T) < 0 then
-              # Rearrange to be positive determinant.
-              T{[d-1,d]} := T{[d,d-1]};
+              # Change sign to be positive determinant.
+              T[d] := -T[d];
             fi;
             return T;
           fi;
@@ -194,8 +194,8 @@ function( S )
       Append(T, comp);
     fi;
     if Determinant(T) < 0 then
-      # Rearrange to be positive determinant.
-      T{[d-1,d]} := T{[d,d-1]};
+      # Change sign to be positive determinant.
+      T[d] := -T[d];
     fi;
     return T;
 end );
