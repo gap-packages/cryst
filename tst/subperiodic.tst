@@ -17,9 +17,12 @@ gap> G^IdentityMat(4);
 gap> TranslationBasis( G );
 [ [ 1, 0, 0 ], [ 0, 1, 0 ] ]
 
+gap> G := LayerGroupIT( 8, 'b' );
+SubPeriodicGroupOnRightIT(Layer,8,'b')
+
 # Test that rod groups are conjured correctly
 gap> G := RodGroupIT( 7 );
-SubPeriodicGroupOnRightIT(Rod,7,'1')
+SubPeriodicGroupOnRightIT(Rod,7,'abc')
 
 gap> IsAffineCrystGroupOnRight( G );
 true
@@ -30,9 +33,15 @@ gap> G^IdentityMat(4);
 gap> TranslationBasis( G );
 [ [ 0, 0, 1 ] ]
 
+gap> G := RodGroupIT( 12, "bca" );
+SubPeriodicGroupOnRightIT(Rod,12,'bca')
+
+gap> TranslationBasis( G );
+[ [ 0, 1, 0 ] ]
+
 # Test that frieze groups are conjured correctly
 gap> G := FriezeGroupIT( 2 );
-SubPeriodicGroupOnRightIT(Frieze,2,'1')
+SubPeriodicGroupOnRightIT(Frieze,2,'a')
 
 gap> IsAffineCrystGroupOnRight( G );
 true
@@ -43,6 +52,12 @@ Group([ [ [ -1, 0, 0 ], [ 0, -1, 0 ], [ 0, 0, 1 ] ],
 
 gap> TranslationBasis( G );
 [ [ 1, 0 ] ]
+
+gap> G := FriezeGroupIT( 2, 'b' );
+SubPeriodicGroupOnRightIT(Frieze,2,'b')
+
+gap> TranslationBasis( G );
+[ [ 0, 1 ] ]
 
 # Test that different ways of calling the same group work
 gap> SubPeriodicGroupIT("Layer", 23) = LayerGroupIT(23);
@@ -124,7 +139,7 @@ true
 
 # Test that Wyckoff works on the left
 gap> G := SubPeriodicGroupOnLeftIT("Layer", 12);
-SubPeriodicGroupOnLeftIT(Layer,12,'1')
+SubPeriodicGroupOnLeftIT(Layer,12,'a')
 
 gap> G = TransposedMatrixGroup(LayerGroupIT(12));
 true
@@ -189,7 +204,7 @@ gap> CrystGroupDefaultAction;
 gap> SetCrystGroupDefaultAction(LeftAction);
 
 gap> G := LayerGroupIT(12);
-SubPeriodicGroupOnLeftIT(Layer,12,'1')
+SubPeriodicGroupOnLeftIT(Layer,12,'a')
 
 gap> G ^ IdentityMat(4);
 <matrix group with 4 generators>
@@ -197,14 +212,17 @@ gap> G ^ IdentityMat(4);
 gap> IsAffineCrystGroupOnLeft(G);
 true
 
+gap> LayerGroupIT(8, 'b');
+SubPeriodicGroupOnLeftIT(Layer,8,'b')
+
 gap> G := RodGroupIT(5);
-SubPeriodicGroupOnLeftIT(Rod,5,'1')
+SubPeriodicGroupOnLeftIT(Rod,5,'abc')
 
 gap> IsAffineCrystGroupOnLeft(G);
 true
 
 gap> G := FriezeGroupIT(2);
-SubPeriodicGroupOnLeftIT(Frieze,2,'1')
+SubPeriodicGroupOnLeftIT(Frieze,2,'a')
 
 gap> IsAffineCrystGroupOnLeft(G);
 true

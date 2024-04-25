@@ -20,7 +20,12 @@ InstallGlobalFunction( SubPeriodicGroupSettingsIT, function( type, nr )
          Error( "frieze group number must be in [1..7]" );
       fi;
    elif type = "Rod" then
-      if nr in [1..75] then
+      if nr in [3..22] then
+        # The settings are "abc" etc, not single characters.
+        # Sorry if this breaks the convention, but the alternative is to
+        # not follow the International Tables.
+        return RecNames( RodGroupList[nr] );
+      elif nr in [1..75] then
          return List( RecNames( RodGroupList[nr] ), x -> x[1] );
       else
          Error( "rod group number must be in [1..75]" );
@@ -42,26 +47,56 @@ end );
 ##
 InstallGlobalFunction( SubPeriodicGroupDataIT, function( r )
 
-   local settings;
-   if IsBound (r.setting) and r.setting <> '1' then
-     Error( "requested setting is not available" );
+   local settings, setting;
+   settings := SubPeriodicGroupSettingsIT(r.type, r.nr);
+   if IsBound(r.setting) then
+     if not (r.setting in settings) then
+       Error( "requested setting is not available" );
+     fi;
+   else
+     # No setting provided. Find the default setting.
+     if r.type = "Frieze" then
+       r.setting := 'a';
+     elif r.type = "Rod" then
+       if "abc" in settings then
+         r.setting := "abc";
+       else
+         r.setting := '1';
+       fi;
+     elif r.type = "Layer" then
+       if 'a' in settings then
+         r.setting := 'a';
+       elif r.nr in [52,62,64] then
+         # The alternative origin choice.
+         r.setting := '2';
+       else
+         r.setting := '1';
+       fi;
+     else
+       Error( "only types Frieze, Rod, or Layer are supported, but got ", r.type );
+     fi;
    fi;
-   r.setting := '1';
+   # Convert from character to string, if required.
+   if not IsList(r.setting) then
+     setting := [r.setting];
+   else
+     setting := r.setting;
+   fi;
    if   r.type = "Frieze" then
      if r.nr in [1..7] then
-       return FriezeGroupList[r.nr].1;
+       return FriezeGroupList[r.nr].(setting);
      else
        Error( "frieze group number must be in [1..7]" );
      fi;
    elif r.type = "Rod" then
      if r.nr in [1..75] then
-       return RodGroupList[r.nr].1;
+       return RodGroupList[r.nr].(setting);
      else
        Error( "rod group number must be in [1..75]" );
      fi;
    elif r.type = "Layer" then
      if r.nr in [1..80] then
-       return LayerGroupList[r.nr].1;
+       return LayerGroupList[r.nr].(setting);
      else
        Error( "layer group number must be in [1..80]" );
      fi;
@@ -75,7 +110,7 @@ end );
 #M  SubPeriodicGroupFunIT . . . constructor function for IT subperiodic group
 ##
 InstallGlobalFunction( SubPeriodicGroupFunIT, function( r )
-   local data, gens, vec, name, norm, S, P, N;
+   local data, gens, vec, name, norm, S, P, N, setting;
    data := SubPeriodicGroupDataIT( r );
    gens := ShallowCopy( data.generators );
    if r.action = LeftAction then
@@ -86,8 +121,13 @@ InstallGlobalFunction( SubPeriodicGroupFunIT, function( r )
       S := AffineCrystGroupOnRight( gens );
       name := "SubPeriodicGroupOnRightIT(";
    fi;
+   if not IsList(r.setting) then
+     setting := [r.setting];
+   else
+     setting := r.setting;
+   fi;
    SetName( S, Concatenation( name, r.type, ",", String(r.nr),
-                              ",'", [r.setting], "')" ) );
+                              ",'", setting, "')" ) );
    return S;
 end );
 
