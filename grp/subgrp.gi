@@ -110,15 +110,19 @@ end );
 #M  SubPeriodicGroupFunIT . . . constructor function for IT subperiodic group
 ##
 InstallGlobalFunction( SubPeriodicGroupFunIT, function( r )
-   local data, gens, vec, name, norm, S, P, N, setting;
+   local data, gens, vec, name, S, setting, d;
    data := SubPeriodicGroupDataIT( r );
    gens := ShallowCopy( data.generators );
+   d := Length(data.basis[1]);
+   for vec in data.basis do
+     Add( gens, AugmentedMatrix( IdentityMat( d ), vec ) );
+   od;
    if r.action = LeftAction then
       gens := List( gens, TransposedMat );
-      S := AffineCrystGroupOnLeft( gens );
+      S := AffineCrystGroupOnLeftNC( gens, IdentityMat(d+1) );
       name := "SubPeriodicGroupOnLeftIT(";
    else
-      S := AffineCrystGroupOnRight( gens );
+      S := AffineCrystGroupOnRightNC( gens, IdentityMat(d+1) );
       name := "SubPeriodicGroupOnRightIT(";
    fi;
    if not IsList(r.setting) then
@@ -126,6 +130,7 @@ InstallGlobalFunction( SubPeriodicGroupFunIT, function( r )
    else
      setting := r.setting;
    fi;
+   AddTranslationBasis( S, data.basis );
    SetName( S, Concatenation( name, r.type, ",", String(r.nr),
                               ",'", setting, "')" ) );
    return S;

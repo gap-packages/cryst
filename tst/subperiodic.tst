@@ -12,7 +12,7 @@ gap> IsAffineCrystGroupOnRight( G );
 true
 
 gap> G^IdentityMat(4);
-<matrix group with 4 generators>
+<matrix group with 3 generators>
 
 gap> TranslationBasis( G );
 [ [ 1, 0, 0 ], [ 0, 1, 0 ] ]
@@ -28,7 +28,7 @@ gap> IsAffineCrystGroupOnRight( G );
 true
 
 gap> G^IdentityMat(4);
-<matrix group with 4 generators>
+<matrix group with 3 generators>
 
 gap> TranslationBasis( G );
 [ [ 0, 0, 1 ] ]
@@ -207,7 +207,7 @@ gap> G := LayerGroupIT(12);
 SubPeriodicGroupOnLeftIT(Layer,12,'a')
 
 gap> G ^ IdentityMat(4);
-<matrix group with 4 generators>
+<matrix group with 3 generators>
 
 gap> IsAffineCrystGroupOnLeft(G);
 true
