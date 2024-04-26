@@ -221,7 +221,6 @@ function( r )
     elif rk > 0 then
         M := r.basis;
         v := r.translation;
-        #if not IsStandardAffineCrystGroup( r.spaceGroup ) then
         if T <> One(T) then
             M := M * Ti;
             v := v * Ti;
@@ -240,7 +239,6 @@ function( r )
         Qi := Q^-1;
         P := Q{[1..d]}{[rk+1..d]} * Qi{[rk+1..d]};
         v := List( v * P, FractionModOne );
-        #if not IsStandardAffineCrystGroup( r.spaceGroup ) then
         if T <> One(T) then
             v := v * T;
         fi;
@@ -362,6 +360,9 @@ InstallMethod( WyckoffStabilizer,
     true, [ IsWyckoffPosition ], 0, 
 function( w )
     local S, t, B, d, I, gen, U, r, new, n, g, v;
+    # BUG: Potentially returns Wyckoff Stabilizers that are too small if S is
+    # a subperiodic group with an origin outside the span of its translation
+    # basis.
     S := WyckoffSpaceGroup( w );
     t := WyckoffTranslation( w );
     B := WyckoffBasis( w );
@@ -401,6 +402,9 @@ InstallMethod( WyckoffOrbit,
     true, [ IsWyckoffPosition ], 0,
 function( w )
     local S, t, B, d, I, gen, U, r, o, s;
+    # BUG: Potentially returns Wyckoff Orbits with too many members if S is
+    # a subperiodic group with an origin outside the span of its translation
+    # basis.
     S := WyckoffSpaceGroup( w );
     t := WyckoffTranslation( w );
     B := WyckoffBasis( w );
