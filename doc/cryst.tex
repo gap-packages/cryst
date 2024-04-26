@@ -470,7 +470,7 @@ on the variable `CrystGroupDefaultAction'.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Wyckoff positions}
 
-A Wyckoff position of a space group <S> is an equivalence class of
+A Wyckoff position of a crystallographic group <S> is an equivalence class of
 points in Euclidean space, having stabilizers which are conjugate
 subgroups of <S>.  Apart from a subset of lower dimension, which
 contains points with even bigger stabilizers, a Wyckoff position
@@ -480,7 +480,7 @@ subspace.
 
 \>WyckoffPositions( <S> ) A
 
-returns the list of Wyckoff positions of the space group <S>.
+returns the list of Wyckoff positions of the group <S>.
 
 \beginexample
 gap> S := SpaceGroupIT(2,14);
@@ -501,12 +501,12 @@ gap> W := WyckoffPositions(S);
 
 In the previous example, <S> has three kinds of special points
 (the basis is empty), whose representatives all have a stabilizer 
-with the same point group (with label 1), one kind of special line
+with the same point group (with label 3), one kind of special line
 (the basis has length 1), and the general position.
 
 \>WyckoffPositionsByStabilizer( <S>, <sub> ) O
 
-where <S> is a space group and <sub> a subgroup of the point group or
+where <S> is a group and <sub> a subgroup of the point group or
 a list of such subgroups, determines only the Wyckoff positions whose
 representatives have a stabilizer with a point group equal to the 
 subgroup <sub> or contained in the list <sub>, respectively.
@@ -553,7 +553,7 @@ gap> WyckoffTranslation( W[3] );
 
 \>WyckoffSpaceGroup( <W> ) O
 
-returns the space group of which <W> is a Wyckoff position.
+returns the crystallographic group of which <W> is a Wyckoff position.
 
 \beginexample
 gap> WyckoffSpaceGroup( W[1] );
