@@ -581,93 +581,14 @@ end;
 
 #############################################################################
 ##
-#F  WyPos( S, stabs, lift ) . . . . . . . . . . . . . . . . Wyckoff positions
-##
-WyPos := function( S, stabs, lift )
-
-    local d, W, T, i, lst, w, dim, a, s, r, new, orb, I, gen, U, c; 
-
-    # get representative affine subspace lattices
-    d := DimensionOfMatrixGroup( S ) - 1;
-    W := List( [0..d], i -> [] );
-    T := TranslationBasis( S );
-    for i in [1..Length(stabs)] do
-        lst := List( GeneratorsOfGroup( stabs[i] ), lift );
-        if IsAffineCrystGroupOnLeft( S ) then
-            lst := List( lst, TransposedMat );
-        fi;
-        lst := FixedPointsModZ( lst, d ); 
-        for w in lst do
-            dim := Length( w.basis ) + 1; 
-            w.translation := w.translation * T;
-            if not IsEmpty( w.basis ) then
-                w.basis       := w.basis * T;
-            fi;
-            w.spaceGroup  := S;
-            w.class       := i;
-            ReduceAffineSubspaceLattice( w );
-            Add( W[dim], w );
-        od;
-    od;
-
-    # eliminate multiple copies
-    I := IdentityMat( d );
-    gen := Filtered( GeneratorsOfGroup( S ), g -> g{[1..d]}{[1..d]} <> I );
-    if IsAffineCrystGroupOnLeft( S ) then
-        gen := List( gen, TransposedMat );
-    fi;
-    U := AffineCrystGroupOnRight( gen, One( S ) );
-    for i in [1..d+1] do
-        lst := ShallowCopy( W[i] );
-        new := [];
-        while lst <> [] do
-            s := lst[1];
-            c := s.class;
-            Unbind( s.class );
-            orb := Orbit( U, Immutable(s), ImageAffineSubspaceLattice );
-            lst := Filtered( lst, 
-                   x -> not rec( translation := x.translation,
-                                 basis       := x.basis,
-                                 spaceGroup  := x.spaceGroup   ) in orb );
-            s.class := c;
-            Add( new, WyckoffPositionObject( s ) );
-        od;
-        W[i] := new;
-    od;
-    return Flat( W );
-
-end; 
-
-#############################################################################
-##
-#F  WyPosSGL( S ) . . . Wyckoff positions via subgroup lattice of point group 
-##
-WyPosSGL := function( S )
-
-    local P, N, lift, stabs, W;
-
-    # get point group P, and its nice representation N
-    P := PointGroup( S );
-    N := NiceObject( P );
-
-    # set up lift from nice rep to std rep
-    lift  := x -> NiceToCrystStdRep( P, x );
-    stabs := List( ConjugacyClassesSubgroups( N ), Representative );
-    Sort( stabs, function(x,y) return Size(x) > Size(y); end );
-
-    # now get the Wyckoff positions
-    return WyPos( S, stabs, lift );
-
-end;
-
-#############################################################################
-##
 #F  IsTranslationInBasis( S ) . . . . tests if Wyckoff position is in lattice
 ##
 IsTranslationInBasis := function(f)
   local STB, t, d, S, gens, xs, translations, basis, t2, Q, R, sol, M, fvecs;
   # From our record f, checks whether the translation vector lies within 
   # the group's translation basis. Returns Boolean.
+  # Also corrects the translation vector in-place to account for false
+  # translations from the fake internal basis vectors.
   S := f.spaceGroup;
   # Trivial case: we have a space group
   if IsSpaceGroup(S) then
@@ -774,6 +695,93 @@ IsTranslationInBasis := function(f)
     ReduceAffineSubspaceLattice(f);
     return true;
   fi;
+end;
+
+#############################################################################
+##
+#F  WyPos( S, stabs, lift ) . . . . . . . . . . . . . . . . Wyckoff positions
+##
+WyPos := function( S, stabs, lift )
+
+    local d, W, T, i, lst, w, dim, a, s, r, new, orb, I, gen, U, c; 
+
+    # get representative affine subspace lattices
+    d := DimensionOfMatrixGroup( S ) - 1;
+    W := List( [0..d], i -> [] );
+    T := SymmetricInternalBasis( S );
+    for i in [1..Length(stabs)] do
+        lst := List( GeneratorsOfGroup( stabs[i] ), lift );
+        if IsAffineCrystGroupOnLeft( S ) then
+            lst := List( lst, TransposedMat );
+        fi;
+        lst := FixedPointsModZ( lst, d ); 
+        for w in lst do
+            dim := Length( w.basis ) + 1; 
+            w.translation := w.translation * T;
+            if not IsEmpty( w.basis ) then
+                w.basis       := w.basis * T;
+            fi;
+            w.spaceGroup  := S;
+            w.class       := i;
+            ReduceAffineSubspaceLattice( w );
+            if IsTranslationInBasis(w) then
+              Add( W[dim], w );
+            fi;
+        od;
+    od;
+
+    # eliminate multiple copies
+    I := IdentityMat( d );
+    gen := Filtered( GeneratorsOfGroup( S ), g -> g{[1..d]}{[1..d]} <> I );
+    if IsAffineCrystGroupOnLeft( S ) then
+        gen := List( gen, TransposedMat );
+    fi;
+    U := AffineCrystGroupOnRight( gen, One( S ) );
+    for i in [1..d+1] do
+        lst := ShallowCopy( W[i] );
+        new := [];
+        while lst <> [] do
+            s := lst[1];
+            c := s.class;
+            Unbind( s.class );
+            orb := Orbit( U, Immutable(s), ImageAffineSubspaceLattice );
+            lst := Filtered( lst, 
+                   x -> not rec( translation := x.translation,
+                                 basis       := x.basis,
+                                 spaceGroup  := x.spaceGroup   ) in orb );
+            s.class := c;
+            Add( new, WyckoffPositionObject( s ) );
+        od;
+        W[i] := new;
+    od;
+    return Flat( W );
+
+end; 
+
+#############################################################################
+##
+#F  WyPosSGL( S ) . . . Wyckoff positions via subgroup lattice of point group 
+##
+WyPosSGL := function( S )
+
+    local P, N, lift, stabs, W;
+
+    # get point group P, and its nice representation N
+    P := PointGroup( S );
+    N := NiceObject( P );
+
+    # set up lift from nice rep to std rep
+    if IsSpaceGroup(S) then
+      lift  := x -> NiceToCrystStdRep( P, x );
+    else
+      lift := x -> NiceToCrystStdRepSymmetric( P, x );
+    fi;
+    stabs := List( ConjugacyClassesSubgroups( N ), Representative );
+    Sort( stabs, function(x,y) return Size(x) > Size(y); end );
+
+    # now get the Wyckoff positions
+    return WyPos( S, stabs, lift );
+
 end;
 
 #############################################################################
@@ -926,8 +934,7 @@ InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight",
 function( S )
 
     # for small dimensions, the recursive method is faster
-    # Also, WyPosSGL is not yet implemented for subperiodic groups
-    if DimensionOfMatrixGroup( S ) < 6 or not IsSpaceGroup( S ) then
+    if DimensionOfMatrixGroup( S ) < 6 then
         return WyPosAT( S );
     else
         return WyPosSGL( S );
@@ -944,9 +951,6 @@ InstallGlobalFunction( WyckoffPositionsByStabilizer, function( S, stb )
     local stabs, P, lift;
 
     # check the arguments
-    if not IsSpaceGroup( S ) then
-        Error( "S must be a space group" );
-    fi;
     if IsGroup( stb ) then
         stabs := [ stb ];
     else
@@ -957,7 +961,11 @@ InstallGlobalFunction( WyckoffPositionsByStabilizer, function( S, stb )
     P := PointGroup( S );
 
     # set up lift from nice rep to std rep
-    lift  := x -> NiceToCrystStdRep( P, x );
+    if IsSpaceGroup(S) then
+      lift  := x -> NiceToCrystStdRep( P, x );
+    else
+      lift  := x -> NiceToCrystStdRepSymmetric( P, x );
+    fi;
     stabs := List( stabs, x -> Image( NiceMonomorphism( P ), x ) );
     Sort( stabs, function(x,y) return Size(x) > Size(y); end );
 

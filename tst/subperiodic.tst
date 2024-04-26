@@ -137,6 +137,34 @@ gap> G := RodGroupIT(17);;
 gap> Length(WyckoffPositions( G^C )) = Length(WyckoffPositions( RodGroupIT(17) ));
 true
 
+# Test that WyckoffPositionsByStabilizer (and, by extension, WyPos) works
+gap> G := LayerGroupIT(24);;
+gap> W := WyckoffPositions(G);;
+gap> sub := Group([[[-1,0,0],[0,1,0],[0,0,1]]]);;
+gap> IsSubgroup(PointGroup(G), sub);
+true
+
+gap> wp := WyckoffPositionsByStabilizer(G, sub);
+[ < Wyckoff position, point group 1, translation := [ 1/4, 0, 0 ],
+	basis := [ [ 0, 1, 0 ], [ 0, 0, 1 ] ] >
+	 ]
+
+gap> wp[1] = W[3];
+true
+
+# Test that the WyPosSGL algorithm works just as well as default.
+gap> G := LayerGroupIT(26);;
+gap> W1 := WyPosSGL(G);;
+gap> W2 := WyPosAT(G);;
+gap> Set(W1) = Set(W2);
+true
+
+gap> C := [ [ 5, -1, 0, 0 ], [ 2, 0, 1, 0 ], [ -3, 1, -1, 0 ], [ 1/2, 1/3, 1, 1 ] ];;
+gap> W1 := WyPosSGL( G^C );;
+gap> W2 := WyPosAT( G^C );;
+gap> Set(W1) = Set(W2);
+true
+
 # Test that Wyckoff works on the left
 gap> G := SubPeriodicGroupOnLeftIT("Layer", 12);
 SubPeriodicGroupOnLeftIT(Layer,12,'a')
