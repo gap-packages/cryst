@@ -564,7 +564,7 @@ SpaceGroupOnRightIT(2,14,'1')
 
 returns the stabilizer of the (generic) points in the representative
 affine subspace of the Wyckoff position <W>. This stabilizer is a
-subgroup of the space group of <W>, and thus an `AffineCrystGroup'.
+subgroup of the crystallographic group of <W>, and thus an `AffineCrystGroup'.
 
 \beginexample
 gap> stab := WyckoffStabilizer( W[4] );
@@ -576,13 +576,13 @@ true
 \>WyckoffOrbit( <W> ) O
 
 determines the orbit of the representative affine subspace <A> of the 
-Wyckoff position <W> under the space group <S> of <W> (modulo lattice 
+Wyckoff position <W> under the crystallographic group <S> of <W> (modulo lattice 
 translations). The affine subspaces in this orbit are then converted 
 into a list of Wyckoff positions, which is returned. The Wyckoff 
 positions in this list are just different representations of <W>. 
 Their `WyckoffBasis' and `WyckoffTranslation' are chosen such that 
 the induced parametrizations of their representative subspaces are 
-mapped onto each other under the space group operation.
+mapped onto each other under the crystallographic group operation.
 
 \beginexample
 gap> orb := WyckoffOrbit( W[4] );
@@ -881,8 +881,9 @@ catalog.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{International Tables}
 
-For the user's convenience, a table with the 17 plane groups and the
-230 space groups is included in {\Cryst}. These groups are given in 
+For the user's convenience, tables with the 17 plane groups, 230
+space groups, 7 frieze groups, 75 rod groups, and 80 layer groups
+are included in {\Cryst}. These groups are given in 
 exactly the same settings (i.e., choices of basis and origin) as in 
 the International Tables. Space groups with a centered lattice are
 therefore given in the non-primitive basis crystallographers are
@@ -903,6 +904,34 @@ direction (setting`\pif{b}\pif') or <c> direction (setting
 space groups are given in a hexagonal basis (setting `\pif{h}\pif') and
 in a rhombohedral basis (setting `\pif{r}\pif'). `\pif{h}\pif' is the 
 default setting.
+
+For the frieze groups, two different settings are available.
+The possible settings are labelled with the characters `\pif{a}\pif'
+and `\pif{b}\pif'. `\pif{a}\pif' is the default setting.
+
+For the orthorhombic rod groups, six settings are available.
+These are labelled with the string `\pif\pif{abc}\pif\pif' or permutations
+of its characters. These correspond to permutations of the <a>,
+<b>, and <c> directions. `\pif\pif{abc}\pif\pif' is the default setting.
+
+For some of the tetragonal, trigonal, and hexagonal rod groups,
+two basis choices exist: `\pif{1}\pif' and `\pif{2}\pif'. `\pif{1}\pif'
+is the default setting.
+
+For layer groups 5 and 7, three cell choices exist, which differ
+by whether the glide vector is along the <a> direction (setting
+`\pif{1}\pif'), the <a+b> direction (setting `\pif{2}\pif'), or the
+<b> direction (setting `\pif{3}\pif'). `\pif{1}\pif' is the default
+setting.
+
+For some orthorhombic layer groups, they have two settings,
+`\pif{a}\pif' for the abc setting, and `\pif{b}\pif' for the bac setting.
+`\pif{a}\pif' is the default setting.
+
+For some layer groups (52, 62, and 64), there exists a point of higher
+symmetry than the origin of the `\pif{1}\pif' setting. In such cases,
+a second setting `\pif{2}\pif' which has this higher symmetry point as
+the origin is available and is the default setting.
 
 \>SpaceGroupSettingsIT( <dim>, <nr> ) F
 
@@ -940,5 +969,49 @@ gap> SpaceGroupOnRightIT( 3, 146, 'r' );
 SpaceGroupOnRightIT(3,146,'r')
 \endexample
 
+The subperiodic group functions accept an argument <type>, which is
+a string which is either `\pif\pif{Frieze}\pif\pif', `\pif\pif{Rod}\pif\pif', or
+`\pif\pif{Layer}\pif\pif'. This specifies the type of subperiodic group.
 
+\>SubPeriodicGroupSettingsIT( <type>, <nr> ) F
 
+returns a string (or list), whose characters (or strings, for
+multi-character settings) label the available settings of
+the subperiodic group with number <nr> and type <type>.
+
+\> SubPeriodicGroupOnRightIT( <type>, <nr> ) F
+\> SubPeriodicGroupOnRightIT( <type>, <nr>, <setting> ) F
+
+returns subperiodic group number <nr> with type <type> in the
+representation acting on the right. In the third argument,
+the desired setting can be specified. Otherwise, the
+group is returned in the default setting for that group.
+
+\> SubPeriodicGroupOnLeftIT( <type>, <nr> ) F
+\> SubPeriodicGroupOnLeftIT( <type>, <nr>, <setting> ) F
+
+returns subperiodic group number <nr> with type <type> in the
+representation acting on the left. In the third argument,
+the desired setting can be specified. Otherwise, the
+group is returned in the default setting for that group.
+
+\> SubPeriodicGroupIT( <type>, <nr> ) F
+\> SubPeriodicGroupIT( <type>, <nr>, <setting> ) F
+
+returns either `SubPeriodicGroupOnRightIT' or `SubPeriodicGroupOnLeftIT' with
+the same arguments, depending on the value of `CrystGroupDefaultAction'.
+
+\> FriezeGroupIT( <nr> ) F
+\> FriezeGroupIT( <nr>, <setting> ) F
+
+returns `SubPeriodicGroupIT(\pif\pif{Frieze}\pif\pif, <nr>, <setting>)'.
+
+\> RodGroupIT( <nr> ) F
+\> RodGroupIT( <nr>, <setting> ) F
+
+returns `SubPeriodicGroupIT(\pif\pif{Rod}\pif\pif, <nr>, <setting>)'.
+
+\> LayerGroupIT( <nr> ) F
+\> LayerGroupIT( <nr>, <setting> ) F
+
+returns `SubPeriodicGroupIT(\pif\pif{Layer}\pif\pif, <nr>, <setting>)'.
