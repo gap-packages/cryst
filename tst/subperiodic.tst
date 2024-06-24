@@ -99,8 +99,9 @@ gap> pos := WyckoffPositions(G);
     basis := [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] >
      ]
 
-gap> WyckoffStabilizer( pos[4] );
-Group([  ])
+# Some GAP versions give Group([  ]), some <matrix group of size 1>.
+gap> IsTrivial( WyckoffStabilizer( pos[4] ) );
+true
 
 gap> WyckoffStabilizer( pos[3] );
 Group(
@@ -186,8 +187,9 @@ gap> pos := WyckoffPositions(G);
     basis := [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] >
      ]
 
-gap> WyckoffStabilizer( pos[5] );
-Group([  ])
+# Some GAP versions give Group([  ]), some <matrix group of size 1>
+gap> IsTrivial( WyckoffStabilizer( pos[5] ) );
+true
 
 gap> WyckoffStabilizer( pos[4] );
 Group(
