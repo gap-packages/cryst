@@ -631,11 +631,11 @@ IsTranslationInBasis := function(f)
   # This is guaranteed if there are no translation components in the generators,
   # or the translation components are within the span of the translation basis.
   translations := List(gens, g -> g[d+1]{[1..d]});
-  if RankMatrix(Concatenation(STB, translations)) = Length(STB) then
+  if RankMat(Concatenation(STB, translations)) = Length(STB) then
     # There are no symmetry operators to take the origin outside the lattice
     # Can use a cheaper check, as solutions don't need to account for an
     # extra translation.
-    if RankMatrix(Concatenation(STB, [t])) = Length(STB) then
+    if RankMat(Concatenation(STB, [t])) = Length(STB) then
       return true;
     else
       # Check if t modulo Z is usable
@@ -666,7 +666,7 @@ IsTranslationInBasis := function(f)
   xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..d]});
   # If xs are all in the span of the translation basis, then the point being
   # acted on is staying inside the lattice, so is valid.
-  if Length(STB) = RankMatrix(Concatenation(STB, xs)) then
+  if Length(STB) = RankMat(Concatenation(STB, xs)) then
     return true;
   fi;
   # Otherwise, we need to test if this point shifted by an integer number of
