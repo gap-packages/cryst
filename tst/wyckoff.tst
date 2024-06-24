@@ -8,4 +8,9 @@ gap> List( [1..17], i -> Length( WyckoffPositions( SpaceGroupIT(2,i) ) ) );
 gap> List( [1..23], i -> Length( WyckoffPositions( SpaceGroupIT(3,10*i-3) ) ) );
 [ 1, 5, 5, 4, 27, 5, 15, 4, 9, 11, 5, 9, 12, 8, 7, 4, 6, 14, 15, 6, 11, 8, 9 ]
 
+# Test conjugation
+gap> C := [[5,-1,0,0],[2,0,1,0],[-3,1,-1,0],[1/2,1/3,1,1]];;
+gap> List( [1..23], i -> Length( WyckoffPositions( SpaceGroupIT(3,10*i-3) ^ C ) ) );
+[ 1, 5, 5, 4, 27, 5, 15, 4, 9, 11, 5, 9, 12, 8, 7, 4, 6, 14, 15, 6, 11, 8, 9 ]
+
 gap> STOP_TEST( "wyckoff.tst", 10000 );

@@ -56,3 +56,6 @@ ReadPackage( "cryst", "gap/equiv.gi" );   # conjugator between space groups
 ##
 ReadPackage( "cryst", "grp/spacegrp.grp" ); # the catalogue
 ReadPackage( "cryst", "grp/spacegrp.gi" );  # access functions
+# And the subperiodic groups
+ReadPackage( "cryst", "grp/subgrp.grp" ); # the catalogue
+ReadPackage( "cryst", "grp/subgrp.gi" );  # access functions

@@ -27,6 +27,12 @@ DeclareGlobalFunction( "NiceToCrystStdRep" );
 
 #############################################################################
 ##
+#F  NiceToCrystStdRepSymmetric( P, perm )
+##
+DeclareGlobalFunction( "NiceToCrystStdRepSymmetric" );
+
+#############################################################################
+##
 #P  IsFromAffineCrystGroupToFpGroup
 ##
 DeclareProperty( "IsFromAffineCrystGroupToFpGroup", 
