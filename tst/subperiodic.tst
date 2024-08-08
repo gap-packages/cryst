@@ -227,6 +227,11 @@ gap> C := [ [ 5, -1, 0, 0 ], [ 2, 0, 1, 0 ], [ -3, 1, -1, 0 ], [ 0, 0, 0, 1 ] ];
 gap> List( [1..8], i -> Length( WyckoffPositions( LayerGroupIT(10*i - 2)^C ) ) );
 [ 3, 6, 3, 11, 10, 5, 5, 10 ]
 
+# Also need to ensure I get good results in the harder case where two
+# internal basis vectors need to be generated
+gap> List( [0..7], i -> Length( WyckoffPositions( RodGroupIT(10*i + 3)^C ) ) );
+[ 3, 8, 2, 3, 1, 2, 3, 12 ]
+
 # Check that changing CrystGroupDefaultAction works as expected
 gap> CrystGroupDefaultAction;
 "RightAction"
