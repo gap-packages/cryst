@@ -70,7 +70,7 @@ InstallMethod( SymmetricInternalBasis,
     true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
     local d, T, gens, g, vecs, eigenvals, ev, i, v, spare_eigenvecs, k, comp,
-          idx, e, j, order;
+          idx, e, j, order, rotations, M, vlist, newbasis, T2, tmpbasis;
     d := DimensionOfMatrixGroup(S) - 1;
     T := TranslationBasis(S);
     # If we have a space group, no need to find extra vectors
@@ -83,15 +83,12 @@ function( S )
       S := TransposedMatrixGroup(S);
     fi;
     # Grab the linear part of the non-trivial generators
-    gens := Filtered(List(GeneratorsOfGroup(S), x -> x{[1..d]}{[1..d]}),
-                     x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
+    gens := Filtered(PointGroup(S), x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
     # If we have no non-trivial operators, then the regular InternalBasis
     # will do
     if Length(gens) = 0 then
       return InternalBasis( S );
     fi;
-    # (If I later find that this algorithm is deficient, I might need to consider
-    # all representative operators, not just the generators.)
     # We want to consider not just the generators, but sums of generator products.
     # This solves for a different set of vectors, like the rotational plane.
     # (If GAP allowed complex numbers, we could get all eigenvectors from gens,
@@ -107,6 +104,7 @@ function( S )
       fi;
     od;
     spare_eigenvecs := rec();
+    newbasis := [];
     # Go over each generator. Find the eigenvectors.
     for g in gens do
       vecs := Eigenvectors(Rationals, g);
@@ -132,7 +130,11 @@ function( S )
         idx := Positions(eigenvals, e);
         if Length(idx) > 1 then
           # Pop degenerate eigenvectors
-          spare_eigenvecs.(Length(idx)) := vecs{idx};
+          if IsBound(spare_eigenvecs.(Length(idx))) then
+            Add(spare_eigenvecs.(Length(idx)), vecs{idx});
+          else
+            spare_eigenvecs.(Length(idx)) := [vecs{idx}];
+          fi;
           for i in Reversed(idx) do
             Remove(vecs, i);
             Remove(eigenvals, i);
@@ -142,46 +144,89 @@ function( S )
       od;
       # The vectors remaining in vecs have unique eigenvalues.
       for v in vecs do
-        # Check whether this new vector extends T
-        # If yes, Add to T.
-        if Rank(Concatenation(T, [v])) > Length(T) then
-          Add(T, v);
-          if Length(T) = d then
-            if Determinant(T) < 0 then
-              # Change sign to be positive determinant.
-              T[d] := -T[d];
-            fi;
-            return T;
-          fi;
+        # Check whether this new vector extends T and we don't already have it
+        # If yes, Add to list of candidate vectors
+        if (Rank(Concatenation(T, [v])) > Length(T)) and not v in newbasis then
+          Add(newbasis, v);
         fi;
       od;
     od;
+    # Now that we have candidate (non-degenerate) vectors for the internal basis,
+    # let us reduce this fictional lattice.
+    newbasis := ReducedLatticeBasis(newbasis);
+    if Length(newbasis) + Length(T) > d then
+      ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
+    fi;
+    if Length(newbasis) + Length(T) = d then
+      # We've found a full basis!
+      T := Concatenation(T, newbasis);
+      if Determinant(T) < 0 then
+        # Ensure our basis has a positive determinant. This is to avoid
+        # accidentally changing chirality when going to standard basis.
+        T[d] := -T[d];
+      fi;
+      return T;
+    fi;
     # If we've made it here, we've exhausted the non-degenerate eigenvectors
+    # When going through the degenerate eigenvectors, it will be useful to have rotations on hand
+    # so we can pick symmetric degenerate sets.
+    # Get the Order > 2 operations
+    rotations := [];
+    # Get the actual generators, without the product sum.
+    gens := Filtered(PointGroup(S), x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
+    for g in gens do
+      M := g{[1..d]}{[1..d]};
+      if Order(M) > 2 and not M in rotations then
+        Add(rotations, M);
+      fi;
+    od;
+    #Print("SymmetricInternalBasis going to degenerate evecs.\n");
     # Now let's go through the spares in increasing order of degeneracy.
     for i in Set(RecNames(spare_eigenvecs), Int) do
-      for v in spare_eigenvecs.(i) do
-        if Rank(Concatenation(T, [v])) > Length(T) then
-          Add(T, v);
-          if Length(T) = d then
-            if Determinant(T) < 0 then
-              # Change sign to be positive determinant.
-              T[d] := -T[d];
-            fi;
-            return T;
+      tmpbasis := [];
+      for vlist in spare_eigenvecs.(i) do
+        for v in vlist do
+          if Rank(Concatenation(T, newbasis, tmpbasis, [v])) > Length(T)+Length(newbasis)+Length(tmpbasis) then
+            Add(tmpbasis, v);
+            # Test rotated versions of this vector
+            for g in rotations do
+              if Rank(Concatenation(T, newbasis, tmpbasis, [v * g])) > Length(T)+Length(newbasis)+Length(tmpbasis) then
+                Add(tmpbasis, v * g);
+              fi;
+            od;
           fi;
+        od;
+        # Add our new basis vectors to the set
+        tmpbasis := ReducedLatticeBasis(tmpbasis);
+        Append(newbasis, tmpbasis);
+        newbasis := ReducedLatticeBasis(newbasis);
+        if Length(newbasis) + Length(T) > d then
+          ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
+        fi;
+        if Length(newbasis) + Length(T) = d then
+          # We've found a full basis!
+          T := Concatenation(T, newbasis);
+          if Determinant(T) < 0 then
+            # Ensure our basis has a positive determinant. This is to avoid
+            # accidentally changing chirality when going to standard basis.
+            T[d] := -T[d];
+          fi;
+          return T;
         fi;
       od;
     od;
     # Iterate over all vectors until Length(T) = d.
     # If somehow we exhaust all vectors before then, resort to InternalBasis'
     # algorithm for filling out the remaining vectors.
+    Print("SymmetricInternalBasis got through all the eigenvectors.\n");
     if Length(T) = 0 then
       return IdentityMat(d);
     else
-      comp := NullMat( d - Length(T), d );
+      T2 := ReducedLatticeBasis(T); # InternalBasis assumes T is reduced
+      comp := NullMat( d - Length(T2), d );
       i:=1; j:=1; k:=1;
-      while i <= Length( T ) do
-          while T[i][j] = 0 do
+      while i <= Length( T2 ) do
+          while T2[i][j] = 0 do
               comp[k][j] := 1;
               k := k+1; j:=j+1;
           od;
