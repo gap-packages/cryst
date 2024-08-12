@@ -63,10 +63,10 @@ gap> TranslationBasis( G );
 gap> SubPeriodicGroupIT("Layer", 23) = LayerGroupIT(23);
 true
 
-gap> SubPeriodicGroupIT("Rod", 14) = RodGroupIT(14);
+gap> SubPeriodicGroupOnRightIT("Rod", 14) = RodGroupIT(14);
 true
 
-gap> SubPeriodicGroupIT("Frieze", 3) = FriezeGroupIT(3);
+gap> SubPeriodicGroupOnRightIT("Frieze", 3, 'a') = FriezeGroupIT(3);
 true
 
 # Confirm that different groups are different
