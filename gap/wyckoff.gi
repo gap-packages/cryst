@@ -64,6 +64,62 @@ InstallMethod( WyckoffBasis,
 
 #############################################################################
 ##
+#F  IsVectorInSpan . . . . . . .is a vector in the span of a list of vectors?
+##
+IsVectorInSpan := function( v, T )
+  # Catch trivial cases
+  if IsEmpty(T) then
+    return false;
+  fi;
+  if IsZero(v) then
+    return true;
+  fi;
+  # I could catch errors, but for an internal function I can assume
+  # well-behaved input
+  # Check if is in span
+  return Rank(Concatenation(T,[v])) = Rank(T);
+end;
+
+#############################################################################
+##
+#F  ReducedLatticeBasisByOrbits . .helper function for SymmetricInternalBasis
+##
+ReducedLatticeBasisByOrbits := function( T, S )
+  # Like ReducedLatticeBasis, but recursively optimises the basis to have
+  # elements in the same orbit. This is because, when building the internal
+  # basis, only the orientations of the fictitious lattice vectors are defined;
+  # the lengths are free variables. But we want the lattive to respect the 
+  # symmetries, so the lengths need to be related.
+  # T: fictitious basis vectors to reduce.
+  # S: Crystallographic group (to get point group and dimensionality).
+  local P, d, T2, t;
+  # Catch trivial case
+  if IsEmpty(T) then
+    return [];
+  fi;
+  P := PointGroup(S);
+  d := DimensionOfMatrixGroup(P);
+  # Initial reduction so have consistent starting point
+  T := ReducedLatticeBasis(T);
+  T2 := [];
+  # Iterate through vectors in T until we have full basis or exhaust T.
+  for t in T do
+    # Only consider a vector if it expands the basis.
+    if not IsVectorInSpan(t, T2) then
+      # Get all vectors in the same orbit.
+      Append(T2, Orbit(P, t));
+      # Reduce to minimal basis set.
+      T2 := ReducedLatticeBasis(T2);
+      if Length(T2) = d then
+        return T2;
+      fi;
+    fi;
+  od;
+  return T2;
+end;
+
+#############################################################################
+##
 #M  SymmetricInternalBasis . .internal basis that respects lattice symmetries
 ##
 InstallMethod( SymmetricInternalBasis,
@@ -100,7 +156,10 @@ function( S )
         # to get complementary eigenvectors.
         # Sum of products of the matrix up to the Order. This is guaranteed to
         # have real eigenvalues (but not necessarily the same sets of degeneracy).
-        Add(gens, Sum(List([0..order-1], x -> gens[i]^x)));
+        M := Sum(List([0..order-1], x -> gens[i]^x));
+        if not M in gens then
+          Add(gens, M);
+        fi;
       fi;
     od;
     spare_eigenvecs := rec();
@@ -131,7 +190,10 @@ function( S )
         if Length(idx) > 1 then
           # Pop degenerate eigenvectors
           if IsBound(spare_eigenvecs.(Length(idx))) then
-            Add(spare_eigenvecs.(Length(idx)), vecs{idx});
+            # Don't record duplicates
+            if not vecs{idx} in spare_eigenvecs.(Length(idx)) then
+              Add(spare_eigenvecs.(Length(idx)), vecs{idx});
+            fi;
           else
             spare_eigenvecs.(Length(idx)) := [vecs{idx}];
           fi;
@@ -146,14 +208,14 @@ function( S )
       for v in vecs do
         # Check whether this new vector extends T and we don't already have it
         # If yes, Add to list of candidate vectors
-        if (Rank(Concatenation(T, [v])) > Length(T)) and not v in newbasis then
+        if not IsVectorInSpan(v, T) and not v in newbasis then
           Add(newbasis, v);
         fi;
       od;
     od;
     # Now that we have candidate (non-degenerate) vectors for the internal basis,
     # let us reduce this fictional lattice.
-    newbasis := ReducedLatticeBasis(newbasis);
+    newbasis := ReducedLatticeBasisByOrbits(newbasis, S);
     if Length(newbasis) + Length(T) > d then
       ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
     fi;
@@ -168,38 +230,19 @@ function( S )
       return T;
     fi;
     # If we've made it here, we've exhausted the non-degenerate eigenvectors
-    # When going through the degenerate eigenvectors, it will be useful to have rotations on hand
-    # so we can pick symmetric degenerate sets.
-    # Get the Order > 2 operations
-    rotations := [];
-    # Get the actual generators, without the product sum.
-    gens := Filtered(PointGroup(S), x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
-    for g in gens do
-      M := g{[1..d]}{[1..d]};
-      if Order(M) > 2 and not M in rotations then
-        Add(rotations, M);
-      fi;
-    od;
-    #Print("SymmetricInternalBasis going to degenerate evecs.\n");
     # Now let's go through the spares in increasing order of degeneracy.
     for i in Set(RecNames(spare_eigenvecs), Int) do
       tmpbasis := [];
       for vlist in spare_eigenvecs.(i) do
         for v in vlist do
-          if Rank(Concatenation(T, newbasis, tmpbasis, [v])) > Length(T)+Length(newbasis)+Length(tmpbasis) then
-            Add(tmpbasis, v);
-            # Test rotated versions of this vector
-            for g in rotations do
-              if Rank(Concatenation(T, newbasis, tmpbasis, [v * g])) > Length(T)+Length(newbasis)+Length(tmpbasis) then
-                Add(tmpbasis, v * g);
-              fi;
-            od;
+          if not IsVectorInSpan(v, Concatenation(T, newbasis, tmpbasis)) then
+            # Add all rotations of this vector, but cut out redundant vectors
+            Append(tmpbasis, ReducedLatticeBasis(Orbit(PointGroup(S), v)));
           fi;
         od;
         # Add our new basis vectors to the set
-        tmpbasis := ReducedLatticeBasis(tmpbasis);
         Append(newbasis, tmpbasis);
-        newbasis := ReducedLatticeBasis(newbasis);
+        newbasis := ReducedLatticeBasisByOrbits(newbasis, S);
         if Length(newbasis) + Length(T) > d then
           ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
         fi;
@@ -218,7 +261,6 @@ function( S )
     # Iterate over all vectors until Length(T) = d.
     # If somehow we exhaust all vectors before then, resort to InternalBasis'
     # algorithm for filling out the remaining vectors.
-    Print("SymmetricInternalBasis got through all the eigenvectors.\n");
     if Length(T) = 0 then
       return IdentityMat(d);
     else
