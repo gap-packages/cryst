@@ -283,6 +283,12 @@ function ( S, conj )
 
     # add Wyckoff positions if known
     if HasWyckoffPositions( S ) then
+      # If we have a sub-periodic group and C includes out-of-basis
+      # components, then we must scrap the cached Wyckoffs.
+      # Just to be safe, we'll scrap it without checking C, as there are
+      # too many edge cases.
+      # Scrapping Wyckoffs just means we don't call SetWyckoffPositions
+      if IsSpaceGroup(S) then
         W := [];
         for w in WyckoffPositions( S ) do
             r := rec( basis       := w!.basis,
@@ -294,6 +300,7 @@ function ( S, conj )
             Add( W, WyckoffPositionObject( r ) );
         od;
         SetWyckoffPositions( R, W );
+      fi;
     fi;
 
     return R;
@@ -331,6 +338,11 @@ function ( S, conj )
 
     # add Wyckoff positions if known
     if HasWyckoffPositions( S ) then
+      # Transformations are only unique for space groups.
+      # Sub-periodic groups can lose information if there are out-of-plane
+      # components, which can make the Wyckoff positions inconsistent.
+      # So we'll only keep the cached Wyckoffs if it is a space group.
+      if IsSpaceGroup(S) then
         W := [];
         for w in WyckoffPositions( S ) do
           r := rec( basis       := w!.basis,
@@ -342,6 +354,7 @@ function ( S, conj )
           Add( W, WyckoffPositionObject( r ) );
         od;
         SetWyckoffPositions( R, W );
+      fi;
     fi;
 
     return R;

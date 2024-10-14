@@ -60,6 +60,12 @@ DeclareGlobalFunction( "ImageAffineSubspaceLatticePointwise" );
 
 #############################################################################
 ##
+#A  SymmetricInternalBasis . .internal basis that respects lattice symmetries
+##
+DeclareAttribute( "SymmetricInternalBasis", IsAffineCrystGroupOnLeftOrRight );
+
+#############################################################################
+##
 #A  WyckoffStabilizer . . . . . . . . . stabilizer of representative subspace
 ##
 DeclareAttribute( "WyckoffStabilizer", IsWyckoffPosition );
