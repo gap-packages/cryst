@@ -64,6 +64,231 @@ InstallMethod( WyckoffBasis,
 
 #############################################################################
 ##
+#F  IsVectorInSpan . . . . . . .is a vector in the span of a list of vectors?
+##
+IsVectorInSpan := function( v, T )
+  # Catch trivial cases
+  if IsEmpty(T) then
+    return false;
+  fi;
+  if IsZero(v) then
+    return true;
+  fi;
+  # I could catch errors, but for an internal function I can assume
+  # well-behaved input
+  # Check if is in span
+  return Rank(Concatenation(T,[v])) = Rank(T);
+end;
+
+#############################################################################
+##
+#F  ReducedLatticeBasisByOrbits . .helper function for SymmetricInternalBasis
+##
+ReducedLatticeBasisByOrbits := function( T, S )
+  # Like ReducedLatticeBasis, but recursively optimises the basis to have
+  # elements in the same orbit. This is because, when building the internal
+  # basis, only the orientations of the fictitious lattice vectors are defined;
+  # the lengths are free variables. But we want the lattive to respect the 
+  # symmetries, so the lengths need to be related.
+  # T: fictitious basis vectors to reduce.
+  # S: Crystallographic group (to get point group and dimensionality).
+  local P, d, T2, t;
+  # Catch trivial case
+  if IsEmpty(T) then
+    return [];
+  fi;
+  P := PointGroup(S);
+  d := DimensionOfMatrixGroup(P);
+  # Initial reduction so have consistent starting point
+  T := ReducedLatticeBasis(T);
+  T2 := [];
+  # Iterate through vectors in T until we have full basis or exhaust T.
+  for t in T do
+    # Only consider a vector if it expands the basis.
+    if not IsVectorInSpan(t, T2) then
+      # Get all vectors in the same orbit.
+      Append(T2, Orbit(P, t));
+      # Reduce to minimal basis set.
+      T2 := ReducedLatticeBasis(T2);
+      if Length(T2) = d then
+        return T2;
+      fi;
+    fi;
+  od;
+  return T2;
+end;
+
+#############################################################################
+##
+#M  SymmetricInternalBasis . .internal basis that respects lattice symmetries
+##
+InstallMethod( SymmetricInternalBasis,
+    true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
+function( S )
+    local d, T, gens, g, vecs, eigenvals, ev, i, v, spare_eigenvecs, k, comp,
+          idx, e, j, order, rotations, M, vlist, newbasis, T2, tmpbasis;
+    d := DimensionOfMatrixGroup(S) - 1;
+    T := TranslationBasis(S);
+    # If we have a space group, no need to find extra vectors
+    if Length(T) = d then
+      return T;
+    fi;
+    T := ShallowCopy(T);
+    # Get to consistent Action (okay, this might falter for point groups)
+    if not IsAffineCrystGroupOnRight(S) then
+      S := TransposedMatrixGroup(S);
+    fi;
+    # Grab the linear part of the non-trivial generators
+    gens := Filtered(PointGroup(S), x -> (x <> IdentityMat(d)) and (x <> -IdentityMat(d)));
+    # If we have no non-trivial operators, then the regular InternalBasis
+    # will do
+    if Length(gens) = 0 then
+      return InternalBasis( S );
+    fi;
+    # We want to consider not just the generators, but sums of generator products.
+    # This solves for a different set of vectors, like the rotational plane.
+    # (If GAP allowed complex numbers, we could get all eigenvectors from gens,
+    # but it doesn't.)
+    for i in [1..Length(gens)] do
+      order := Order(gens[i]);
+      if order > 2 then
+        # Order > 2 allows complex eigenvalues, so need a supplemental matrix
+        # to get complementary eigenvectors.
+        # Sum of products of the matrix up to the Order. This is guaranteed to
+        # have real eigenvalues (but not necessarily the same sets of degeneracy).
+        M := Sum(List([0..order-1], x -> gens[i]^x));
+        if not M in gens then
+          Add(gens, M);
+        fi;
+      fi;
+    od;
+    spare_eigenvecs := rec();
+    newbasis := [];
+    # Go over each generator. Find the eigenvectors.
+    for g in gens do
+      vecs := Eigenvectors(Rationals, g);
+      # Get the eigenvalues for each eigenvector
+      eigenvals := [];
+      for v in vecs do
+        ev := v * g; # ev: v times eigenvalue
+        # Find the first non-zero value, if present, and divide
+        if ev = Zero(v) then
+          # If ev is zero vector, then eigenvalue is zero
+          Add(eigenvals, 0);
+        else
+          # Find the first non-zero value
+          i := PositionProperty(ev, x -> x <> 0);
+          Add(eigenvals, ev[i] / v[i]);
+        fi;
+      od;
+      # We'll sort the eigenvalues
+      StableSortParallel(eigenvals, vecs);
+      # Single out the eigenvectors with non-degenerate eigenvalues
+      # but keep the degenerate ones in case we exhaust the non-degenerate ones.
+      for e in eigenvals do
+        idx := Positions(eigenvals, e);
+        if Length(idx) > 1 then
+          # Pop degenerate eigenvectors
+          if IsBound(spare_eigenvecs.(Length(idx))) then
+            # Don't record duplicates
+            if not vecs{idx} in spare_eigenvecs.(Length(idx)) then
+              Add(spare_eigenvecs.(Length(idx)), vecs{idx});
+            fi;
+          else
+            spare_eigenvecs.(Length(idx)) := [vecs{idx}];
+          fi;
+          for i in Reversed(idx) do
+            Remove(vecs, i);
+            Remove(eigenvals, i);
+          od;
+        fi;
+        # Otherwise, just keep the vector in vecs
+      od;
+      # The vectors remaining in vecs have unique eigenvalues.
+      for v in vecs do
+        # Check whether this new vector extends T and we don't already have it
+        # If yes, Add to list of candidate vectors
+        if not IsVectorInSpan(v, T) and not v in newbasis then
+          Add(newbasis, v);
+        fi;
+      od;
+    od;
+    # Now that we have candidate (non-degenerate) vectors for the internal basis,
+    # let us reduce this fictional lattice.
+    newbasis := ReducedLatticeBasisByOrbits(newbasis, S);
+    if Length(newbasis) + Length(T) > d then
+      ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
+    fi;
+    if Length(newbasis) + Length(T) = d then
+      # We've found a full basis!
+      T := Concatenation(T, newbasis);
+      if Determinant(T) < 0 then
+        # Ensure our basis has a positive determinant. This is to avoid
+        # accidentally changing chirality when going to standard basis.
+        T[d] := -T[d];
+      fi;
+      return T;
+    fi;
+    # If we've made it here, we've exhausted the non-degenerate eigenvectors
+    # Now let's go through the spares in increasing order of degeneracy.
+    for i in Set(RecNames(spare_eigenvecs), Int) do
+      tmpbasis := [];
+      for vlist in spare_eigenvecs.(i) do
+        for v in vlist do
+          if not IsVectorInSpan(v, Concatenation(T, newbasis, tmpbasis)) then
+            # Add all rotations of this vector, but cut out redundant vectors
+            Append(tmpbasis, ReducedLatticeBasis(Orbit(PointGroup(S), v)));
+          fi;
+        od;
+        # Add our new basis vectors to the set
+        Append(newbasis, tmpbasis);
+        newbasis := ReducedLatticeBasisByOrbits(newbasis, S);
+        if Length(newbasis) + Length(T) > d then
+          ErrorNoReturn("Somehow have more basis vectors than dimensions!?!");
+        fi;
+        if Length(newbasis) + Length(T) = d then
+          # We've found a full basis!
+          T := Concatenation(T, newbasis);
+          if Determinant(T) < 0 then
+            # Ensure our basis has a positive determinant. This is to avoid
+            # accidentally changing chirality when going to standard basis.
+            T[d] := -T[d];
+          fi;
+          return T;
+        fi;
+      od;
+    od;
+    # Iterate over all vectors until Length(T) = d.
+    # If somehow we exhaust all vectors before then, resort to InternalBasis'
+    # algorithm for filling out the remaining vectors.
+    if Length(T) = 0 then
+      return IdentityMat(d);
+    else
+      T2 := ReducedLatticeBasis(T); # InternalBasis assumes T is reduced
+      comp := NullMat( d - Length(T2), d );
+      i:=1; j:=1; k:=1;
+      while i <= Length( T2 ) do
+          while T2[i][j] = 0 do
+              comp[k][j] := 1;
+              k := k+1; j:=j+1;
+          od;
+          i := i+1; j := j+1;
+      od;
+      while j <= d do
+          comp[k][j] := 1;
+          k := k+1; j:=j+1;
+      od;
+      Append(T, comp);
+    fi;
+    if Determinant(T) < 0 then
+      # Change sign to be positive determinant.
+      T[d] := -T[d];
+    fi;
+    return T;
+end );
+
+#############################################################################
+##
 #M  ReduceAffineSubspaceLattice . . . . reduce affine subspace modulo lattice
 ##
 InstallGlobalFunction( ReduceAffineSubspaceLattice, 
@@ -74,7 +299,8 @@ function( r )
     r.basis := ReducedLatticeBasis( r.basis );
     rk := Length( r.basis );
     d  := Length( r.translation );
-    T  := TranslationBasis( r.spaceGroup );
+    T  := SymmetricInternalBasis( r.spaceGroup );
+    # Using SymmetricInternalBasis allows handling subperiodic groups.
     Ti := T^-1;
 
     if rk = d then
@@ -82,7 +308,7 @@ function( r )
     elif rk > 0 then
         M := r.basis;
         v := r.translation;
-        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        if T <> One(T) then
             M := M * Ti;
             v := v * Ti;
         fi;
@@ -100,12 +326,12 @@ function( r )
         Qi := Q^-1;
         P := Q{[1..d]}{[rk+1..d]} * Qi{[rk+1..d]};
         v := List( v * P, FractionModOne );
-        if not IsStandardAffineCrystGroup( r.spaceGroup ) then
+        if T <> One(T) then
             v := v * T;
         fi;
-        v := VectorModL( v, T );
+        v := VectorModL( v, TranslationBasis(r.spaceGroup) );
     else
-        v := VectorModL( r.translation, T );
+        v := VectorModL( r.translation, TranslationBasis(r.spaceGroup) );
     fi;
     r.translation := v;
 
@@ -221,6 +447,9 @@ InstallMethod( WyckoffStabilizer,
     true, [ IsWyckoffPosition ], 0, 
 function( w )
     local S, t, B, d, I, gen, U, r, new, n, g, v;
+    # BUG: Potentially returns Wyckoff Stabilizers that are too small if S is
+    # a subperiodic group with an origin outside the span of its translation
+    # basis.
     S := WyckoffSpaceGroup( w );
     t := WyckoffTranslation( w );
     B := WyckoffBasis( w );
@@ -260,6 +489,9 @@ InstallMethod( WyckoffOrbit,
     true, [ IsWyckoffPosition ], 0,
 function( w )
     local S, t, B, d, I, gen, U, r, o, s;
+    # BUG: Potentially returns Wyckoff Orbits with too many members if S is
+    # a subperiodic group with an origin outside the span of its translation
+    # basis.
     S := WyckoffSpaceGroup( w );
     t := WyckoffTranslation( w );
     B := WyckoffBasis( w );
@@ -440,6 +672,124 @@ end;
 
 #############################################################################
 ##
+#F  IsTranslationInBasis( S ) . . . . tests if Wyckoff position is in lattice
+##
+IsTranslationInBasis := function(f)
+  local STB, t, d, S, gens, xs, translations, basis, t2, Q, R, sol, M, fvecs;
+  # From our record f, checks whether the translation vector lies within 
+  # the group's translation basis. Returns Boolean.
+  # Also corrects the translation vector in-place to account for false
+  # translations from the fake internal basis vectors.
+  S := f.spaceGroup;
+  # Trivial case: we have a space group
+  if IsSpaceGroup(S) then
+    return true;
+  fi;
+  # Otherwise, consider if the translation vector lies within the translation basis
+  t := f.translation;
+  d := Length(t);
+  STB := TranslationBasis(S);
+  # If the Wyckoff basis is non-empty, then maybe another point on the Wyckoff
+  # position lies in the crystal's translation basis.
+  if Length(f.basis) > 0 then
+    STB := Concatenation(STB, -f.basis);
+  fi;
+  # Make all vectors in STB integers, so can use RowEchelonForm safely.
+  # We can do this safely because we don't care about the magnitude of these
+  # vectors, only their span.
+  STB := List( STB, v -> v * Lcm(List(v, DenominatorRat)) );
+  # Simplify (so Rank = Length)
+  STB := RowEchelonForm(STB);
+  # Trivial case: the basis of allowed points fills the whole space
+  if Length(STB) = d then
+    return true;
+  fi;
+  # Now, we can't simply check if t is in the span of STB, because
+  # the origin may be non-zero. Instead, we must check if the vectors,
+  # when operated on, fit the span.
+  gens := GeneratorsOfGroup(S);
+  if IsAffineCrystGroupOnLeft(S) then
+    gens := List(gens, TransposedMat);
+  fi;
+  # We'll also filter the pure translations out of gens, because those have
+  # been caught in TranslationBasis(S);
+  gens := Filtered(gens, g -> g{[1..d]}{[1..d]} <> IdentityMat(d));
+  # Let us check for a simpler case: the origin is at zero.
+  # This is guaranteed if there are no translation components in the generators,
+  # or the translation components are within the span of the translation basis.
+  translations := List(gens, g -> g[d+1]{[1..d]});
+  if RankMat(Concatenation(STB, translations)) = Length(STB) then
+    # There are no symmetry operators to take the origin outside the lattice
+    # Can use a cheaper check, as solutions don't need to account for an
+    # extra translation.
+    if RankMat(Concatenation(STB, [t])) = Length(STB) then
+      return true;
+    else
+      # Check if t modulo Z is usable
+      # Because earlier parts of the algorithm give the translation modulo
+      # fictitious lattice vectors, so we want to choose the correct modulo.
+      # Convert to standard basis
+      basis := SymmetricInternalBasis(S);
+      t := t * Inverse(basis);
+      STB := STB * Inverse(basis);
+      Q := IdentityMat(d);
+      R := RowEchelonFormT(TransposedMat(STB), Q);
+      # Q * TransposedMat(STB) = R (except R drops zero rows)
+      t2 := Q * t;
+      # Grab just the inconsistent part of the solution vector.
+      t2{[1..Length(R)]} := 0 * [1..Length(R)];
+      t2 := Inverse(Q) * t2; # Convert out of row echelon form
+      # Check that it is integers
+      if not ForAll(t2, IsInt) then
+        return false;
+      fi;
+      # If it is, correct the translation.
+      f.translation := f.translation - t2 * basis;
+      ReduceAffineSubspaceLattice(f);
+      return true;
+    fi;
+  fi;
+  # xs are the difference between point t and point t after being operated on.
+  xs := List(gens, g -> (Concatenation(t, [1]) * (g - One(g))){[1..d]});
+  # If xs are all in the span of the translation basis, then the point being
+  # acted on is staying inside the lattice, so is valid.
+  if Length(STB) = RankMat(Concatenation(STB, xs)) then
+    return true;
+  fi;
+  # Otherwise, we need to test if this point shifted by an integer number of
+  # fictitious lattice vectors would give a point in the lattice.
+  # First, grab the fictitious lattice vectors.
+  fvecs := Filtered( SymmetricInternalBasis(S), v -> not v in TranslationBasis(S) );
+  # We now solve the system of all xs simultaneously.
+  Q := IdentityMat(d * Length(gens));
+  R := RowEchelonFormT(KroneckerProduct(IdentityMat(Length(gens)), TransposedMat(STB)), Q);
+  t2 := Q * Flat(xs); # Q is the transformation taking to REF.
+  # Grab just the inconsistent part
+  t2{[1..Length(R)]} := 0 * [1..Length(R)];
+  # We now have (g-I) * fvec * n = t2.
+  # We want to find n if it is integers.
+  # Stack up all the linear parts of the generators.
+  # (Remember that gens are RightAction, so normally act on row vectors.)
+  # (But I'm doing maths with column vectors at the moment.)
+  M := Concatenation(List(gens, g -> TransposedMat(g{[1..d]}{[1..d]}) - IdentityMat(d) ));
+  # Multiply by the vectors of interest.
+  # Move to the same REF
+  M := Q * M * TransposedMat(fvecs);
+  # Find an integer solution, for just the inconsistent part.
+  # (IntSolutionMat works on RightAction)
+  sol := IntSolutionMat(TransposedMat(M{[Length(R)+1..Length(M)]}), t2{[Length(R)+1..Length(t2)]});
+  if sol = fail then
+    return false;
+  else
+    # We have a solution. Correct the translation and go home.
+    f.translation := f.translation - sol * fvecs;
+    ReduceAffineSubspaceLattice(f);
+    return true;
+  fi;
+end;
+
+#############################################################################
+##
 #F  WyPos( S, stabs, lift ) . . . . . . . . . . . . . . . . Wyckoff positions
 ##
 WyPos := function( S, stabs, lift )
@@ -449,7 +799,7 @@ WyPos := function( S, stabs, lift )
     # get representative affine subspace lattices
     d := DimensionOfMatrixGroup( S ) - 1;
     W := List( [0..d], i -> [] );
-    T := TranslationBasis( S );
+    T := SymmetricInternalBasis( S );
     for i in [1..Length(stabs)] do
         lst := List( GeneratorsOfGroup( stabs[i] ), lift );
         if IsAffineCrystGroupOnLeft( S ) then
@@ -465,7 +815,9 @@ WyPos := function( S, stabs, lift )
             w.spaceGroup  := S;
             w.class       := i;
             ReduceAffineSubspaceLattice( w );
-            Add( W[dim], w );
+            if IsTranslationInBasis(w) then
+              Add( W[dim], w );
+            fi;
         od;
     od;
 
@@ -510,7 +862,11 @@ WyPosSGL := function( S )
     N := NiceObject( P );
 
     # set up lift from nice rep to std rep
-    lift  := x -> NiceToCrystStdRep( P, x );
+    if IsSpaceGroup(S) then
+      lift  := x -> NiceToCrystStdRep( P, x );
+    else
+      lift := x -> NiceToCrystStdRepSymmetric( P, x );
+    fi;
     stabs := List( ConjugacyClassesSubgroups( N ), Representative );
     Sort( stabs, function(x,y) return Size(x) > Size(y); end );
 
@@ -542,24 +898,37 @@ WyPosStep := function( idx, G, M, b, lst )
         else
             F := [];
         fi;
+        # At this stage, F contains possible basis and translation information
+        # for the Wyckoff positions
         c := lst.c + 1;
         added := false;
         for f in F do
             d := Length( f.basis ) + 1; 
             stop := d=lst.dim+1;
+            # Multiplying by the translation basis of the group takes it back
+            # to the original setting from the standard setting
             f.translation := f.translation * lst.T;
             if not IsEmpty( f.basis ) then
                 f.basis   := f.basis * lst.T;
             fi;
             f.spaceGroup  := lst.S;
             ReduceAffineSubspaceLattice( f );
-            if not f in lst.sp[d] then
+            if IsTranslationInBasis(f) then
+              # Exclude f if f.translation lies
+              # outside the span of TranslationBasis(lst.S).
+              # IsTranslationInBasis also accounts for f.translation possibly
+              # being off modulo 1 and corrects it, and accounts for
+              # non-centered origins.
+              if not f in lst.sp[d] then
+                # We check for duplicates after we potentially correct
+                # the translation.
                 O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
                 w := ShallowCopy( f );
                 w.class := c;
                 UniteSet( lst.sp[d], O );
                 Add( lst.W[d], WyckoffPositionObject(w) );
                 added := true;
+              fi;
             fi;
         od;
         if added and not stop then
@@ -591,16 +960,27 @@ WyPosAT := function( S )
         S2 := TransposedMatrixGroup( S2 );
     fi;
     
-    lst := rec( dim := d, T := TranslationBasis(S), S := S, c := 1,
+    lst := rec( dim := d, T := SymmetricInternalBasis(S), S := S, c := 1,
                 S2 := S2 );
+    # T used to be TranslationBasis, but it's used for changing from Standard
+    # form to original form, so needs to be a full matrix.
 
     zz := []; mat := []; vec := [];
     for g in Zuppos( NiceObject( P ) ) do
         if g <> () then
-            m := NiceToCrystStdRep(P,g);
+            # Record a point group operation *in standard basis*
+            # Meaning you might have permuted the bases.
+            if IsSpaceGroup( S ) then
+              m := NiceToCrystStdRep(P,g);
+            else
+              # If a sub-periodic group, need to do some slightly more expensive checks.
+              m := NiceToCrystStdRepSymmetric(P,g);
+            fi;
             if IsAffineCrystGroupOnRight( S ) then
                 m := TransposedMat(m);
             fi;
+            # The matrix M and vector b are used in a set of equations
+            # to solve for the Wyckoff positions
             M := m{[1..d]}{[1..d]}-IdentityMat(d);
             b := m{[1..d]}[d+1];
             M := RowEchelonFormVector(M,b);
@@ -614,13 +994,15 @@ WyPosAT := function( S )
     lst.z   := zz;
     lst.mat := mat;
     lst.vec := vec;
-
+    
+    # This record is used to build the general position.
     s := rec( translation := ListWithIdenticalEntries(d,0),
-              basis       := TranslationBasis(S),
+              basis       := SymmetricInternalBasis(S),
               spaceGroup  := S );
     ReduceAffineSubspaceLattice(s);
     lst.sp := List( [1..d+1], x-> [] ); Add( lst.sp[d+1], s );
-
+    
+    # Here we make the general position
     w := ShallowCopy( s );
     w.class := 1;
     w := WyckoffPositionObject( w );
@@ -642,11 +1024,6 @@ InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight",
     true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
 
-    # check if we indeed have a space group
-    if not IsSpaceGroup( S ) then
-        Error("S must be a space group");
-    fi;
-
     # for small dimensions, the recursive method is faster
     if DimensionOfMatrixGroup( S ) < 6 then
         return WyPosAT( S );
@@ -665,9 +1042,6 @@ InstallGlobalFunction( WyckoffPositionsByStabilizer, function( S, stb )
     local stabs, P, lift;
 
     # check the arguments
-    if not IsSpaceGroup( S ) then
-        Error( "S must be a space group" );
-    fi;
     if IsGroup( stb ) then
         stabs := [ stb ];
     else
@@ -678,7 +1052,11 @@ InstallGlobalFunction( WyckoffPositionsByStabilizer, function( S, stb )
     P := PointGroup( S );
 
     # set up lift from nice rep to std rep
-    lift  := x -> NiceToCrystStdRep( P, x );
+    if IsSpaceGroup(S) then
+      lift  := x -> NiceToCrystStdRep( P, x );
+    else
+      lift  := x -> NiceToCrystStdRepSymmetric( P, x );
+    fi;
     stabs := List( stabs, x -> Image( NiceMonomorphism( P ), x ) );
     Sort( stabs, function(x,y) return Size(x) > Size(y); end );
 
