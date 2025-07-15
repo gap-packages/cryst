@@ -596,7 +596,7 @@ WyPosAT := function( S )
 
     zz := []; mat := []; vec := [];
     for g in Zuppos( NiceObject( P ) ) do
-        if g <> () then
+        if not IsOne(g) then
             m := NiceToCrystStdRep(P,g);
             if IsAffineCrystGroupOnRight( S ) then
                 m := TransposedMat(m);
@@ -627,7 +627,7 @@ WyPosAT := function( S )
     lst.W := List( [1..d+1], x -> [] ); Add( lst.W[d+1], w );
 
     if 1 <= Length(lst.z) then
-        WyPosStep(1,TrivialGroup(IsPermGroup),[],[],lst);
+        WyPosStep(1,TrivialSubgroup(NiceObject( P )),[],[],lst);
     fi;
 
     return Flat(lst.W);
