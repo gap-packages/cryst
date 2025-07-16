@@ -51,7 +51,7 @@ Group(
 gap> S := SpaceGroupIT(2,7);
 SpaceGroupOnRightIT(2,7,'1')
 
-gap> P := PointGroup(S);; Size( P );; P;
+gap> P := PointGroup(S);
 Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
 
 gap> N := NormalizerInGLnZ(P);
