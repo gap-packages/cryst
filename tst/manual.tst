@@ -68,15 +68,15 @@ gap> S := SpaceGroupIT(2,14);
 SpaceGroupOnRightIT(2,14,'1')
 
 gap> W := WyckoffPositions(S);
-[ < Wyckoff position, point group 3, translation := [ 0, 0 ], 
+[ < Wyckoff position, point group 1, translation := [ 0, 0 ], 
     basis := [  ] >
-    , < Wyckoff position, point group 3, translation := [ 2/3, 1/3 ], 
+    , < Wyckoff position, point group 1, translation := [ 1/3, 2/3 ], 
     basis := [  ] >
-    , < Wyckoff position, point group 3, translation := [ 1/3, 2/3 ], 
+    , < Wyckoff position, point group 1, translation := [ 2/3, 1/3 ], 
     basis := [  ] >
     , < Wyckoff position, point group 2, translation := [ 0, 0 ], 
     basis := [ [ 1, -1 ] ] >
-    , < Wyckoff position, point group 1, translation := [ 0, 0 ], 
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ], 
     basis := [ [ 1, 0 ], [ 0, 1 ] ] >
      ]
 
@@ -98,7 +98,7 @@ gap> WyckoffBasis( W[4] );
 [ [ 1, -1 ] ]
 
 gap> WyckoffTranslation( W[3] );
-[ 1/3, 2/3 ]
+[ 2/3, 1/3 ]
 
 gap> WyckoffSpaceGroup( W[1] );
 SpaceGroupOnRightIT(2,14,'1')
@@ -111,15 +111,15 @@ true
 
 gap> orb := WyckoffOrbit( W[4] );
 [ < Wyckoff position, point group 2, translation := [ 0, 0 ], 
-    basis := [ [ 1, -1 ] ] >
-    , < Wyckoff position, point group 2, translation := [ 0, 0 ], 
+    basis := [ [ -2, -1 ] ] >,
+  < Wyckoff position, point group 2, translation := [ 0, 0 ], 
+    basis := [ [ 1, -1 ] ] >,
+  < Wyckoff position, point group 2, translation := [ 0, 0 ], 
     basis := [ [ 1, 2 ] ] >
-    , < Wyckoff position, point group 2, translation := [ 0, 0 ], 
-    basis := [ [ -2, -1 ] ] >
      ]
 gap> Set(orb);
 [ < Wyckoff position, point group 2, translation := [ 0, 0 ], 
-    basis := [ [ 1, -1 ] ] >
+    basis := [ [ -2, -1 ] ] >
      ]
 
 gap> G := Group(  (1,2,3), (2,3,4) );

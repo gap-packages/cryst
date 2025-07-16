@@ -272,7 +272,7 @@ function( w )
     fi;
     U := AffineCrystGroupOnRight( gen, One( S ) );
     r := rec( translation := t, basis := B, spaceGroup  := S );
-    o := Orbit( U, r, ImageAffineSubspaceLatticePointwise );
+    o := SortedList( Orbit( U, r, ImageAffineSubspaceLatticePointwise ) );
     s := List( o, x -> WyckoffPositionObject( 
                               rec( translation := x.translation, 
                                    basis       := x.basis, 
@@ -483,11 +483,12 @@ WyPos := function( S, stabs, lift )
             s := lst[1];
             c := s.class;
             Unbind( s.class );
-            orb := Orbit( U, Immutable(s), ImageAffineSubspaceLattice );
+            orb := SortedList( Orbit( U, Immutable(s), ImageAffineSubspaceLattice ) );
             lst := Filtered( lst, 
                    x -> not rec( translation := x.translation,
                                  basis       := x.basis,
                                  spaceGroup  := x.spaceGroup   ) in orb );
+            s := ShallowCopy( orb[1] );
             s.class := c;
             Add( new, WyckoffPositionObject( s ) );
         od;
@@ -554,8 +555,8 @@ WyPosStep := function( idx, G, M, b, lst )
             f.spaceGroup  := lst.S;
             ReduceAffineSubspaceLattice( f );
             if not f in lst.sp[d] then
-                O := Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice );
-                w := ShallowCopy( f );
+                O := SortedList( Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice ) );
+                w := ShallowCopy( O[1] );
                 w.class := c;
                 UniteSet( lst.sp[d], O );
                 Add( lst.W[d], WyckoffPositionObject(w) );
@@ -642,6 +643,8 @@ InstallMethod( WyckoffPositions, "for AffineCrystGroupOnLeftOrRight",
     true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
 function( S )
 
+    local W, c1, c2, z, i, j;
+
     # check if we indeed have a space group
     if not IsSpaceGroup( S ) then
         Error("S must be a space group");
@@ -649,10 +652,24 @@ function( S )
 
     # for small dimensions, the recursive method is faster
     if DimensionOfMatrixGroup( S ) < 6 then
-        return WyPosAT( S );
+        W := WyPosAT( S );
     else
-        return WyPosSGL( S );
+        W := WyPosSGL( S );
     fi;
+
+    W  := SortedList( W );
+    c1 := List( W, w -> w!.class ); c2 := [];
+    z  := 1;
+    for i in DuplicateFreeList( c1 ) do
+        for j in Positions( c1, i ) do
+            c2[j] := z;
+        od;
+        z := z + 1;
+    od;
+
+    return List( [1..Length(W)], i -> WyckoffPositionObject(
+        rec( basis := W[i]!.basis, spaceGroup := W[i]!.spaceGroup,
+             translation := W[i]!.translation, class := c2[i] ) ) );
 
 end );
 
