@@ -14,7 +14,7 @@ gap> C^m;
 gap> C := SpaceGroupIT( 3, 133 );
 SpaceGroupOnRightIT(3,133,'2')
 
-gap> P := PointGroup( C );
+gap> P := PointGroup( C );; Size( P );; P;
 <matrix group of size 16 with 4 generators>
 
 gap> NormalizerInGLnZ( P );
@@ -51,7 +51,7 @@ Group(
 gap> S := SpaceGroupIT(2,7);
 SpaceGroupOnRightIT(2,7,'1')
 
-gap> P := PointGroup(S);
+gap> P := PointGroup(S);; Size( P );; P;
 Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
 
 gap> N := NormalizerInGLnZ(P);
