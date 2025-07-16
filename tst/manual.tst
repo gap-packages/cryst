@@ -67,6 +67,20 @@ gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 gap> S := SpaceGroupIT(2,14);
 SpaceGroupOnRightIT(2,14,'1')
 
+#@if CompareVersionNumbers(GAPInfo.Version, "4.15")
+gap> W := WyckoffPositions(S);
+[ < Wyckoff position, point group 2, translation := [ 0, 0 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 2, translation := [ 2/3, 1/3 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 2, translation := [ 1/3, 2/3 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ],
+    basis := [ [ 1, -1 ] ] >
+    , < Wyckoff position, point group 1, translation := [ 0, 0 ],
+    basis := [ [ 1, 0 ], [ 0, 1 ] ] >
+     ]
+#@else
 gap> W := WyckoffPositions(S);
 [ < Wyckoff position, point group 3, translation := [ 0, 0 ], 
     basis := [  ] >
@@ -79,6 +93,7 @@ gap> W := WyckoffPositions(S);
     , < Wyckoff position, point group 1, translation := [ 0, 0 ], 
     basis := [ [ 1, 0 ], [ 0, 1 ] ] >
      ]
+#@fi
 
 gap> sub := Group([ [ [ 0, -1 ], [ -1, 0 ] ] ]);
 Group([ [ [ 0, -1 ], [ -1, 0 ] ] ])
@@ -109,6 +124,20 @@ Group([ [ [ 0, -1, 0 ], [ -1, 0, 0 ], [ 0, 0, 1 ] ] ])
 gap> IsAffineCrystGroupOnRight( stab );
 true
 
+#@if CompareVersionNumbers(GAPInfo.Version, "4.15")
+gap> orb := WyckoffOrbit( W[4] );
+[ < Wyckoff position, point group 3, translation := [ 0, 0 ],
+    basis := [ [ 1, -1 ] ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ],
+    basis := [ [ 1, 2 ] ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 0 ],
+    basis := [ [ -2, -1 ] ] >
+     ]
+gap> Set(orb);
+[ < Wyckoff position, point group 3, translation := [ 0, 0 ],
+    basis := [ [ 1, -1 ] ] >
+     ]
+#@else
 gap> orb := WyckoffOrbit( W[4] );
 [ < Wyckoff position, point group 2, translation := [ 0, 0 ], 
     basis := [ [ 1, -1 ] ] >
@@ -121,6 +150,7 @@ gap> Set(orb);
 [ < Wyckoff position, point group 2, translation := [ 0, 0 ], 
     basis := [ [ 1, -1 ] ] >
      ]
+#@fi
 
 gap> G := Group(  (1,2,3), (2,3,4) );
 Group([ (1,2,3), (2,3,4) ])

@@ -23,6 +23,32 @@ gap> NormalizerInGLnZ( P );
 gap> G := SpaceGroupIT(3,68);
 SpaceGroupOnRightIT(3,68,'2')
 
+#@if CompareVersionNumbers(GAPInfo.Version, "4.15")
+gap> pos := SortedList(WyckoffPositions(G));
+[ < Wyckoff position, point group 6, translation := [ 0, 0, 1/2 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 1/4, 1/4 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 3, translation := [ 0, 1/4, 3/4 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 6, translation := [ 1/4, 1/4, 1/2 ],
+    basis := [  ] >
+    , < Wyckoff position, point group 5, translation := [ 0, 3/4, 0 ],
+    basis := [ [ 0, 0, 1 ] ] >
+    , < Wyckoff position, point group 5, translation := [ 1/4, 0, 0 ],
+    basis := [ [ 0, 0, 1 ] ] >
+    , < Wyckoff position, point group 4, translation := [ 0, 0, 1/4 ],
+    basis := [ [ 0, 1, 0 ] ] >
+    , < Wyckoff position, point group 1, translation := [ 0, 0, 0 ],
+    basis := [ [ 1/2, 1/2, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ] >
+    , < Wyckoff position, point group 2, translation := [ 1/4, 1/4, 1/4 ],
+    basis := [ [ 1, 0, 0 ] ] >
+     ]
+
+gap> WyckoffStabilizer(pos[6]);
+Group(
+[ [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ] ])
+#@else
 gap> pos := WyckoffPositions(G);
 [ < Wyckoff position, point group 3, translation := [ 0, 3/4, 1/4 ], 
     basis := [  ] >
@@ -47,6 +73,7 @@ gap> pos := WyckoffPositions(G);
 gap> WyckoffStabilizer(pos[5]);
 Group(
 [ [ [ -1, 0, 0, 0 ], [ 0, -1, 0, 0 ], [ 0, 0, 1, 0 ], [ 1/2, 0, 0, 1 ] ] ])
+#@fi
 
 gap> S := SpaceGroupIT(2,7);
 SpaceGroupOnRightIT(2,7,'1')
