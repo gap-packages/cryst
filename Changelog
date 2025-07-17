@@ -1,3 +1,11 @@
+Version 4.1.28
+
+   - standardized Wyckoff position representation, which is now stable
+	across GAP versions
+
+   - adaptions to new treatment of rational matrix groups (we need
+     the polenta package now)
+
 Version 4.1.27
 
    - fixed incomplete conjugation of Wyckoff positions
