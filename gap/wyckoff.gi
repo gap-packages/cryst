@@ -314,7 +314,7 @@ end;
 ##         x * Q^-1 * D = b       with D a diagonal matrix.
 ##  Solving y * D = b we get x = y * Q.
 ##
-SolveInhomEquationsModZ := function( M, b, onRight )
+InstallGlobalFunction( SolveInhomEquationsModZ, function( M, b, onRight )
 
     local   Q,  j,  L,  space,  i,  v;
     
@@ -353,7 +353,7 @@ SolveInhomEquationsModZ := function( M, b, onRight )
     L := List( L, l->List( l, q->FractionModOne(q) ) );
     
     return [ L, Q{[Length(M)+1..Length(Q)]} ];
-end;
+end );
 
 #############################################################################
 ##
@@ -463,9 +463,12 @@ WyPos := function( S, stabs, lift )
                 w.basis       := w.basis * T;
             fi;
             w.spaceGroup  := S;
-            w.class       := i;
             ReduceAffineSubspaceLattice( w );
-            Add( W[dim], w );
+            w.class       := i;
+            if Size( WyckoffStabilizer( WyckoffPositionObject( ShallowCopy(w) ) ) ) =
+               Size( stabs[i] ) then
+                Add( W[dim], w );
+            fi;
         od;
     od;
 
@@ -526,11 +529,12 @@ end;
 ##
 WyPosStep := function( idx, G, M, b, lst )
 
-    local g, G2, M2, b2, F, c, added, stop, f, d, w, O;
+    local g, G2, ln, M2, b2, F, c, added, stop, f, d, w, O, o;
 
     g := lst.z[idx];
     if not g in G then
         G2 := ClosureGroup( G, g );
+        ln := Size( PointGroup(lst.S2) ) / Size( G2 );
         M2 := Concatenation( M, lst.mat[idx] );
         b2 := Concatenation( b, lst.vec[idx] );
         if M <> [] then
@@ -558,9 +562,12 @@ WyPosStep := function( idx, G, M, b, lst )
                 O := SortedList( Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice ) );
                 w := ShallowCopy( O[1] );
                 w.class := c;
-                UniteSet( lst.sp[d], O );
-                Add( lst.W[d], WyckoffPositionObject(w) );
-                added := true;
+                o := SortedList( Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLatticePointwise ) );
+                if Length( o ) = ln then
+                    UniteSet( lst.sp[d], O );
+                    Add( lst.W[d], WyckoffPositionObject(w) );
+                    added := true;
+                fi;
             fi;
         od;
         if added and not stop then

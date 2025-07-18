@@ -544,7 +544,21 @@ end );
 ##
 InstallMethod( IsSymmorphicSpaceGroup,
     "generic method", true, [ IsAffineCrystGroupOnLeftOrRight ], 0,
-    S -> CocVecs( S ) = [] );
+    function ( S )
+    local d, gen, mat, vec, sol;
+    d := DimensionOfMatrixGroup( S ) - 1;
+    gen := GeneratorsOfGroup( StandardAffineCrystGroup(S) );
+    gen := Filtered( List( gen, g -> g - One(S) ),
+                     m -> not IsZero( m{[1..d]}{[1..d]} ) );
+    if IsEmpty( gen ) then gen := [ One(S) ]; fi;
+    if IsAffineCrystGroupOnLeft(S) then
+        gen := List( gen, TransposedMat );
+    fi;
+    mat := List( [1..d], i -> Concatenation( List( gen, g -> g[i]{[1..d]} ) ) );
+    vec := List( Concatenation( List( gen, g -> g[d+1]{[1..d]} ) ), FractionModOne );
+    sol := SolveInhomEquationsModZ( mat, vec, true );
+    return not IsEmpty( sol[1] );
+end );
 
 #############################################################################
 ##

@@ -100,3 +100,9 @@ DeclareGlobalFunction( "WyckoffGraphFun" );
 ##
 DeclareOperation( "WyckoffGraph", 
     [ IsAffineCrystGroupOnLeftOrRight, IsRecord ] );
+
+#############################################################################
+##
+#F  SolveInhomEquationsModZ( mat, vec, onRight ) . . . solve inhom. eq. mod Z 
+##
+DeclareGlobalFunction( "SolveInhomEquationsModZ" ); 
