@@ -1,3 +1,11 @@
+Version 4.1.29
+
+   - fix an inconsistent numbering of stabilizer classes of WyckoffPositions
+     (thanks to Bernard Field for analyzing and reporting)
+
+   - replaced an incorrect implementation of IsSymmorphicSpaceGroup by a
+     correct one (thanks to Hongyi Zhao for analyzing and reporting)
+
 Version 4.1.28
 
    - standardized Wyckoff position representation, which is now stable
