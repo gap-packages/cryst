@@ -2,14 +2,20 @@
 set -e
 
 echo "TeXing documentation"
-rm -f manual.aux manual.dvi manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
-tex manual
+# delete old stuff to avoid spurious or "hidden errors" caused by their presence
+rm -f manual.aux manual.pdf manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+# TeX the manual
+pdftex manual
+
+
+# TeX the manual again to incorporate the ToC 
+pdftex manual
+# ... and build the index
 ../../../doc/manualindex manual
-tex manual
+# Finally TeX the manual again to get cross-references right
+pdftex manual
 
-echo "Creating PDF version"
-pdftex manual; pdftex manual
-
-echo "Creating HTML documentation"
+# The HTML version of the manual
 mkdir -p ../htm
-../../../etc/convert.pl -c -i -u -n cryst . ../htm
+echo "Creating HTML documentation"
+../../../etc/convert.pl -i -u -c -n cryst . ../htm
