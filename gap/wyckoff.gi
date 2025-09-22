@@ -562,12 +562,9 @@ WyPosStep := function( idx, G, M, b, lst )
                 O := SortedList( Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLattice ) );
                 w := ShallowCopy( O[1] );
                 w.class := c;
-                o := SortedList( Orbit( lst.S2, Immutable(f), ImageAffineSubspaceLatticePointwise ) );
-                if Length( o ) = ln then
-                    UniteSet( lst.sp[d], O );
-                    Add( lst.W[d], WyckoffPositionObject(w) );
-                    added := true;
-                fi;
+                UniteSet( lst.sp[d], O );
+                Add( lst.W[d], WyckoffPositionObject(w) );
+                added := true;
             fi;
         od;
         if added and not stop then
