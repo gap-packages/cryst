@@ -1,5 +1,5 @@
 <?php 
-  $Cryst_Version    = '4.1.29';
-  $Cryst_Date       = '18 Jul 2025';
+  $Cryst_Version    = '4.1.30';
+  $Cryst_Date       = '22 Sep 2025';
   $Cryst_Size       = '254 kB';
 ?>
