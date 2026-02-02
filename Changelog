@@ -1,3 +1,9 @@
+Version 4.1.31
+
+   - fixed a bug in RepresentativeAction for affine cryst groups
+     due to incorrect handling of empty list of point group generators
+     (thanks to  kiryph for reporting).
+
 Version 4.1.30
 
    - fixed a regression in WyckoffPositions (thanks to kiryph for reporting).

@@ -207,6 +207,10 @@ function( G, d, e, opr )
 
     dim := DimensionOfMatrixGroup( PG );
     gP := GeneratorsOfGroup( Pe );
+    # trivial point group
+    if IsEmpty(gP) then
+        return R;
+    fi;
     M  := NullMat( Length(gP) * Length(Te), dim * Length(gP) );
     if not IsEmpty( Te ) then
         for i in [1..Length(gP)] do
