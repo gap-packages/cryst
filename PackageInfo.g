@@ -104,7 +104,6 @@ Dependencies := rec(
                            [ "polenta", ">= 1.3.10" ] ],
   SuggestedOtherPackages := [ [ "CrystCat", ">=1.1.9" ],
                               [ "CaratInterface", ">=2.3.3" ],
-                              [ "XGAP", ">=4.22" ] 
   ],
   ExternalConditions := []
 ),
