@@ -30,33 +30,14 @@ gap> Length(L);
 gap> List( L, IndexInParent );                                       
 [ 2, 2, 2, 3, 4 ]
 
-# doc/cryst.xml:439-455
+# doc/cryst.xml:439-445
 gap> P := Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ]);
 Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
-gap> norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );
-[ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
-  [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
 gap> SpaceGroupsByPointGroupOnRight( P );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
   <matrix group with 4 generators>, <matrix group with 4 generators> ]
-gap> SpaceGroupsByPointGroupOnRight( P, norm );
-[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
-  <matrix group with 4 generators> ]
-gap> SpaceGroupsByPointGroupOnRight( P, norm, true );
-[ [ <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators> ] ]
 
-# doc/cryst.xml:467-475
-gap> SpaceGroupTypesByPointGroupOnRight( P );
-[ <matrix group with 4 generators>, <matrix group with 4 generators>, 
-  <matrix group with 4 generators> ]
-gap> SpaceGroupTypesByPointGroupOnRight( P, true );
-[ [ <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
-  [ <matrix group with 4 generators> ] ]
-
-# doc/cryst.xml:521-536
+# doc/cryst.xml:527-542
 gap> S := SpaceGroupIT(2,14);
 SpaceGroupOnRightIT(2,14,'1')
 gap> W := WyckoffPositions(S);
@@ -72,7 +53,7 @@ gap> W := WyckoffPositions(S);
     basis := [ [ 1, 0 ], [ 0, 1 ] ] >
      ]
 
-# doc/cryst.xml:551-560
+# doc/cryst.xml:557-566
 gap> sub := Group([ [ [ 0, -1 ], [ -1, 0 ] ] ]);
 Group([ [ [ 0, -1 ], [ -1, 0 ] ] ])
 gap> IsSubgroup( PointGroup( S ), sub );
@@ -82,29 +63,29 @@ gap> WyckoffPositionsByStabilizer( S, sub );
     basis := [ [ 1, -1 ] ] >
      ]
 
-# doc/cryst.xml:567-570
+# doc/cryst.xml:573-576
 gap> ForAll( W, IsWyckoffPosition );
 true
 
-# doc/cryst.xml:578-581
+# doc/cryst.xml:584-587
 gap> WyckoffBasis( W[4] );
 [ [ 1, -1 ] ]
 
-# doc/cryst.xml:589-592
+# doc/cryst.xml:595-598
 gap> WyckoffTranslation( W[3] );
 [ 2/3, 1/3 ]
 
-# doc/cryst.xml:599-602
+# doc/cryst.xml:605-608
 gap> WyckoffSpaceGroup( W[1] );
 SpaceGroupOnRightIT(2,14,'1')
 
-# doc/cryst.xml:611-616
+# doc/cryst.xml:617-622
 gap> stab := WyckoffStabilizer( W[4] );
 Group([ [ [ 0, -1, 0 ], [ -1, 0, 0 ], [ 0, 0, 1 ] ] ])
 gap> IsAffineCrystGroupOnRight( stab );
 true
 
-# doc/cryst.xml:630-643
+# doc/cryst.xml:636-649
 gap> orb := WyckoffOrbit( W[4] );
 [ < Wyckoff position, point group 2, translation := [ 0, 0 ], 
     basis := [ [ -2, -1 ] ] >
@@ -118,7 +99,7 @@ gap> Set(orb);
     basis := [ [ -2, -1 ] ] >
      ]
 
-# doc/cryst.xml:872-897
+# doc/cryst.xml:878-903
 gap> G := Group(  (1,2,3), (2,3,4) );
 Group([ (1,2,3), (2,3,4) ])
 gap> H := Group( (1,2,3) ); 
@@ -144,7 +125,7 @@ gap> ColorCosetList( U );
 gap> List( last, x -> ColorOfElement( U, Representative(x) ) );
 [ 1, 3 ]
 
-# doc/cryst.xml:911-923
+# doc/cryst.xml:917-929
 gap> S := SpaceGroupIT( 2, 10 );                                  
 SpaceGroupOnRightIT(2,10,'1')
 gap> m := MaximalSubgroupClassReps( S, rec( primes := [2] ) );    
@@ -157,7 +138,7 @@ false
 gap> C := ColorGroup( S, m[2] );; IsColorGroup( PointGroup( C ) );
 true
 
-# doc/cryst.xml:930-942
+# doc/cryst.xml:936-948
 gap> sub := MaximalSubgroupClassReps( S, rec( primes := [2] ) );
 [ <matrix group with 4 generators>, <matrix group with 3 generators>, 
   <matrix group with 4 generators> ]
@@ -170,7 +151,7 @@ gap> sub := Filtered( sub, s -> IndexInParent( s ) = 2 );
 gap> Length( AffineInequivalentSubgroups( S, sub ) );
 2
 
-# doc/cryst.xml:1004-1011
+# doc/cryst.xml:1010-1017
 gap> SpaceGroupSettingsIT( 3, 146 );
 "hr"
 gap> SpaceGroupOnRightIT( 3, 146 );        

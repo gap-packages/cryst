@@ -439,12 +439,16 @@ collected into orbits under the conjugation action with elements from
 <Example><![CDATA[
 gap> P := Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ]);
 Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ])
-gap> norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );
-[ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
-  [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
 gap> SpaceGroupsByPointGroupOnRight( P );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
   <matrix group with 4 generators>, <matrix group with 4 generators> ]
+]]></Example>
+Obtaining <A>norm</A> with <C>NormalizerInGLnZ</C> requires the &GAP; package
+&CaratInterface; to be installed (and compiled).
+<Log><![CDATA[
+gap> norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );
+[ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ], [ [ -1, 0 ], [ 0, -1 ] ],
+  [ [ 1, 0 ], [ 0, -1 ] ], [ [ 0, 1 ], [ 1, 0 ] ] ]
 gap> SpaceGroupsByPointGroupOnRight( P, norm );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
   <matrix group with 4 generators> ]
@@ -452,7 +456,7 @@ gap> SpaceGroupsByPointGroupOnRight( P, norm, true );
 [ [ <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators> ] ]
-]]></Example>
+]]></Log>
 </Description>
 </ManSection>
 <ManSection>
@@ -464,7 +468,9 @@ if the boolean argument <A>orbsflag</A> is present and <K>true</K>, not only spa
 group type representatives, but all space groups up to conjugacy in
 the full translation group are returned. These are then collected 
 into lists of space groups of the same space group type.
-<Example><![CDATA[
+As it needs the full normalizer of <A>P</A>, this function requires the &GAP;
+package &CaratInterface; to be installed (and compiled).
+<Log><![CDATA[
 gap> SpaceGroupTypesByPointGroupOnRight( P );
 [ <matrix group with 4 generators>, <matrix group with 4 generators>, 
   <matrix group with 4 generators> ]
@@ -472,7 +478,7 @@ gap> SpaceGroupTypesByPointGroupOnRight( P, true );
 [ [ <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators>, <matrix group with 4 generators> ], 
   [ <matrix group with 4 generators> ] ]
-]]></Example>
+]]></Log>
 </Description>
 </ManSection>
 <ManSection>
