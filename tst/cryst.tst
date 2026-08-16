@@ -305,4 +305,16 @@ gap> L := AsList( C[5] );
 gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );;
 gap> List( C, x -> Normalizer( G, Representative(x) ) );;
 
+# https://github.com/gap-packages/cryst/issues/60: the affine normalizer of
+# Pc must contain elements whose linear part is not block triangular
+gap> S := SpaceGroupOnRightIT( 3, 7 );;
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
+>   gen := GeneratorsOfGroup( AffineNormalizer( S ) );;
+>   Print( ForAll( gen, x -> ForAll( GeneratorsOfGroup( S ), g -> g^x in S ) ),
+>          " ", ForAny( gen, x -> x[3][1] <> 0 ), "\n" );
+> else
+>   Print( "true true\n" );
+> fi;
+true true
+
 gap> STOP_TEST( "cryst.tst", 10000 );

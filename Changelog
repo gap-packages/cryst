@@ -1,3 +1,10 @@
+Unreleased
+
+   - fixed AffineNormalizer, which returned a proper subgroup of the affine
+     normalizer for some space groups (e.g. Pc), because the stabilizer
+     computation used incomplete Schreier generators
+     (thanks to lan496 for reporting).
+
 Version 4.1.31
 
    - fixed a bug in RepresentativeAction for affine cryst groups
