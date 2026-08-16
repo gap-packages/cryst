@@ -18,7 +18,7 @@ AutoDoc(rec(
             "introduction.xml",
             "cryst.xml"
         ],
-        bib := "manual.bib",
+        bib := "cryst.bib",
         entities := rec(
             CaratInterface := "<Package>CaratInterface</Package>",
             Cryst := "<Package>Cryst</Package>",
