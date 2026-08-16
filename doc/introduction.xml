@@ -17,13 +17,13 @@ groups acting from the right, also affine crystallographic groups acting
 from the left are now fully supported. Many algorithms have been added, 
 extended, or improved in other ways.
 <P/>
-Our warmest thanks go the Max Neunhöffer, whose extensive
+Our warmest thanks go to Max Neunhöffer, whose extensive
 testing of the &GAP; 4 version of &Cryst; in connection with &XGAP; 
 uncovered several bugs and led to many performance improvements.
 <P/>
 &Cryst; is implemented in the &GAP;&nbsp;4 language, and runs on any 
 system supporting &GAP;&nbsp;4. However, certain commands may require 
-that other GAP packages such as &CaratInterface; or &XGAP; are installed.
+that other &GAP; packages such as &CaratInterface; or &XGAP; are installed.
 In particular, the routines in Section&nbsp;<Ref Sect="Normalizers"/> are likely
 to require &CaratInterface;, and the function WyckoffGraph (see&nbsp;<Ref Func="WyckoffGraph"/>)
 requires &XGAP;. Both &CaratInterface; and &XGAP; may be available
@@ -52,10 +52,8 @@ Technische Universität Darmstadt,
 Schlossgartenstraße 7, D-64289 Darmstadt, Germany<Br/>
 e-mail: <Email>nickel@mathematik.tu-darmstadt.de</Email></Item>
 </List>
-For bug reports, suggestions and comments please please use
+For bug reports, suggestions and comments please use
 the issue tracker on GitHub:
-<List>
-<Mark></Mark>
-<Item><URL>https://github.com/gap-packages/Cryst/issues/</URL></Item>
-</List>
+<P/>
+<URL>https://github.com/gap-packages/Cryst/issues/</URL>
 </Chapter>

@@ -265,7 +265,7 @@ checks if <A>S</A> is a space group in standard form.
 <Description>
 returns a conjugate of <A>S</A> which is in standard form.
 <P/>
-If an space group is a semi-direct product of its point group with its
+If a space group <A>S</A> is a semi-direct product of its point group with its
 translation subgroup, <A>S</A> is said to be symmorphic.
 </Description>
 </ManSection>
@@ -284,9 +284,9 @@ In the representation by augmented matrices, affine crystallographic
 groups are infinite matrix groups. Their infinity is relatively
 trivial in the sense that they have an abelian normal subgroup of 
 finite index. Nevertheless, for many operations special methods
-have to be installed that avoid to attempt algorithms that never
+have to be installed that avoid attempting algorithms that never
 finish. These methods all make essential use of the exactness of the
-sequence of homomorphism <C>0 -&gt; <A>T</A> -&gt; <A>S</A> -&gt; <A>P</A> -&gt; 1</C>, where
+sequence of homomorphisms <C>0 -&gt; <A>T</A> -&gt; <A>S</A> -&gt; <A>P</A> -&gt; 1</C>, where
 <A>T</A> is the translation subgroup of <A>S</A>, and <A>P</A> its point group.
 <P/>
 All operations for general groups that make sense for affine
@@ -303,7 +303,7 @@ Some methods installed for affine crystallographic groups have
 a special behavior.
 <P/>
 <ManSection>
-<Meth Name="\\^" Label="for an AffineCrystGroup" Arg="S, conj"/>
+<Meth Name="\^" Label="for an AffineCrystGroup" Arg="S, conj"/>
 <Description>
 If <A>S</A> is an <C>AffineCrystGroupOnRight</C>, the group
 <M>conj^{-1} * S * conj</M> is returned. <A>conj</A> must be an affine matrix
@@ -773,7 +773,7 @@ continuous translations is bound in the component
 <ManSection>
 <Func Name="AffineInequivalentSubgroups" Arg="S, sub"/>
 <Description>
-takes as input a space group <A>S</A> and list of subgroups of <A>S</A>,
+takes as input a space group <A>S</A> and a list of subgroups of <A>S</A>,
 and returns a sublist of affine inequivalent subgroups.
 Note that the affine normalizer of <A>S</A> must be discrete in the
 current implementation. If it is not, <K>fail</K> is returned.
@@ -785,7 +785,7 @@ acting from the same side),
 <ManSection>
 <Oper Name="ConjugatorSpaceGroups" Arg="S1, S2"/>
 <Description>
-returns an affine matrix <A>m</A> such that <C>S1^{}m = S2</C>, of <K>fail</K>
+returns an affine matrix <A>m</A> such that <C>S1^m = S2</C>, or <K>fail</K>
 if no such matrix exists, i.e., if the two space groups are not
 equivalent. This function requires that the &GAP; package
 &CaratInterface; is installed (and compiled).
@@ -860,7 +860,7 @@ induced by <A>G</A> acting on the colors of the parent of <A>G</A>.
 <ManSection>
 <Attr Name="ColorHomomorphism" Arg="G"/>
 <Description>
-returns the homomomorphism from <A>G</A> to its <C>ColorPermGroup</C>.
+returns the homomorphism from <A>G</A> to its <C>ColorPermGroup</C>.
 </Description>
 </ManSection>
 <ManSection>
