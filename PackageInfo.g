@@ -9,8 +9,8 @@ PackageName := "Cryst",
 
 Subtitle := "Computing with crystallographic groups",
 
-Version := "4.1.31",
-Date := "04/05/2026", # dd/mm/yyyy format
+Version := "4.1.32",
+Date := "18/08/2026", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 ArchiveURL := Concatenation( 
