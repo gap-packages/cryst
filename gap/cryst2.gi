@@ -774,7 +774,8 @@ InstallMethod( AffineNormalizer, "for SpaceGroup acting OnRight", true,
 function( S )
 
     local d, P, H, T, N, Pgens, Sgens, invT, gens, Pi, Si, hom, opr, orb, 
-          g, m, set, rep, lst, pnt, img, t, sch, n, nn, normgens, TN, AN;
+          g, m, set, ind, rep, lst, i, j, k, pnt, img, t, sch, n, nn,
+          normgens, TN, AN;
 
     d := DimensionOfMatrixGroup( S ) - 1;
     P := PointGroup( S );
@@ -819,26 +820,44 @@ function( S )
         Add( orb, [ m, m[d+1]{[1..d]} ] );
     od;
     orb := [ orb ];
-    set := ShallowCopy( orb );
+
+    set := [ orb[1] ];   # the points of orb, sorted, for binary search
+    ind := [ 1 ];        # ind[k] is the position of set[k] in orb
 
     rep := [ One( N ) ];
     lst := [];
-    for pnt  in orb  do
+    i := 0;
+    while i < Length( orb ) do
+        i := i+1;
+        pnt := orb[i];
         for g  in gens  do
             img := List( pnt, x -> opr( x, g ) );
-            if not img in set  then
-                Add( orb, img );
-                AddSet( set, img );
-                Add( rep, rep[Position(orb,pnt)]*g );
+            k := PositionSorted( set, img );
+            if k <= Length( set ) and set[k] = img then
+                j := ind[k];
             else
-                t := AffineLift( img, d );
-                if t<>[] then
-                    sch := rep[Position(orb,pnt)]*g;
-                    n := IdentityMat( d+1 );
-                    n{[1..d]}{[1..d]} := sch;
-                    n[d+1]{[1..d]} := t;
-                    AddSet( lst, n );
-                fi;
+                Add( orb, img );
+                Add( rep, rep[i]*g );
+                j := Length( orb );
+                Add( set, img, k );
+                Add( ind, j, k );
+            fi;
+            # rep[i]*g maps the base point to img; if img lifts, it
+            # normalizes S once combined with the translation t
+            t := AffineLift( img, d );
+            if t<>[] then
+                n := IdentityMat( d+1 );
+                n{[1..d]}{[1..d]} := rep[i]*g;
+                n[d+1]{[1..d]} := t;
+                AddSet( lst, n );
+            fi;
+            # Schreier generator for the stabilizer of the base point;
+            # it fixes all translations, so it lifts with t = 0
+            sch := rep[i]*g*rep[j]^-1;
+            if sch <> One( N ) then
+                n := IdentityMat( d+1 );
+                n{[1..d]}{[1..d]} := sch;
+                AddSet( lst, n );
             fi;
         od;
     od;
