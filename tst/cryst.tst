@@ -325,6 +325,7 @@ gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
 >     Error( "Cryst: orbsflag variants failed" );
 >   fi;
 > fi;
+
 # https://github.com/gap-packages/cryst/issues/60: the affine normalizer of
 # Pc must contain elements whose linear part is not block triangular
 gap> S := SpaceGroupOnRightIT( 3, 7 );;
