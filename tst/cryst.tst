@@ -305,6 +305,26 @@ gap> L := AsList( C[5] );
 gap> List(L, x -> RepresentativeAction( G, L[1], x, OnPoints ) );;
 gap> List( C, x -> Normalizer( G, Representative(x) ) );;
 
+# the manual examples for these need CaratInterface, so they are not extracted
+gap> P := Group([ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ] ]);;
+gap> if IsPackageMarkedForLoading( "CaratInterface", "" ) then
+>   norm := GeneratorsOfGroup( NormalizerInGLnZ( P ) );;
+>   if not norm = [ [ [ -1, 0 ], [ 0, -1 ] ], [ [ -1, 0 ], [ 0, 1 ] ],
+>        [ [ -1, 0 ], [ 0, -1 ] ], [ [ 1, 0 ], [ 0, -1 ] ],
+>        [ [ 0, 1 ], [ 1, 0 ] ] ] then
+>     Error( "Cryst: NormalizerInGLnZ failed" );
+>   fi;
+>   if not [ 3, 3 ] = [ Length( SpaceGroupsByPointGroupOnRight( P, norm ) ),
+>                       Length( SpaceGroupTypesByPointGroupOnRight( P ) ) ] then
+>     Error( "Cryst: SpaceGroupTypesByPointGroupOnRight failed" );
+>   fi;
+>   if not [ 1, 2, 1 ] = List( SpaceGroupsByPointGroupOnRight( P, norm, true ),
+>                              Length )
+>      or not [ 1, 2, 1 ] = List( SpaceGroupTypesByPointGroupOnRight( P, true ),
+>                                 Length ) then
+>     Error( "Cryst: orbsflag variants failed" );
+>   fi;
+> fi;
 # https://github.com/gap-packages/cryst/issues/60: the affine normalizer of
 # Pc must contain elements whose linear part is not block triangular
 gap> S := SpaceGroupOnRightIT( 3, 7 );;

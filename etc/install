@@ -2,7 +2,7 @@
 
 # before running this script, edit date and version in
 # Changelog, PackageInfo.g, etc/VERSION, etc/make_tar
-# etc/changelog.html, doc/manual.tex
+# etc/changelog.html
 
 ./make_tar
 

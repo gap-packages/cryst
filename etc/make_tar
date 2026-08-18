@@ -6,18 +6,18 @@ PKGTAR=cryst-4.1.31.tar
 rm -f $PKGTAR*
 
 # rebuild documentation
-(cd ../doc; ./make_doc;)
+(cd .. && gap -A -q --quitonbreak makedoc.g)
 
 # make the package archive
-mkdir -p cryst/doc cryst/gap cryst/grp cryst/htm cryst/tst
+mkdir -p cryst/doc cryst/gap cryst/grp cryst/tst
 grep -v svg ../README.md > cryst/README
 cp -p ../*.g ../Changelog ../COPYING cryst/
-cp -p ../doc/manual.bbl ../doc/manual.six ../doc/manual.lab ../doc/manual.toc \
-  ../doc/manual.mst ../doc/manual.pdf ../doc/*.tex ../doc/make_doc cryst/doc/
+cp -p ../doc/*.xml ../doc/*.bib ../doc/*.css ../doc/*.js \
+  ../doc/chap*.html ../doc/chap*.txt ../doc/chooser.html \
+  ../doc/manual.lab ../doc/manual.six ../doc/manual.pdf cryst/doc/
 cp -p ../gap/*.g[di] cryst/gap/
 cp -p ../grp/spacegrp.* cryst/grp/
 cp -p ../tst/*.tst ../tst/testall.g cryst/tst/
-cp -p ../htm/*.htm cryst/htm/
 chmod -R a+rX cryst
 tar cvf $PKGTAR cryst
 chmod a+r $PKGTAR

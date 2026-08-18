@@ -6,7 +6,7 @@ successor of the CrystGap package for GAP 3. During the porting
 process to GAP 4, large parts of the code have been rewritten, and 
 the functionality has been extended considerably. Cryst provides a 
 rich set of methods to compute with affine crystallographic groups, 
-in particular space groups. In constrast to the GAP 3 version, 
+in particular space groups. In contrast to the GAP 3 version, 
 affine crystallographic groups are now fully supported both in the 
 representation acting from the right and in the representation 
 acting from the left. The latter representation is the one preferred 
@@ -14,7 +14,7 @@ by crystallographers. There are also functions to determine
 representatives of all space group types of a given dimension. 
 
 Cryst is implemented in the GAP 4 language, and runs on any system 
-supporting GAP 4. This version requires at least GAP version 4.5. 
+supporting GAP 4. This version requires at least GAP version 4.12. 
 It is recommended, however, to use the most recent version of GAP. 
 Certain commands may need other GAP packages such as CARAT or XGAP. 
 Both CARAT and XGAP are available only under Unix. CARAT may be 

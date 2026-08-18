@@ -1,0 +1,59 @@
+<Chapter Label="Introduction">
+<Heading>Introduction</Heading>
+<Index>cryst</Index>
+<P/>
+The &Cryst; package, previously known as <Package>CrystGAP</Package>, provides 
+functions for the computation with affine crystallographic groups, 
+in particular space groups. For the definition of the standard 
+crystallographic notions we refer to the International Tables 
+<Cite Key="Hah95"/>, in particular the chapter by Wondratschek <Cite Key="Won95"/>,
+and to the introductory chapter in <Cite Key="BBNWZ78"/>. The principal 
+algorithms used in this package are described in <Cite Key="EGN97"/>.
+<P/>
+The present version for &GAP;&nbsp;4 has been considerably reworked from
+an earlier version for &GAP;&nbsp;3.4.4. Most of the porting to &GAP;&nbsp;4
+has been done by Franz Gähler. Besides affine crystallographic
+groups acting from the right, also affine crystallographic groups acting 
+from the left are now fully supported. Many algorithms have been added, 
+extended, or improved in other ways.
+<P/>
+Our warmest thanks go to Max Neunhöffer, whose extensive
+testing of the &GAP; 4 version of &Cryst; in connection with &XGAP; 
+uncovered several bugs and led to many performance improvements.
+<P/>
+&Cryst; is implemented in the &GAP;&nbsp;4 language, and runs on any 
+system supporting &GAP;&nbsp;4. However, certain commands may require 
+that other &GAP; packages such as &CaratInterface; or &XGAP; are installed.
+In particular, the routines in Section&nbsp;<Ref Sect="Normalizers"/> are likely
+to require &CaratInterface;, and the function WyckoffGraph (see&nbsp;<Ref Func="WyckoffGraph"/>)
+requires &XGAP;. Both &CaratInterface; and &XGAP; may be available
+only under Unix.
+<P/>
+The &Cryst; package is loaded with the command
+<Example><![CDATA[
+gap> LoadPackage( "cryst" ); 
+true
+]]></Example>
+&Cryst; has been developed by
+<List>
+<Mark>Bettina Eick</Mark>
+<Item>Fachbereich Mathematik und Informatik<Br/>
+Technische Universität Braunschweig<Br/>
+Pockelsstr. 14, D-38106 Braunschweig, Germany<Br/>
+e-mail: <Email>b.eick@tu-bs.de</Email></Item>
+<Mark>Franz Gähler</Mark>
+<Item>Fakultät für Mathematik, 
+Universität Bielefeld<Br/>
+Postfach 10 01 31, D-33501 Bielefeld, Germany<Br/>
+e-mail: <Email>gaehler@math.uni-bielefeld.de</Email></Item>
+<Mark>Werner Nickel</Mark>
+<Item>Fachbereich Mathematik, AG2,
+Technische Universität Darmstadt, 
+Schlossgartenstraße 7, D-64289 Darmstadt, Germany<Br/>
+e-mail: <Email>nickel@mathematik.tu-darmstadt.de</Email></Item>
+</List>
+For bug reports, suggestions and comments please use
+the issue tracker on GitHub:
+<P/>
+<URL>https://github.com/gap-packages/Cryst/issues/</URL>
+</Chapter>

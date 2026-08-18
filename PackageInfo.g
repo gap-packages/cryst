@@ -91,8 +91,8 @@ SupportEmail := "gaehler@math.uni-bielefeld.de",
 
 PackageDoc  := rec(
   BookName  := "Cryst",
-  ArchiveURLSubset := ["doc", "htm"],
-  HTMLStart := "htm/chapters.htm",
+  ArchiveURLSubset := ["doc"],
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Computing with crystallographic groups",
