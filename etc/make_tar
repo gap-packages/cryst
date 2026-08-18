@@ -5,8 +5,8 @@ PKGTAR=cryst-4.1.32.tar
 # remove old archive
 rm -f $PKGTAR*
 
-# rebuild documentation
-(cd .. && gap -A -q --quitonbreak makedoc.g)
+# update documentation
+(cd .. && gap -A -q --quitonbreak -c 'Read("makedoc.g" : relativePath:="../../..");')
 
 # make the package archive
 mkdir -p cryst/doc cryst/gap cryst/grp cryst/tst
