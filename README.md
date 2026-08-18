@@ -30,10 +30,8 @@ It is loaded with the GAP command
 Cryst has been developed by
 
     Bettina Eick,
-    Institut Computational Mathematics,
-    Fachbereich Mathematik und Informatik,
-    Technische Universität Braunschweig,
-    Pockelsstr. 14, D-38106 Braunschweig, Germany
+    Institut Analysis und Algebra, TU Braunschweig,
+    Universitätsplatz 2, D-38106 Braunschweig, Germany
     e-mail: beick@tu-bs.de
 
     Franz Gähler,
@@ -42,9 +40,6 @@ Cryst has been developed by
     e-mail: gaehler@math.uni-bielefeld.de
 
     Werner Nickel,
-    Fachbereich Mathematik, AG2,
-    Technische Universität Darmstadt,
-    Schlossgartenstrasse 7, D-64289 Darmstadt, Germany
     e-mail: nickel@mathematik.tu-darmstadt.de
 
 For bug reports, suggestions and other comments please use the issue

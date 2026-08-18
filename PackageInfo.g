@@ -18,7 +18,7 @@ ArchiveURL := Concatenation(
 
 ArchiveFormats := ".tar.gz",
 
-BinaryFiles := [ "doc/manual.pdf", "doc/manual.dvi" ],
+BinaryFiles := [ "doc/manual.pdf" ],
 
 Persons := [
   rec(
@@ -29,11 +29,8 @@ Persons := [
     Email := "beick@tu-bs.de",
     WWWHome       := "http://www.iaa.tu-bs.de/beick",
     PostalAddress := Concatenation(
-               "Institut Analysis und Algebra\n",
-               "TU Braunschweig\n",
-               "Universitätsplatz 2\n",
-               "D-38106 Braunschweig\n",
-               "Germany" ),
+      "Institut Analysis und Algebra, TU Braunschweig\n",
+      "Universitätsplatz 2, D-38106 Braunschweig, Germany" ),
     Place := "Braunschweig",
     Institution := "TU Braunschweig"
   ),
@@ -44,9 +41,11 @@ Persons := [
     IsMaintainer := true,
     Email := "gaehler@math.uni-bielefeld.de",
     WWWHome := "https://www.math.uni-bielefeld.de/~gaehler/",
-    #PostalAddress := "",           
+    PostalAddress := Concatenation(
+      "Fakultät für Mathematik, Universität Bielefeld\n",
+      "Postfach 10 01 31, D-33501 Bielefeld, Germany" ),           
     Place := "Bielefeld",
-    Institution := "Mathematik, Universität Bielefeld"
+    Institution := "Universität Bielefeld"
   ),
   rec(
     LastName := "Nickel",

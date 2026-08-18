@@ -34,24 +34,6 @@ The &Cryst; package is loaded with the command
 gap> LoadPackage( "cryst" ); 
 true
 ]]></Example>
-&Cryst; has been developed by
-<List>
-<Mark>Bettina Eick</Mark>
-<Item>Fachbereich Mathematik und Informatik<Br/>
-Technische Universität Braunschweig<Br/>
-Pockelsstr. 14, D-38106 Braunschweig, Germany<Br/>
-e-mail: <Email>b.eick@tu-bs.de</Email></Item>
-<Mark>Franz Gähler</Mark>
-<Item>Fakultät für Mathematik, 
-Universität Bielefeld<Br/>
-Postfach 10 01 31, D-33501 Bielefeld, Germany<Br/>
-e-mail: <Email>gaehler@math.uni-bielefeld.de</Email></Item>
-<Mark>Werner Nickel</Mark>
-<Item>Fachbereich Mathematik, AG2,
-Technische Universität Darmstadt, 
-Schlossgartenstraße 7, D-64289 Darmstadt, Germany<Br/>
-e-mail: <Email>nickel@mathematik.tu-darmstadt.de</Email></Item>
-</List>
 For bug reports, suggestions and comments please use
 the issue tracker on GitHub:
 <P/>
